@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "declaration": false,
+    "noLib": false,
+    "module": "commonjs",
+    "jsx": "react",
+    "removeComments": false,
+    "moduleResolution": "node",
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "noEmitOnError": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}

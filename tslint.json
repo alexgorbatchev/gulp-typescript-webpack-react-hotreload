@@ -1,0 +1,7 @@
+{
+  "rules": {
+    "indent": "spaces",
+    "curly": true,
+    "class-name": true
+  }
+}
