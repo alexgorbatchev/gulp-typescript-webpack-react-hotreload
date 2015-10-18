@@ -10,7 +10,7 @@ module.exports = {
     common.entry.app,
   ],
   output: {
-    path: common.output.path
+    path: common.output.path,
     publicPath: common.output.publicPath,
     filename: 'app.js',
   },
@@ -24,6 +24,10 @@ module.exports = {
     ],
     loaders: [
       common.loaders.react,
+      {
+        test: /[.]html$/,
+        loader: 'file'
+      }
     ]
   }
 };
