@@ -1,4 +1,4 @@
-/// <reference path="typings/tsd.d.ts" />
+/// <reference path="typings/dev.d.ts" />
 
 import * as path from 'path';
 
@@ -57,6 +57,10 @@ gulp.task('public', function() {
     .pipe($.changed('build/public'))
     .pipe($.print(filepath => `Copied ${filepath}`))
     .pipe(gulp.dest('build/public'));
+});
+
+gulp.task('webpack', function() {
+  const webpack = require('webpack');
 });
 
 gulp.task('format', ['typescript:format:src', 'typescript:format:tests']);

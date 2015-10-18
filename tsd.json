@@ -8,16 +8,7 @@
     "react/react.d.ts": {
       "commit": "af5b8275d1f2b92738b93fddabc461fc20c553a1"
     },
-    "gulp/gulp.d.ts": {
-      "commit": "af5b8275d1f2b92738b93fddabc461fc20c553a1"
-    },
     "node/node.d.ts": {
-      "commit": "af5b8275d1f2b92738b93fddabc461fc20c553a1"
-    },
-    "orchestrator/orchestrator.d.ts": {
-      "commit": "af5b8275d1f2b92738b93fddabc461fc20c553a1"
-    },
-    "q/Q.d.ts": {
       "commit": "af5b8275d1f2b92738b93fddabc461fc20c553a1"
     },
     "express/express.d.ts": {
