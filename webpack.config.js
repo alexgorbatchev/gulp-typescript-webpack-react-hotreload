@@ -1,38 +1,29 @@
 var path = require('path');
 var webpack = require('webpack');
+var common = require('./webpack.common');
 
 module.exports = {
   devtool: 'source-map',
   entry: [
     'webpack-dev-server/client?http://localhost:3001',
     'webpack/hot/only-dev-server',
-    './src/client/index.tsx'
+    common.entry.app,
   ],
   output: {
-    path: path.join(__dirname, 'dist'),
-    filename: 'bundle.js',
-    publicPath: '/static/'
+    path: common.output.path
+    publicPath: common.output.publicPath,
+    filename: 'app.js',
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
   ],
-  resolve: {
-    alias: {},
-    extensions: ['', '.tsx', '.ts', '.js']
-  },
+  resolve: common.resolve,
   module: {
     preLoaders: [
-      {
-        test: /\.ts(x)?$/,
-        loader: 'tslint'
-      }
+      common.preLoaders.react,
     ],
     loaders: [
-      {
-        test: /\.ts(x)?$/,
-        loaders: ['react-hot', 'ts-loader'],
-        include: path.join(__dirname, 'src', 'client')
-      }
+      common.loaders.react,
     ]
   }
 };

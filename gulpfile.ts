@@ -1,9 +1,11 @@
-/// <reference path="typings/dev.d.ts" />
+/// <reference path="typings/tsd.d.ts" />
 
 import * as path from 'path';
 
 const gulp = require('gulp');
 const del = require('del');
+const deepmerge = require('deepmerge');
+const {log, colors} = require('gulp-util');
 
 const $ = {
   changed: require('gulp-changed'),
@@ -59,8 +61,18 @@ gulp.task('public', function() {
     .pipe(gulp.dest('build/public'));
 });
 
-gulp.task('webpack', function() {
+gulp.task('webpack', function(done) {
   const webpack = require('webpack');
+
+  webpack(require('./webpack.config-production.js'), function(err, stats) {
+    if (err) {
+      log(colors.red(err.message));
+      return process.exit(-1);
+    }
+
+    stats.toString('minimal').split(/\n/g).forEach(line => log(`    ${line}`));
+    done();
+  });
 });
 
 gulp.task('format', ['typescript:format:src', 'typescript:format:tests']);

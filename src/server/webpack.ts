@@ -9,10 +9,8 @@ const app = new WebpackDevServer(webpack(config), {
   inline: true,
   hot: true,
   historyApiFallback: true,
-  // contentBase: __dirname + '/../public',
   publicPath: '/static/',
   stats: { colors: true },
-  // proxy: { '*': 'http://localhost:3000' },
 });
 
 app.listen(3001, 'localhost', function() {
