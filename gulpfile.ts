@@ -1,4 +1,4 @@
-/// <reference path="typings/build.d.ts" />
+/// <reference path="typings/tsd.d.ts" />
 
 import * as path from 'path';
 
@@ -43,7 +43,7 @@ gulp.task('typescript:format:tests', function() {
 gulp.task('typescript', ['typescript:format:src'], function() {
   return gulp.src('src/server/**/*.ts')
     .pipe($.plumber({ errorHandler: $.notify.onError('<%= error.relativeFilename %>: <%= error.diagnostic.messageText %>') }))
-    .pipe($.changed())
+    .pipe($.changed('build/server', { extension: '.js' }))
     .pipe($.typescript(typescriptProject)).js
     .pipe($.print(filepath => `Generated ${filepath}`))
     .pipe(gulp.dest('build/server'))
@@ -63,8 +63,10 @@ gulp.task('format', ['typescript:format:src', 'typescript:format:tests']);
 gulp.task('build', ['public', 'format', 'typescript']);
 
 gulp.task('dev', ['build'], function() {
+  gulp.watch('src/**/*.{ts,tsx}', ['typescript:format:src']);
   gulp.watch('src/server/**/*.ts', ['typescript']);
   gulp.watch('src/public/**/*', ['public']);
   gulp.watch('tests/**/*.ts', ['typescript:format:tests']);
   gulp.watch('build/server/**/*.js', $.devExpress('build/server/index.js'));
+  gulp.watch('build/server/webpack.js', $.devExpress('build/server/webpack.js'));
 });
