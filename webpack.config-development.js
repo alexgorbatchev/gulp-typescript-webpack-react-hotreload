@@ -24,10 +24,6 @@ module.exports = {
     ],
     loaders: [
       common.loaders.react,
-      {
-        test: /[.]html$/,
-        loader: 'file'
-      }
     ]
   }
 };

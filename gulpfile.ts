@@ -4,7 +4,6 @@ import * as path from 'path';
 
 const gulp = require('gulp');
 const del = require('del');
-const deepmerge = require('deepmerge');
 const {log, colors} = require('gulp-util');
 
 const $ = {

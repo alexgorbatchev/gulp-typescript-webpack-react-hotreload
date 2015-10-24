@@ -5,7 +5,7 @@ module.exports = {
     react: {
       test: /\.ts(x)?$/,
       loaders: ['react-hot', 'ts-loader'],
-      include: path.join(__dirname, 'src', 'client')
+      include: path.join(__dirname, 'src', 'client'),
     },
   },
   preLoaders: {

@@ -11,6 +11,7 @@ const app = new WebpackDevServer(webpack(config), {
   historyApiFallback: true,
   publicPath: '/static/',
   stats: { colors: true },
+  proxy: { '*': 'http://localhost:3000' },
 });
 
 app.listen(3001, 'localhost', function() {
