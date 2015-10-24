@@ -15,7 +15,7 @@ entry = {
 };
 
 if (DEVELOPMENT) {
-  entry.app.unshift(
+  entry.vendor.unshift(
     'webpack-dev-server/client?http://localhost:3001',
     'webpack/hot/only-dev-server'
   );
