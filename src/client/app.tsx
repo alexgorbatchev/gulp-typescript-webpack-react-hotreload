@@ -1,5 +1,4 @@
-const Radium = require('radium');
-
+import * as Radium from 'radium';
 import * as React from 'react';
 
 export enum AppKind {
