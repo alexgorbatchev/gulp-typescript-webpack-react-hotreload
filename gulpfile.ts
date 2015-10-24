@@ -8,6 +8,7 @@ const {log, colors} = require('gulp-util');
 
 const $ = {
   changed: require('gulp-changed'),
+  changedInPlace: require('gulp-changed-in-place'),
   collector: require('gulp-collector'),
   devExpress: require('gulp-dev-express'),
   ifElse: require('gulp-if-else'),
@@ -27,7 +28,7 @@ gulp.task('clean', () => del('build'));
 
 gulp.task('typescript:format:src', function() {
   return gulp.src('src/**/*.{ts,tsx}')
-    .pipe($.changed())
+    .pipe($.changedInPlace())
     .pipe($.tsfmt(tsfmtOptions))
     .pipe($.print(filepath => `Formatted ${filepath}`))
     .pipe(gulp.dest('src'));
@@ -35,7 +36,7 @@ gulp.task('typescript:format:src', function() {
 
 gulp.task('typescript:format:tests', function() {
   return gulp.src('tests/**/*.ts')
-    .pipe($.changed())
+    .pipe($.changedInPlace())
     .pipe($.tsfmt(tsfmtOptions))
     .pipe($.print(filepath => `Formatted ${filepath}`))
     .pipe(gulp.dest('tests'));
@@ -60,7 +61,7 @@ gulp.task('public', function() {
     .pipe(gulp.dest('build/public'));
 });
 
-gulp.task('webpack', function(done) {
+gulp.task('webpack', ['pre-build'], function(done) {
   const webpack = require('webpack');
 
   webpack(require('./webpack.config-production.js'), function(err, stats) {
@@ -75,9 +76,10 @@ gulp.task('webpack', function(done) {
 });
 
 gulp.task('format', ['typescript:format:src', 'typescript:format:tests']);
-gulp.task('build', ['public', 'format', 'typescript']);
+gulp.task('pre-build', ['public', 'format', 'typescript']);
+gulp.task('build', ['pre-build', 'webpack']);
 
-gulp.task('dev', ['build'], function() {
+gulp.task('dev', ['pre-build'], function() {
   gulp.watch('src/**/*.{ts,tsx}', ['typescript:format:src']);
   gulp.watch('src/server/**/*.ts', ['typescript']);
   gulp.watch('src/public/**/*', ['public']);

@@ -1,18 +1,25 @@
 {
   "compilerOptions": {
     "declaration": false,
-    "target": "es5",
     "experimentalDecorators": true,
-    "noLib": false,
-    "module": "commonjs",
     "jsx": "react",
-    "removeComments": false,
+    "module": "commonjs",
     "moduleResolution": "node",
+    "noEmit": true,
+    "noEmitOnError": true,
+    "noLib": false,
     "preserveConstEnums": true,
+    "removeComments": false,
     "sourceMap": true,
-    "noEmitOnError": true
+    "target": "es5"
   },
   "exclude": [
     "node_modules"
+  ],
+  "files": [
+    "typings/tsd.d.ts",
+    "src/client/index.tsx",
+    "src/server/webpack.ts",
+    "src/server/index.ts"
   ]
 }
