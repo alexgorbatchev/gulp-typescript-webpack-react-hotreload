@@ -2,7 +2,7 @@
 
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
-const config = require('../../webpack.config-development');
+const config = require('../../webpack.config');
 
 const app = new WebpackDevServer(webpack(config), {
   progress: true,
