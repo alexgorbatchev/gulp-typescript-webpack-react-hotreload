@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import App, {foo} from '../../src/client/app';
+import Component, {foo} from '../src/app/component';
 
 describe('hello-karma', function () {
   it('works', function () {
@@ -7,7 +7,7 @@ describe('hello-karma', function () {
     expect(true).to.be.false;
   });
 
-  it('app is here too', function () {
-    expect(App).to.be.ok;
+  it('component is here too', function () {
+    expect(Component).to.be.ok;
   });
 });

@@ -18,8 +18,8 @@
   ],
   "files": [
     "typings/tsd.d.ts",
-    "src/client/index.tsx",
-    "src/server/webpack.ts",
-    "src/server/index.ts"
+    "src/app/index.tsx",
+    "webpack.ts",
+    "gulpfile.ts"
   ]
 }

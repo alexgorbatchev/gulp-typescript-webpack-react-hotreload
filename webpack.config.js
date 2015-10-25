@@ -12,7 +12,7 @@ devtool = 'source-map';
 
 entry = {
   vendor: ['react', 'radium'],
-  app: ['./src/client/index.tsx'],
+  app: [path.join(__dirname, 'src', 'app', 'index.tsx')],
 };
 
 output = {
@@ -26,7 +26,6 @@ plugins = [
   new webpack.HotModuleReplacementPlugin(),
   new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' }),
 ];
-
 
 resolve = {
   alias: {},
@@ -44,7 +43,11 @@ loaders = [
   {
     test: /\.ts(x)?$/,
     loaders: ['react-hot', 'ts-loader'],
-    include: path.join(__dirname, 'src', 'client'),
+    include: path.join(__dirname, 'src', 'app'),
+  },
+  {
+    test: /\.(png|jpg|svg)$/,
+    loader: 'url-loader?limit=8192'
   },
 ];
 

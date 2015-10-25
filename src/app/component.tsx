@@ -1,14 +1,14 @@
 import * as Radium from 'radium';
 import * as React from 'react';
 
-export enum AppKind {
+export enum ComponentKind {
   primary,
   warning
 }
 
 export interface HelloWorldProps extends React.Props<any> {
   name: string;
-  kind: AppKind;
+  kind: ComponentKind;
 }
 
 var styles = {
@@ -16,11 +16,11 @@ var styles = {
     color: '#fff',
   },
 
-  [AppKind.primary]: {
+  [ComponentKind.primary]: {
     background: '#0074D9',
   },
 
-  [AppKind.warning]: {
+  [ComponentKind.warning]: {
     background: '#FF4136',
   }
 };
@@ -30,16 +30,16 @@ export function foo() {
 }
 
 @Radium
-export default class App extends React.Component<HelloWorldProps, any> {
+export default class Component extends React.Component<HelloWorldProps, any> {
   static propTypes: React.ValidationMap<any> = {
-    kind: React.PropTypes.oneOf([AppKind.primary, AppKind.warning]).isRequired
+    kind: React.PropTypes.oneOf([ComponentKind.primary, ComponentKind.warning]).isRequired
   };
 
   render() {
     return (
       <div style={[styles.base, styles[this.props.kind]]}>
           <h1>Hello, {this.props.name}...</h1>
-          <div src="./images/twitter.svg" />
+          <img src={require('../public/images/twitter.svg')} width="100" />
         </div>
     );
   }
