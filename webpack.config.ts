@@ -1,12 +1,12 @@
-var path = require('path');
-var webpack = require('webpack');
-var ManifestPlugin = require('webpack-manifest-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const ManifestPlugin = require('webpack-manifest-plugin');
 
-var devtool, entry, output, plugins, resolve, preLoaders, loaders, stats;
+let devtool, entry, output, plugins, resolve, preLoaders, loaders, stats;
 
-var PRODUCTION = process.env.NODE_ENV === 'production';
-var TEST = process.env.NODE_ENV === 'test';
-var DEVELOPMENT = !PRODUCTION && !TEST;
+const PRODUCTION = process.env.NODE_ENV === 'production';
+const TEST = process.env.NODE_ENV === 'test';
+const DEVELOPMENT = !PRODUCTION && !TEST;
 
 devtool = 'source-map';
 
@@ -94,14 +94,14 @@ if (TEST) {
 }
 
 module.exports = {
-  devtool: devtool,
-  entry: entry,
-  output: output,
-  plugins: plugins,
-  resolve: resolve,
-  stats: stats, // this is used by webpack dev server and gulpfile
+  devtool,
+  entry,
+  output,
+  plugins,
+  resolve,
+  stats, // this is used by webpack dev server and gulpfile
   module: {
-    preLoaders: preLoaders,
-    loaders: loaders,
+    preLoaders,
+    loaders,
   }
 };

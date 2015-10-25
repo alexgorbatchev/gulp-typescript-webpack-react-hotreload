@@ -63,5 +63,5 @@ gulp.task('build', ['webpack']);
 
 gulp.task('dev', ['typescript:tsconfig', 'typescript:format'], function() {
   gulp.watch(allTypescriptFiles, ['typescript:tsconfig', 'typescript:format']);
-  gulp.watch(['webpack.ts', 'webpack.config.js'], $.devExpress('webpack.ts'));
+  gulp.watch(['webpack.ts', 'webpack.config.ts'], $.devExpress('webpack.ts'));
 });
