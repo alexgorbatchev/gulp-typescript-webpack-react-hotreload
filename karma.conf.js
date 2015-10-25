@@ -1,51 +1,62 @@
 process.env.NODE_ENV = 'test';
-var path = require('path')
+var path = require('path');
 
-module.exports = function karmaConfig(config) {
+module.exports = function(config) {
   config.set({
     colors: true,
     frameworks: ['mocha'],
-    reporters: ['spec', 'coverage'],
+    reporters: ['spec'],// 'coverage'],
 
     files: [
-      // Reference: https://www.npmjs.com/package/phantomjs-polyfill
-      // Needed because React.js requires bind and phantomjs does not support it
       'node_modules/phantomjs-polyfill/bind-polyfill.js',
-      'test/karma/**/*.test.ts',
+      'test/karma/bundle.js',
     ],
 
     preprocessors: {
-      'test/karma/**/*.test.ts': ['webpack', 'sourcemap'],
+      // '**/*.ts, **/*.tsx': ['coverage'],
+      'test/karma/bundle.js': ['webpack', 'sourcemap']
     },
 
-    browsers: ['PhantomJS'],
+    browsers: ['Chrome'],
     singleRun: true,
 
-    coverageReporter: {
-      dir: 'build/coverage/',
-      type: 'html',
-    },
-
-    // webpack: require('./webpack.config'),
+    // coverageReporter: {
+    //   dir: 'build/coverage/',
+    //   instrumenter: {
+    //       '**/*.ts': 'istanbul',
+    //       '**/*.tsx': 'istanbul'
+    //   },
+    //   instrumenterOptions: {
+    //       istanbul: {
+    //           noCompact: true,
+    //           embedSource: true,
+    //       }
+    //   },
+    //   reporters: [
+    //       { type: 'html' },
+    //       { type: 'text-summary' },
+    //   ]
+    // },
 
     webpack: {
+      devtool: '#inline-source-map',
       resolve: {
         extensions: ['', '.ts', '.tsx', '.js'],
       },
       module: {
-        preLoaders: [
-          {
-            test: /\.ts(x)?$/,
-            exclude: /(test|node_modules)\//,
-            loader: 'isparta-instrumenter',
-          }
-        ],
         loaders: [
           {
             test: /\.ts(x)?$/,
-            loaders: ['ts-loader']//, 'isparta-instrumenter'],
+            loaders: ['ts-loader'],
           },
-        ]
+        ],
+        // postLoaders: [
+        //   {
+        //     test: /\.ts(x)?$/,
+        //     include: path.join(__dirname, 'src', 'client'),
+        //     loader: 'istanbul-instrumenter'
+        //   }
+        // ]
       }
     },
 

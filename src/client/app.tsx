@@ -25,6 +25,10 @@ var styles = {
   }
 };
 
+export function foo() {
+  throw new Error("sad face");
+}
+
 @Radium
 export default class App extends React.Component<HelloWorldProps, any> {
   static propTypes: React.ValidationMap<any> = {
