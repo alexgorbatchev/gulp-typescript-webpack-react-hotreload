@@ -18,7 +18,6 @@ const $ = {
   typescript: require('gulp-typescript'),
 };
 
-// const {watch: isWatching} = require('yargs').argv;
 const typescriptProject = $.typescript.createProject('tsconfig.json', { typescript: require('typescript') });
 const allTypescriptFiles = ['src/**/*.{ts,tsx}', 'test/**/*.ts', 'gulpfile.ts'];
 
@@ -30,23 +29,28 @@ gulp.task('typescript:format', function() {
     .pipe(gulp.dest(file => path.basename(file.path)));
 });
 
-// gulp.task('public', function() {
-//   gulp.src('src/public/**/*')
-//     .pipe($.changed('build/public'))
-//     .pipe($.print(filepath => `Copied ${filepath}`))
-//     .pipe(gulp.dest('build/public'));
-// });
-
-gulp.task('webpack', ['pre-build'], function(done) {
+gulp.task('webpack', function(done) {
   const webpack = require('webpack');
+  const config = require('./webpack.config.js');
 
-  webpack(require('./webpack.config.js'), function(err, stats) {
+  webpack(config, function(err, stats) {
     if (err) {
       log(colors.red(err.message));
       return process.exit(-1);
     }
 
-    stats.toString('minimal').split(/\n/g).forEach(line => log(`    ${line}`));
+    const reset = colors.enabled ? '\033[0m' : '';
+
+    function logWithWarnings(line) {
+      const hasWarning = line.indexOf('WARNING') === 0;
+      const dashes = '    ---------------------------------------------------------------------';
+      if (hasWarning) { log(dashes); }
+      log('    ' + line + reset);
+      if (hasWarning) { log(dashes); }
+    }
+
+    stats.toString(config.stats).split(/\n/g).forEach(logWithWarnings);
+
     done();
   });
 });

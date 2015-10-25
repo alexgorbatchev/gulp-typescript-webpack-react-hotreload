@@ -11,12 +11,12 @@ const app = new WebpackDevServer(webpack(config), {
   historyApiFallback: true,
   publicPath: '/static/',
   contentBase: 'src/public',
-  stats: { colors: true },
+  stats: config.stats,
 });
 
-app.listen(3001, 'localhost', function() {
+app.listen(3000, 'localhost', function() {
   process.send && process.send('express ready');
 
-  console.log('http://localhost:3001');
-  console.log('http://localhost:3001/webpack-dev-server');
+  console.log('http://localhost:3000');
+  console.log('http://localhost:3000/webpack-dev-server');
 });
