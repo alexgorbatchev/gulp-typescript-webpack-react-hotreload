@@ -1,5 +1,3 @@
-/// <reference path="typings/tsd.d.ts" />
-
 import * as path from 'path';
 
 const gulp = require('gulp');
@@ -14,6 +12,7 @@ const $ = {
   notify: require('gulp-notify'),
   plumber: require('gulp-plumber'),
   print: require('gulp-print'),
+  tsConfig: require('gulp-tsconfig-files'),
   tsfmt: require('gulp-tsfmt'),
   typescript: require('gulp-typescript'),
 };
@@ -21,12 +20,17 @@ const $ = {
 const typescriptProject = $.typescript.createProject('tsconfig.json', { typescript: require('typescript') });
 const allTypescriptFiles = ['src/**/*.{ts,tsx}', 'test/**/*.ts', 'gulpfile.ts'];
 
+gulp.task('typescript:tsconfig', function() {
+  gulp.src(['typings/tsd.d.ts'].concat(allTypescriptFiles))
+    .pipe($.tsConfig())
+});
+
 gulp.task('typescript:format', function() {
-  return gulp.src(allTypescriptFiles)
+  gulp.src(allTypescriptFiles)
     .pipe($.changedInPlace())
     .pipe($.tsfmt({ options: require('./tsfmt.json') }))
     .pipe($.print(filepath => `Formatted ${filepath}`))
-    .pipe(gulp.dest(file => path.basename(file.path)));
+    .pipe(gulp.dest(file => path.dirname(file.path)));
 });
 
 gulp.task('webpack', function(done) {
@@ -57,7 +61,7 @@ gulp.task('webpack', function(done) {
 
 gulp.task('build', ['webpack']);
 
-gulp.task('dev', ['typescript:format'], function() {
-  gulp.watch(allTypescriptFiles,  ['typescript:format']);
+gulp.task('dev', ['typescript:tsconfig', 'typescript:format'], function() {
+  gulp.watch(allTypescriptFiles, ['typescript:tsconfig', 'typescript:format']);
   gulp.watch(['webpack.ts', 'webpack.config.js'], $.devExpress('webpack.ts'));
 });

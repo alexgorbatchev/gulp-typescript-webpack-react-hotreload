@@ -18,8 +18,9 @@
   ],
   "files": [
     "typings/tsd.d.ts",
+    "src/app/component.tsx",
     "src/app/index.tsx",
-    "webpack.ts",
+    "test/hello-world.test.ts",
     "gulpfile.ts"
   ]
 }
