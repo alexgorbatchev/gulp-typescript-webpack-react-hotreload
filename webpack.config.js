@@ -2,7 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 var ManifestPlugin = require('webpack-manifest-plugin');
 
-var devtool, entry, output, plugins, resolve, preLoaders, loaders;
+var devtool, entry, output, plugins, resolve, preLoaders, loaders, stats;
 
 var PRODUCTION = process.env.NODE_ENV === 'production';
 var TEST = process.env.NODE_ENV === 'test';
@@ -42,12 +42,13 @@ preLoaders = [
 loaders = [
   {
     test: /\.ts(x)?$/,
-    loaders: ['react-hot', 'ts-loader'],
+    loaders: ['react-hot', 'ts-loader?silent'],
     include: path.join(__dirname, 'src', 'app'),
   },
   {
     test: /\.(png|jpg|svg)$/,
-    loader: 'url-loader?limit=8192'
+    loader: 'url-loader?limit=8192',
+    include: path.join(__dirname, 'src', 'public', 'images'),
   },
 ];
 
@@ -57,6 +58,18 @@ if (DEVELOPMENT) {
     'webpack/hot/only-dev-server'
   );
 }
+
+stats = {
+  colors: require('gulp-util').colors.enabled,
+  assets: false,
+  version: true,
+  timings: true,
+  hash: true,
+  chunks: true,
+  chunkModules: false,
+  errorDetails: true,
+  reasons: true,
+};
 
 if (PRODUCTION) {
   plugins.push(
@@ -86,6 +99,7 @@ module.exports = {
   output: output,
   plugins: plugins,
   resolve: resolve,
+  stats: stats, // this is used by webpack dev server and gulpfile
   module: {
     preLoaders: preLoaders,
     loaders: loaders,
