@@ -16,4 +16,7 @@ const app = new WebpackDevServer(webpack(config), {
 
 app.listen(3001, 'localhost', function() {
   process.send && process.send('express ready');
+
+  console.log('http://localhost:3001');
+  console.log('http://localhost:3001/webpack-dev-server');
 });

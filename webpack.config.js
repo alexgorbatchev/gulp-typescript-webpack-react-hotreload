@@ -5,7 +5,8 @@ var ManifestPlugin = require('webpack-manifest-plugin');
 var devtool, entry, output, plugins, resolve, preLoaders, loaders;
 
 var PRODUCTION = process.env.NODE_ENV === 'production';
-var DEVELOPMENT = !PRODUCTION;
+var TEST = process.env.NODE_ENV === 'test';
+var DEVELOPMENT = !PRODUCTION && !TEST;
 
 devtool = 'source-map';
 
@@ -14,18 +15,11 @@ entry = {
   app: ['./src/client/index.tsx'],
 };
 
-if (DEVELOPMENT) {
-  entry.vendor.unshift(
-    'webpack-dev-server/client?http://localhost:3001',
-    'webpack/hot/only-dev-server'
-  );
-}
-
 output = {
   path: path.join(__dirname, 'build', 'public'),
   publicPath: '/static/',
-  filename: PRODUCTION ? '[name]-[hash].js' : '[name].js',
-  chunkFilename: PRODUCTION ? '[name]-[hash].js' : '[name].js',
+  filename: '[name].js',
+  chunkFilename: '[name].js',
 };
 
 plugins = [
@@ -33,10 +27,6 @@ plugins = [
   new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' }),
 ];
 
-if (PRODUCTION) {
-  plugins.push(new webpack.optimize.UglifyJsPlugin({ comments: false }));
-  plugins.push(new ManifestPlugin());
-}
 
 resolve = {
   alias: {},
@@ -57,6 +47,35 @@ loaders = [
     include: path.join(__dirname, 'src', 'client'),
   },
 ];
+
+if (DEVELOPMENT) {
+  entry.vendor.unshift(
+    'webpack-dev-server/client?http://localhost:3001',
+    'webpack/hot/only-dev-server'
+  );
+}
+
+if (PRODUCTION) {
+  plugins.push(
+    new webpack.optimize.UglifyJsPlugin({ comments: false }),
+    new ManifestPlugin()
+  );
+
+  output.filename = '[name]-[hash].js';
+  output.chunkFilename = '[name]-[hash].js';
+}
+
+if (TEST) {
+  devtool = 'inline-source-map';
+  entry = {};
+  output = {};
+
+  preLoaders.push({
+    test: /\.ts(x)?$/,
+    exclude: /(test|node_modules|bower_components)\//,
+    loader: 'isparta-instrumenter',
+  });
+}
 
 module.exports = {
   devtool: devtool,

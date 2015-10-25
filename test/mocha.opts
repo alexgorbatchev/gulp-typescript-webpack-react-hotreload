@@ -1,0 +1,4 @@
+--require ts-node/register
+--colors
+--reporter spec
+test/mocha/**/*.ts
