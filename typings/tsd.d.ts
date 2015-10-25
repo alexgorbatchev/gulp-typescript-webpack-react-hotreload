@@ -8,3 +8,4 @@
 /// <reference path="react/react.d.ts" />
 /// <reference path="sinon/sinon.d.ts" />
 /// <reference path="radium/radium.d.ts" />
+/// <reference path="mocha/mocha.d.ts" />
