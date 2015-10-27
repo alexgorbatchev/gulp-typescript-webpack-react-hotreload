@@ -1,3 +1,5 @@
+/// <reference path="../typings/tsd.d.ts" />
+
 import * as Radium from 'radium';
 import * as React from 'react';
 
@@ -39,7 +41,7 @@ export default class Component extends React.Component<HelloWorldProps, any> {
     return (
       <div style={[styles.base, styles[this.props.kind]]}>
           <h1>Hello, {this.props.name}...</h1>
-          <img src={require('../public/images/twitter.svg')} width="100" />
+          <img src={require('./images/twitter.svg')} width="100" />
         </div>
     );
   }

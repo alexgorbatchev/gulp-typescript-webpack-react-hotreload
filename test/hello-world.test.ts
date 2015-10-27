@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import Component, {foo} from '../src/app/component';
+import Component, {foo} from '../src/component';
 
 describe('hello-karma', function () {
   it('works', function () {
