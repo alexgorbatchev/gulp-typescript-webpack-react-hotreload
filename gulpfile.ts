@@ -33,7 +33,7 @@ gulp.task('tdd', $.bg('karma', 'start', '--single-run=false'));
 
 gulp.task('webpack', function(done) {
   const webpack = require('webpack');
-  const config = require('./webpack.config.ts');
+  const config = require('./webpack.config.ts').default;
 
   webpack(config, function(err, stats) {
     if (err) {
@@ -64,5 +64,5 @@ gulp.task('build', ['webpack']);
 
 gulp.task('dev', ['typescript:format', 'tdd'], function() {
   gulp.watch(allTypescriptFiles, ['typescript:format', 'typescript:tsconfig']);
-  gulp.watch(['webpack.ts', 'webpack.config.ts'], $.devExpress('webpack.ts'));
+  gulp.watch(['webpack.ts', 'webpack.config.ts'], $.devExpress('webpack.js'));
 });
