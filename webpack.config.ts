@@ -1,13 +1,14 @@
 const path = require('path');
 const webpack = require('webpack');
 const ManifestPlugin = require('webpack-manifest-plugin');
+import {execSync} from 'child_process';
 
 let devtool, entry, output, plugins, resolve, preLoaders, loaders, stats;
 
 const PRODUCTION = process.env.NODE_ENV === 'production';
 const TEST = process.env.NODE_ENV === 'test';
 const DEVELOPMENT = !PRODUCTION && !TEST;
-const SRC_DIR = path.join(__dirname, 'src')
+const SRC_DIR = path.join(__dirname, 'src');
 
 devtool = 'source-map';
 
@@ -24,7 +25,6 @@ output = {
 };
 
 plugins = [
-  new webpack.HotModuleReplacementPlugin(),
   new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' }),
 ];
 
@@ -53,13 +53,6 @@ loaders = [
   },
 ];
 
-if (DEVELOPMENT) {
-  entry.vendor.unshift(
-    'webpack-dev-server/client?http://localhost:3000',
-    'webpack/hot/only-dev-server'
-  );
-}
-
 stats = {
   colors: require('gulp-util').colors.enabled,
   assets: false,
@@ -72,9 +65,22 @@ stats = {
   reasons: true,
 };
 
+if (DEVELOPMENT) {
+  entry.vendor.unshift(
+    'webpack-dev-server/client?http://localhost:3000',
+    'webpack/hot/only-dev-server'
+  );
+
+  plugins.push(
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({ VERSION: '"development"' })
+  );
+}
+
 if (PRODUCTION) {
   plugins.push(
     new webpack.optimize.UglifyJsPlugin({ comments: false }),
+    new webpack.DefinePlugin({ VERSION: getVersion() }),
     new ManifestPlugin()
   );
 
@@ -106,3 +112,10 @@ export default {
     loaders,
   }
 };
+
+function getVersion(): string {
+  const result: string = execSync('git describe --exact-match --tags HEAD 2>&1; exit 0').toString();
+  const matches: Array<string> = result.match(/^fatal: no tag exactly matches '(\w+)'/);
+  const sha: string = matches && matches[1];
+  return JSON.stringify(sha || result.replace(/\n/g, ''));
+}

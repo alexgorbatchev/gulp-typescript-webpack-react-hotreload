@@ -1,5 +1,3 @@
-require('ts-node/register');
-
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 
@@ -11,7 +9,7 @@ const app = new WebpackDevServer(webpack(config), {
   hot: true,
   historyApiFallback: true,
   publicPath: '/static/',
-  contentBase: 'src/public',
+  contentBase: 'src',
   stats: config.stats,
 });
 
