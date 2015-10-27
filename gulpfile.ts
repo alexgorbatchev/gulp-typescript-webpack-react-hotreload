@@ -8,6 +8,7 @@ const $ = {
   changedInPlace: require('gulp-changed-in-place'),
   devExpress: require('gulp-dev-express'),
   print: require('gulp-print'),
+  tsconfigFiles: require('gulp-tsconfig-files'),
   tsfmt: require('gulp-tsfmt'),
   typescript: require('gulp-typescript'),
 };
@@ -21,6 +22,11 @@ gulp.task('typescript:format', function() {
     .pipe($.tsfmt({ options: require('./tsfmt.json') }))
     .pipe($.print(filepath => `Formatted ${filepath}`))
     .pipe(gulp.dest(file => path.dirname(file.path)));
+});
+
+gulp.task('typescript:tsconfig', function() {
+  gulp.src(['typings/tsd.d.ts'].concat(allTypescriptFiles), { read: false })
+    .pipe($.tsconfigFiles());
 });
 
 gulp.task('tdd', $.bg('karma', 'start', '--single-run=false'));
@@ -57,6 +63,6 @@ gulp.task('webpack', function(done) {
 gulp.task('build', ['webpack']);
 
 gulp.task('dev', ['typescript:format', 'tdd'], function() {
-  gulp.watch(allTypescriptFiles, ['typescript:format']);
+  gulp.watch(allTypescriptFiles, ['typescript:format', 'typescript:tsconfig']);
   gulp.watch(['webpack.ts', 'webpack.config.ts'], $.devExpress('webpack.ts'));
 });

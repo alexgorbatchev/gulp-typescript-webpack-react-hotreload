@@ -1,5 +1,3 @@
-/// <reference path="../typings/tsd.d.ts" />
-
 import * as Radium from 'radium';
 import * as React from 'react';
 

@@ -20,6 +20,7 @@
     "gulp-cli": "^0.3.0",
     "gulp-dev-express": "^1.0.1",
     "gulp-print": "^2.0.1",
+    "gulp-tsconfig-files": "0.0.2",
     "gulp-tsfmt": "0.0.3",
     "gulp-typescript": "^2.9.2",
     "gulp-util": "^3.0.6",

@@ -1,5 +1,3 @@
-/// <reference path="typings/tsd.d.ts" />
-
 const path = require('path');
 const webpack = require('webpack');
 const ManifestPlugin = require('webpack-manifest-plugin');
@@ -96,7 +94,7 @@ if (TEST) {
   });
 }
 
-module.exports = {
+export default {
   devtool,
   entry,
   output,

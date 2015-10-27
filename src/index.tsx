@@ -1,5 +1,3 @@
-/// <reference path="../typings/tsd.d.ts" />
-
 import * as React from 'react';
 import * as Radium from 'radium';
 import Component, {ComponentKind} from './component';

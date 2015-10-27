@@ -1,10 +1,9 @@
-/// <reference path="typings/tsd.d.ts" />
-
 require('ts-node/register');
 
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
-const config = require('./webpack.config.ts');
+
+import config from './webpack.config.ts';
 
 const app = new WebpackDevServer(webpack(config), {
   progress: true,

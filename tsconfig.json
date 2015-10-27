@@ -1,13 +1,11 @@
 {
   "compilerOptions": {
-    "declaration": false,
     "experimentalDecorators": true,
     "jsx": "react",
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmit": true,
     "noEmitOnError": true,
-    "noLib": false,
     "preserveConstEnums": true,
     "removeComments": false,
     "sourceMap": true,
@@ -17,6 +15,13 @@
     "node_modules"
   ],
   "files": [
-    "typings/tsd.d.ts"
+    "typings/tsd.d.ts",
+    "src/component.tsx",
+    "src/index.tsx",
+    "test/hello-world.test.ts",
+    "gulpfile.ts",
+    "karma.conf.ts",
+    "webpack.config.ts",
+    "webpack.ts"
   ]
 }
