@@ -4,26 +4,16 @@ const gulp = require('gulp');
 const {log, colors} = require('gulp-util');
 
 const $ = {
-  changed: require('gulp-changed'),
+  bg: require('gulp-bg'),
   changedInPlace: require('gulp-changed-in-place'),
-  collector: require('gulp-collector'),
   devExpress: require('gulp-dev-express'),
-  ifElse: require('gulp-if-else'),
-  notify: require('gulp-notify'),
-  plumber: require('gulp-plumber'),
   print: require('gulp-print'),
-  tsConfig: require('gulp-tsconfig-files'),
   tsfmt: require('gulp-tsfmt'),
   typescript: require('gulp-typescript'),
 };
 
 const typescriptProject = $.typescript.createProject('tsconfig.json', { typescript: require('typescript') });
-const allTypescriptFiles = ['src/**/*.{ts,tsx}', 'test/**/*.ts', 'gulpfile.ts'];
-
-gulp.task('typescript:tsconfig', function() {
-  gulp.src(['typings/tsd.d.ts'].concat(allTypescriptFiles))
-    .pipe($.tsConfig())
-});
+const allTypescriptFiles = ['src/**/*.{ts,tsx}', 'test/**/*.ts', '*.ts'];
 
 gulp.task('typescript:format', function() {
   gulp.src(allTypescriptFiles)
@@ -33,9 +23,11 @@ gulp.task('typescript:format', function() {
     .pipe(gulp.dest(file => path.dirname(file.path)));
 });
 
+gulp.task('tdd', $.bg('karma', 'start', '--single-run=false'));
+
 gulp.task('webpack', function(done) {
   const webpack = require('webpack');
-  const config = require('./webpack.config.js');
+  const config = require('./webpack.config.ts');
 
   webpack(config, function(err, stats) {
     if (err) {
@@ -53,7 +45,10 @@ gulp.task('webpack', function(done) {
       if (hasWarning) { log(dashes); }
     }
 
-    stats.toString(config.stats).split(/\n/g).forEach(logWithWarnings);
+    stats
+      .toString(config.stats)
+      .split(/\n/g)
+      .forEach(logWithWarnings);
 
     done();
   });
@@ -61,7 +56,7 @@ gulp.task('webpack', function(done) {
 
 gulp.task('build', ['webpack']);
 
-gulp.task('dev', ['typescript:tsconfig', 'typescript:format'], function() {
-  gulp.watch(allTypescriptFiles, ['typescript:tsconfig', 'typescript:format']);
+gulp.task('dev', ['typescript:format', 'tdd'], function() {
+  gulp.watch(allTypescriptFiles, ['typescript:format']);
   gulp.watch(['webpack.ts', 'webpack.config.ts'], $.devExpress('webpack.ts'));
 });
