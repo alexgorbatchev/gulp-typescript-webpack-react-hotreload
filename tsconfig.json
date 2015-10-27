@@ -17,10 +17,6 @@
     "node_modules"
   ],
   "files": [
-    "typings/tsd.d.ts",
-    "src/app/component.tsx",
-    "src/app/index.tsx",
-    "test/hello-world.test.ts",
-    "gulpfile.ts"
+    "typings/tsd.d.ts"
   ]
 }

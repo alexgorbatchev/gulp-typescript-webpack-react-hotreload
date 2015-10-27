@@ -1,3 +1,5 @@
+/// <reference path="typings/tsd.d.ts" />
+
 const path = require('path');
 const webpack = require('webpack');
 const ManifestPlugin = require('webpack-manifest-plugin');
@@ -7,12 +9,13 @@ let devtool, entry, output, plugins, resolve, preLoaders, loaders, stats;
 const PRODUCTION = process.env.NODE_ENV === 'production';
 const TEST = process.env.NODE_ENV === 'test';
 const DEVELOPMENT = !PRODUCTION && !TEST;
+const SRC_DIR = path.join(__dirname, 'src')
 
 devtool = 'source-map';
 
 entry = {
   vendor: ['react', 'radium'],
-  app: [path.join(__dirname, 'src', 'app', 'index.tsx')],
+  app: [path.join(SRC_DIR, 'index.tsx')],
 };
 
 output = {
@@ -42,13 +45,13 @@ preLoaders = [
 loaders = [
   {
     test: /\.ts(x)?$/,
-    loaders: ['react-hot', 'ts-loader?silent'],
-    include: path.join(__dirname, 'src', 'app'),
+    loaders: ['react-hot', 'ts?silent'],
+    include: path.join(SRC_DIR),
   },
   {
     test: /\.(png|jpg|svg)$/,
     loader: 'url-loader?limit=8192',
-    include: path.join(__dirname, 'src', 'public', 'images'),
+    include: path.join(SRC_DIR, 'images'),
   },
 ];
 
