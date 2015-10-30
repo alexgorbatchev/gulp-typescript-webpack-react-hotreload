@@ -16,6 +16,7 @@
   ],
   "files": [
     "typings/tsd.d.ts",
+    "src/application.tsx",
     "src/component.tsx",
     "src/index.tsx",
     "test/hello-world.test.ts",

@@ -1,11 +1,17 @@
 import * as React from 'react';
-import * as Radium from 'radium';
-import Component, {ComponentKind} from './component';
+import * as ReactDOM from 'react-dom';
+import { Router, Route, Link } from 'react-router';
+import Application from './application';
 
 declare var VERSION: string;
 
-console.log(VERSION);
+const root = (
+  <Router>
+    <Route path="/" component={Application}/>
+    </Router>
+);
 
-React.render(<Component name="World" kind={ComponentKind.warning} />, document.getElementById('root'));
+ReactDOM.render(root, document.getElementById('root'));
 
 document.getElementById('time').innerHTML = new Date().toString();
+document.getElementById('sha').innerHTML = VERSION;
