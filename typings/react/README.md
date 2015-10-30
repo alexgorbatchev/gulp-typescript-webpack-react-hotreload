@@ -1,0 +1,1 @@
+https://github.com/jbrantly/DefinitelyTyped/tree/react-v14/react
