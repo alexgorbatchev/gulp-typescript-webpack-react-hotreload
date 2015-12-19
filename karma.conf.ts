@@ -1,5 +1,3 @@
-/// <reference path="typings/tsd.d.ts" />
-
 process.env.NODE_ENV = 'test';
 
 module.exports = function(config) {

@@ -17,11 +17,12 @@ const typescriptProject = $.typescript.createProject('tsconfig.json', { typescri
 const allTypescriptFiles = ['src/**/*.{ts,tsx}', 'test/**/*.ts', '*.ts'];
 
 gulp.task('typescript:format', function() {
-  gulp.src(allTypescriptFiles)
-    .pipe($.changedInPlace())
-    .pipe($.tsfmt({ options: require('./tsfmt.json') }))
-    .pipe($.print(filepath => `Formatted ${filepath}`))
-    .pipe(gulp.dest(file => path.dirname(file.path)));
+  log('typescript:format is not ready until TypeScript 1.8')
+  // gulp.src(allTypescriptFiles)
+  //   .pipe($.changedInPlace())
+  //   .pipe($.tsfmt({ options: require('./tsfmt.json') }))
+  //   .pipe($.print(filepath => `Formatted ${filepath}`))
+  //   .pipe(gulp.dest(file => path.dirname(file.path)));
 });
 
 gulp.task('typescript:tsconfig', function() {
