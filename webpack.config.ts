@@ -3,17 +3,23 @@ const webpack = require('webpack');
 const ManifestPlugin = require('webpack-manifest-plugin');
 import {execSync} from 'child_process';
 
-let devtool, entry, output, plugins, resolve, preLoaders, loaders, stats;
+let devtool, entry, output, plugins, resolve, preLoaders, loaders;
 
 const PRODUCTION = process.env.NODE_ENV === 'production';
 const TEST = process.env.NODE_ENV === 'test';
 const DEVELOPMENT = !PRODUCTION && !TEST;
 const SRC_DIR = path.join(__dirname, 'src');
+const TEST_DIR = path.join(__dirname, 'test');
 
 devtool = 'source-map';
 
 entry = {
-  vendor: ['react', 'radium'],
+  vendor: [
+    'react',
+    'radium',
+    'react-dom',
+    'react-router',
+  ],
   app: [path.join(SRC_DIR, 'index.tsx')],
 };
 
@@ -44,26 +50,14 @@ loaders = [
   {
     test: /\.ts(x)?$/,
     loaders: ['react-hot', 'ts?silent'],
-    include: path.join(SRC_DIR),
+    include: [SRC_DIR],
   },
   {
     test: /\.(png|jpg|svg)$/,
     loader: 'url-loader?limit=8192',
-    include: path.join(SRC_DIR, 'images'),
+    include: [path.join(SRC_DIR, 'images')],
   },
 ];
-
-stats = {
-  colors: require('gulp-util').colors.enabled,
-  assets: false,
-  version: true,
-  timings: true,
-  hash: true,
-  chunks: true,
-  chunkModules: false,
-  errorDetails: true,
-  reasons: true,
-};
 
 if (DEVELOPMENT) {
   entry.vendor.unshift(
@@ -73,7 +67,7 @@ if (DEVELOPMENT) {
 
   plugins.push(
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.DefinePlugin({ VERSION: '"development"' })
+    new webpack.DefinePlugin({ VERSION: `"${process.env.NODE_ENV}"` })
   );
 }
 
@@ -89,16 +83,31 @@ if (PRODUCTION) {
 }
 
 if (TEST) {
-  devtool = 'inline-source-map';
+  devtool = '#inline-source-map';
   entry = {};
   output = {};
+  plugins = [];
+  
+  loaders[0].include.push(TEST_DIR);
 
-  preLoaders.push({
-    test: /\.ts(x)?$/,
-    exclude: /(test|node_modules|bower_components)\//,
-    loader: 'isparta-instrumenter',
-  });
+  // preLoaders.push({
+  //   test: /\.ts(x)?$/,
+  //   exclude: /(test|node_modules|bower_components)\//,
+  //   loader: 'isparta-instrumenter',
+  // });
 }
+
+export let stats = {
+  colors: require('gulp-util').colors.enabled,
+  assets: false,
+  version: true,
+  timings: true,
+  hash: true,
+  chunks: true,
+  chunkModules: false,
+  errorDetails: true,
+  reasons: true,
+};
 
 export default {
   devtool,
@@ -106,7 +115,6 @@ export default {
   output,
   plugins,
   resolve,
-  stats, // this is used by webpack dev server and gulpfile
   module: {
     preLoaders,
     loaders,

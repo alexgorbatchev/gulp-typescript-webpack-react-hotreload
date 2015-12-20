@@ -5,7 +5,10 @@ module.exports = function(config) {
     colors: true,
     frameworks: ['mocha'],
     reporters: ['spec'],
-
+    browsers: ['Chrome'],
+    singleRun: true,
+    webpack: require('./webpack.config').default,
+    
     files: [
       'node_modules/phantomjs-polyfill/bind-polyfill.js',
       'test/bundle.js',
@@ -13,24 +16,6 @@ module.exports = function(config) {
 
     preprocessors: {
       'test/bundle.js': ['webpack', 'sourcemap']
-    },
-
-    browsers: ['Chrome'],
-    singleRun: true,
-
-    webpack: {
-      devtool: '#inline-source-map',
-      resolve: {
-        extensions: ['', '.ts', '.tsx', '.js'],
-      },
-      module: {
-        loaders: [
-          {
-            test: /\.ts(x)?$/,
-            loaders: ['ts?silent'],
-          },
-        ],
-      }
     },
 
     webpackMiddleware: {

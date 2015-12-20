@@ -19,7 +19,7 @@
     "src/application.tsx",
     "src/component.tsx",
     "src/index.tsx",
-    "test/hello-world.test.ts",
+    "test/hello-world.test.tsx",
     "gulpfile.ts",
     "karma.conf.ts",
     "webpack.config.ts",
