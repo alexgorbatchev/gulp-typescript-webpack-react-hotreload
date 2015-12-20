@@ -14,7 +14,7 @@ const $ = {
 };
 
 const typescriptProject = $.typescript.createProject('tsconfig.json', { typescript: require('typescript') });
-const allTypescriptFiles = ['src/**/*.{ts,tsx}', 'test/**/*.ts', '*.ts'];
+const allTypescriptFiles = ['src/**/*.{ts,tsx}', 'test/**/*.{ts,tsx}', '*.ts'];
 
 gulp.task('typescript:format', function() {
   log('typescript:format is not ready until TypeScript 1.8')
@@ -30,7 +30,7 @@ gulp.task('typescript:tsconfig', function() {
     .pipe($.tsconfigFiles());
 });
 
-gulp.task('tdd', $.bg('karma', 'start', '--single-run=false'));
+gulp.task('tdd', ['typescript:tsconfig'], $.bg('karma', 'start', '--single-run=false'));
 
 gulp.task('webpack', function(done) {
   const webpack = require('webpack');
