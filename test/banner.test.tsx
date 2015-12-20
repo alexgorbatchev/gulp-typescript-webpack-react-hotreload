@@ -1,20 +1,20 @@
-import {expect} from 'chai';
+import { expect } from 'chai';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as TestUtils from 'react-addons-test-utils';
-import Component, { ComponentKind, foo } from '../src/component';
+import Banner, { BannerKind, foo } from '../src/components/banner';
 
 describe('hello-karma', function () {
   it('works', function () {
     const instance = TestUtils.renderIntoDocument(
-      <Component name="World" kind={ComponentKind.primary} />
+      <Banner name="World" kind={BannerKind.primary} />
     );
     
     console.log(instance.refs);
   });
 
-  it('component is here too', function () {
-    expect(Component).to.be.ok;
+  it('banner is here too', function () {
+    expect(Banner).to.be.ok;
     foo();
   });
 });

@@ -16,10 +16,10 @@
   ],
   "files": [
     "typings/tsd.d.ts",
-    "src/application.tsx",
-    "src/component.tsx",
     "src/index.tsx",
-    "test/hello-world.test.tsx",
+    "src/components/application.tsx",
+    "src/components/banner.tsx",
+    "test/banner.test.tsx",
     "gulpfile.ts",
     "karma.conf.ts",
     "webpack.config.ts",
