@@ -3,6 +3,8 @@ const WebpackDevServer = require('webpack-dev-server');
 
 import config, {stats} from './webpack.config.ts';
 
+stats.chunkModules = true;
+
 const app = new WebpackDevServer(webpack(config), {
   progress: true,
   inline: true,

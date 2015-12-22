@@ -1,14 +1,12 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Router, Route, Link } from 'react-router';
-import Application from './components/application';
+import routes from './routes';
 
 declare var VERSION: string;
 
 const root = (
-  <Router>
-    <Route path="/" component={Application}/>
-  </Router>
+  <Router routes={routes} />
 );
 
 ReactDOM.render(root, document.getElementById('root'));

@@ -32,6 +32,9 @@ output = {
 
 plugins = [
   new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' }),
+  new webpack.optimize.DedupePlugin(),
+  new webpack.optimize.OccurenceOrderPlugin(),
+  // new webpack.optimize.AggressiveMergingPlugin(),
 ];
 
 resolve = {
@@ -99,17 +102,18 @@ if (TEST) {
 
 export let stats = {
   colors: require('gulp-util').colors.enabled,
-  assets: false,
+  assets: true,
   version: true,
   timings: true,
   hash: true,
   chunks: true,
   chunkModules: false,
   errorDetails: true,
-  reasons: true,
+  reasons: false,
 };
 
 export default {
+  target: 'web',
   devtool,
   entry,
   output,
