@@ -32,7 +32,7 @@ export default class Banner extends React.Component<BannerProps, any> {
 
   render() {
     return <div ref="root" style={[styles.base, styles[this.props.kind]]}>
-      <img ref="logo" src={require('../images/twitter.svg')} width="20" />
+      <img ref="logo" src={require('../../images/twitter.svg')} width="20" />
     </div>
   }
 }

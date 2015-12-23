@@ -47,6 +47,7 @@
     "webpack-manifest-plugin": "^0.5.0"
   },
   "dependencies": {
+    "es6-promise": "^3.0.2",
     "history": "^1.13.1",
     "immutable": "^3.7.6",
     "lodash": "^3.10.1",

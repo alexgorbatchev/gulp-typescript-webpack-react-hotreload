@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const ManifestPlugin = require('webpack-manifest-plugin');
-import {execSync} from 'child_process';
+import { execSync } from 'child_process';
 
 let devtool, entry, output, plugins, resolve, preLoaders, loaders;
 
@@ -19,6 +19,7 @@ entry = {
     'radium',
     'react-dom',
     'react-router',
+    'es6-promise',
   ],
   app: [path.join(SRC_DIR, 'index.tsx')],
 };
@@ -34,7 +35,7 @@ plugins = [
   new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' }),
   new webpack.optimize.DedupePlugin(),
   new webpack.optimize.OccurenceOrderPlugin(),
-  // new webpack.optimize.AggressiveMergingPlugin(),
+  new webpack.optimize.AggressiveMergingPlugin(),
 ];
 
 resolve = {
