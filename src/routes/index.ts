@@ -1,4 +1,2 @@
-export default [
-  require('./home').default,
-  require('./about').default,
-];
+import Root from './root';
+export default Root;

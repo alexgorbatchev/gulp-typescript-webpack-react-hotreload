@@ -3,19 +3,10 @@ require('es6-promise').polyfill();
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Router } from 'react-router';
-import childRoutes from './routes';
-import Application from './application';
+import routes from './routes';
 
 declare var ENV: string;
 declare var SHA: string;
-
-const routes = [
-  {
-    path: '/', 
-    component: Application,
-    childRoutes,
-  }
-];
 
 ReactDOM.render(<Router routes={routes} />, document.getElementById('root'));
 
