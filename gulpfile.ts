@@ -26,13 +26,14 @@ gulp.task('typescript:format', function() {
 });
 
 gulp.task('typescript:tsconfig', function() {
-  gulp.src(['typings/tsd.d.ts'].concat(allTypescriptFiles), { read: false })
-    .pipe($.tsconfigFiles());
+  // gulp.src(['typings/tsd.d.ts'].concat(allTypescriptFiles), { read: false })
+  //   .pipe($.tsconfigFiles());
 });
 
-gulp.task('tdd', ['typescript:tsconfig'], $.bg('karma', 'start', '--single-run=false'));
+gulp.task('karma', ['typescript:tsconfig'], $.bg('karma', 'start', '--single-run=false'));
+gulp.task('webpack-dev-server', $.devExpress('webpack.js'));
 
-gulp.task('webpack', function(done) {
+gulp.task('build-assets', function(done) {
   const webpack = require('webpack');
   const config = require('./webpack.config.ts').default;
 
@@ -61,9 +62,9 @@ gulp.task('webpack', function(done) {
   });
 });
 
-gulp.task('build', ['webpack']);
+gulp.task('build', ['build-assets']);
 
-gulp.task('dev', ['typescript:format', 'tdd'], function() {
+gulp.task('dev', ['typescript:format', 'karma'], function() {
   gulp.watch(allTypescriptFiles, ['typescript:format', 'typescript:tsconfig']);
-  gulp.watch(['webpack.ts', 'webpack.config.ts'], $.devExpress('webpack.js'));
+  gulp.watch(['webpack.ts', 'webpack.config.ts'], ['webpack-dev-server']);
 });

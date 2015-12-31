@@ -13,16 +13,5 @@
   },
   "exclude": [
     "node_modules"
-  ],
-  "files": [
-    "typings/tsd.d.ts",
-    "src/index.tsx",
-    "src/components/application.tsx",
-    "src/components/banner.tsx",
-    "test/banner.test.tsx",
-    "gulpfile.ts",
-    "karma.conf.ts",
-    "webpack.config.ts",
-    "webpack.ts"
   ]
 }
