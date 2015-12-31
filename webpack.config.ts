@@ -1,6 +1,7 @@
-const path = require('path');
 const webpack = require('webpack');
 const ManifestPlugin = require('webpack-manifest-plugin');
+
+import * as path from 'path';
 import { execSync } from 'child_process';
 
 let devtool, entry, output, plugins, resolve, preLoaders, loaders;
@@ -15,11 +16,16 @@ devtool = 'source-map';
 
 entry = {
   vendor: [
-    'react',
     'radium',
+    'react',
     'react-dom',
+    'react-redux',
     'react-router',
     'es6-promise',
+    'immutable',
+  ],
+  components: [
+    './src/components'
   ],
   app: [path.join(SRC_DIR, 'index.tsx')],
 };
@@ -33,9 +39,14 @@ output = {
 
 plugins = [
   new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' }),
+  new webpack.optimize.CommonsChunkPlugin({ name: 'components', chunks: ['components', 'app'] }),
   new webpack.optimize.DedupePlugin(),
   new webpack.optimize.OccurenceOrderPlugin(),
-  new webpack.optimize.AggressiveMergingPlugin(),
+  // new webpack.optimize.AggressiveMergingPlugin(),
+  new webpack.DefinePlugin({
+    ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
+    SHA: getSHA(),
+  }),
 ];
 
 resolve = {
@@ -59,7 +70,7 @@ loaders = [
   {
     test: /\.(png|jpg|svg)$/,
     loader: 'url-loader?limit=8192',
-    include: [path.join(SRC_DIR, 'images')],
+    include: [SRC_DIR],
   },
 ];
 
@@ -70,15 +81,13 @@ if (DEVELOPMENT) {
   );
 
   plugins.push(
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.DefinePlugin({ VERSION: `"${process.env.NODE_ENV}"` })
+    new webpack.HotModuleReplacementPlugin()
   );
 }
 
 if (PRODUCTION) {
   plugins.push(
     new webpack.optimize.UglifyJsPlugin({ comments: false }),
-    new webpack.DefinePlugin({ VERSION: getVersion() }),
     new ManifestPlugin()
   );
 
@@ -92,7 +101,7 @@ if (TEST) {
   output = {};
   plugins = [];
   
-  loaders[0].include.push(TEST_DIR);
+  // loaders[0].include.push(TEST_DIR);
 
   // preLoaders.push({
   //   test: /\.ts(x)?$/,
@@ -126,9 +135,8 @@ export default {
   }
 };
 
-function getVersion(): string {
+function getSHA(): string {
   const result: string = execSync('git describe --exact-match --tags HEAD 2>&1; exit 0').toString();
   const matches: Array<string> = result.match(/^fatal: no tag exactly matches '(\w+)'/);
-  const sha: string = matches && matches[1];
-  return JSON.stringify(sha || result.replace(/\n/g, ''));
+  return JSON.stringify((matches && matches[1]) || result);
 }
