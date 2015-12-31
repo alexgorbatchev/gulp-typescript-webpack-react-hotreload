@@ -1,6 +1,19 @@
 export default {
   path: 'about',
-  getComponent(location, callback) {
-    require.ensure([], require => callback(null, require('./about')['default']));
+  
+  getChildRoutes(location, callback) {
+    require.ensure([], () => callback(null, [
+      require('./routes/contact').default,
+      require('./routes/team').default,
+    ]));
+  },
+  
+  // childRoutes: [
+  //   require('./contact').default,
+  //   require('./team').default,
+  // ],
+  
+  getComponents(location, callback) {
+    require.ensure([], () => callback(null, require('./components/about').default));
   }
 };

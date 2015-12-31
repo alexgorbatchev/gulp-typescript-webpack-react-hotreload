@@ -2,12 +2,12 @@ import { expect } from 'chai';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import * as TestUtils from 'react-addons-test-utils';
-import Banner, { Kind } from './banner';
+import Contact from './index';
 
-describe('banner', function () {
+describe('contact', function () {
   it('works', function () {
     const instance = TestUtils.renderIntoDocument(
-      <Banner kind={Kind.primary} />
+      <Contact />
     );
     
     expect(instance).to.be.ok;

@@ -1,10 +1,13 @@
+require('es6-promise').polyfill();
+
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Router, Route, Link } from 'react-router';
+import { Router } from 'react-router';
 import childRoutes from './routes';
 import Application from './application';
 
-declare var VERSION: string;
+declare var ENV: string;
+declare var SHA: string;
 
 const routes = [
   {
@@ -14,12 +17,7 @@ const routes = [
   }
 ];
 
-
-const root = (
-  <Router routes={routes} />
-);
-
-ReactDOM.render(root, document.getElementById('root'));
+ReactDOM.render(<Router routes={routes} />, document.getElementById('root'));
 
 document.getElementById('time').innerHTML = new Date().toString();
-document.getElementById('sha').innerHTML = VERSION;
+document.getElementById('sha').innerHTML = `${ENV} ${SHA}`;

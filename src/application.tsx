@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Link } from 'react-router'
+import { Link } from 'react-router';
 
 export default class extends React.Component<any, any> {
   render() {

@@ -1,6 +1,7 @@
 export default {
-  path: '/home',
-  getComponent(location, callback) {
-    require.ensure([], require => callback(null, require('./home')['default']));
+  path: 'home',
+  
+  getComponents(location, callback) {
+    require.ensure([], () => callback(null, require('./components/home').default));
   }
 };

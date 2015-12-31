@@ -1,8 +1,4 @@
-
-import Home from './home';
-import About from './about';
-
 export default [
-  Home,
-  About
+  require('./home').default,
+  require('./about').default,
 ];
