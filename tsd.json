@@ -50,8 +50,8 @@
     "react/react-dom.d.ts": {
       "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
     },
-    "es6-promise/es6-promise.d.ts": {
-      "commit": "4c41545030eba44b27ce7209112dbf862f6b1d78"
+    "es6-shim/es6-shim.d.ts": {
+      "commit": "dc9dabe74a5be62613b17a3605309783a12ff28a"
     }
   }
 }

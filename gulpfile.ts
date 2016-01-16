@@ -5,15 +5,15 @@ const {log, colors} = require('gulp-util');
 
 const $ = {
   bg: require('gulp-bg'),
-  changedInPlace: require('gulp-changed-in-place'),
+  // changedInPlace: require('gulp-changed-in-place'),
   devExpress: require('gulp-dev-express'),
-  print: require('gulp-print'),
-  tsconfigFiles: require('gulp-tsconfig-files'),
-  tsfmt: require('gulp-tsfmt'),
-  typescript: require('gulp-typescript'),
+  // print: require('gulp-print'),
+  // tsconfigFiles: require('gulp-tsconfig-files'),
+  // tsfmt: require('gulp-tsfmt'),
+  // typescript: require('gulp-typescript'),
 };
 
-const typescriptProject = $.typescript.createProject('tsconfig.json', { typescript: require('typescript') });
+// const typescriptProject = $.typescript.createProject('tsconfig.json', { typescript: require('typescript') });
 const allTypescriptFiles = ['src/**/*.{ts,tsx}', 'test/**/*.{ts,tsx}', '*.ts'];
 
 gulp.task('typescript:format', function() {

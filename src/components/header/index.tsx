@@ -27,7 +27,7 @@ const styles = {
 };
 
 @Radium
-export default class Header extends React.Component<IHeaderProps, any> {
+export default class HeaderComponent extends React.Component<IHeaderProps, any> {
   // static propTypes: React.ValidationMap<any> = {
   //   kind: React.PropTypes.oneOf([HeaderKind.h1, HeaderKind.h2]).isRequired
   // };

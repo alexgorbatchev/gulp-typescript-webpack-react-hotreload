@@ -25,7 +25,7 @@ const styles = {
 };
 
 @Radium
-export default class Banner extends React.Component<BannerProps, any> {
+export default class BannerComponent extends React.Component<BannerProps, any> {
   // static propTypes: React.ValidationMap<any> = {
   //   kind: React.PropTypes.oneOf([BannerKind.primary, BannerKind.warning]).isRequired
   // };

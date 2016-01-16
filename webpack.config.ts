@@ -16,13 +16,17 @@ devtool = 'source-map';
 
 entry = {
   vendor: [
+    'es6-promise',
+    'immutable',
+    'history',
+    'object.assign',
     'radium',
     'react',
     'react-dom',
     'react-redux',
     'react-router',
-    'es6-promise',
-    'immutable',
+    'redux',
+    'redux-simple-router',
   ],
   components: [
     './src/components'
@@ -37,16 +41,20 @@ output = {
   chunkFilename: '[name].js',
 };
 
+const definePlugin = new webpack.DefinePlugin({
+  SHA: getSHA(),
+  DEVELOPMENT,
+  PRODUCTION,
+  TEST,
+});
+
 plugins = [
   new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' }),
   new webpack.optimize.CommonsChunkPlugin({ name: 'components', chunks: ['components', 'app'] }),
   new webpack.optimize.DedupePlugin(),
   new webpack.optimize.OccurenceOrderPlugin(),
   // new webpack.optimize.AggressiveMergingPlugin(),
-  new webpack.DefinePlugin({
-    ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
-    SHA: getSHA(),
-  }),
+  definePlugin
 ];
 
 resolve = {
@@ -99,8 +107,10 @@ if (TEST) {
   devtool = '#inline-source-map';
   entry = {};
   output = {};
-  plugins = [];
-  
+  plugins = [
+    definePlugin
+  ];
+
   // loaders[0].include.push(TEST_DIR);
 
   // preLoaders.push({

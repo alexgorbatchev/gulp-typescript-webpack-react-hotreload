@@ -1,14 +1,21 @@
 require('es6-promise').polyfill();
+require('object.assign/polyfill')();
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Router } from 'react-router';
+import { Provider } from 'react-redux';
 import routes from './routes';
+import store from './store';
 
-declare var ENV: string;
-declare var SHA: string;
+declare const SHA;
 
-ReactDOM.render(<Router routes={routes} />, document.getElementById('root'));
+ReactDOM.render(
+  <Provider store={store}>
+    <Router routes={routes} />
+  </Provider>
+  , document.getElementById('root')
+);
 
 document.getElementById('time').innerHTML = new Date().toString();
-document.getElementById('sha').innerHTML = `${ENV} ${SHA}`;
+document.getElementById('sha').innerHTML = SHA;

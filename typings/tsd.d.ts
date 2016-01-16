@@ -11,6 +11,6 @@
 /// <reference path="redux/redux.d.ts" />
 /// <reference path="react-redux/react-redux.d.ts" />
 /// <reference path="react/react-addons-test-utils.d.ts" />
-/// <reference path="es6-promise/es6-promise.d.ts" />
 /// <reference path="_custom/radium.d.ts" />
 /// <reference path="_custom/require.d.ts" />
+/// <reference path="es6-shim/es6-shim.d.ts" />
