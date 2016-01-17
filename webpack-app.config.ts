@@ -11,31 +11,17 @@ const TEST = process.env.NODE_ENV === 'test';
 const DEVELOPMENT = !PRODUCTION && !TEST;
 const SRC_DIR = path.join(__dirname, 'src');
 const TEST_DIR = path.join(__dirname, 'test');
+const BUILD_DIR = path.join(__dirname, 'build', 'public');
 
 devtool = 'source-map';
 
 entry = {
-  vendor: [
-    'es6-promise',
-    'immutable',
-    'history',
-    'object.assign',
-    'radium',
-    'react',
-    'react-dom',
-    'react-redux',
-    'react-router',
-    'redux',
-    'redux-simple-router',
-  ],
-  components: [
-    './src/components'
-  ],
-  app: [path.join(SRC_DIR, 'index.tsx')],
+  components: './src/components',
+  app: [ path.join(SRC_DIR, 'index.tsx') ],
 };
 
 output = {
-  path: path.join(__dirname, 'build', 'public'),
+  path: BUILD_DIR,
   publicPath: '/static/',
   filename: '[name].js',
   chunkFilename: '[name].js',
@@ -49,12 +35,16 @@ const definePlugin = new webpack.DefinePlugin({
 });
 
 plugins = [
-  new webpack.optimize.CommonsChunkPlugin({ name: 'vendor' }),
   new webpack.optimize.CommonsChunkPlugin({ name: 'components', chunks: ['components', 'app'] }),
   new webpack.optimize.DedupePlugin(),
   new webpack.optimize.OccurenceOrderPlugin(),
+  new webpack.DllReferencePlugin({
+    context: __dirname,
+    manifest: require(`${BUILD_DIR}/vendor-manifest.json`),
+    sourceType: 'var',
+  }),
   // new webpack.optimize.AggressiveMergingPlugin(),
-  definePlugin
+  definePlugin,
 ];
 
 resolve = {
@@ -73,20 +63,22 @@ loaders = [
   {
     test: /\.ts(x)?$/,
     loaders: ['react-hot', 'ts?silent'],
-    include: [SRC_DIR],
+    include: [ SRC_DIR ],
   },
   {
     test: /\.(png|jpg|svg)$/,
     loader: 'url-loader?limit=8192',
-    include: [SRC_DIR],
+    include: [ SRC_DIR ],
   },
 ];
 
 if (DEVELOPMENT) {
-  entry.vendor.unshift(
+  entry.app.unshift(
     'webpack-dev-server/client?http://localhost:3000',
     'webpack/hot/only-dev-server'
   );
+
+  loaders[0].exclude = [ /.*test\.ts(x)?$/ ];
 
   plugins.push(
     new webpack.HotModuleReplacementPlugin()
@@ -107,17 +99,7 @@ if (TEST) {
   devtool = '#inline-source-map';
   entry = {};
   output = {};
-  plugins = [
-    definePlugin
-  ];
-
-  // loaders[0].include.push(TEST_DIR);
-
-  // preLoaders.push({
-  //   test: /\.ts(x)?$/,
-  //   exclude: /(test|node_modules|bower_components)\//,
-  //   loader: 'isparta-instrumenter',
-  // });
+  plugins = [ definePlugin ];
 }
 
 export let stats = {

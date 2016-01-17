@@ -7,8 +7,8 @@ module.exports = function(config) {
     reporters: ['spec'],
     browsers: ['Chrome'],
     singleRun: true,
-    webpack: require('./webpack.config').default,
-    
+    webpack: require('./webpack-app.config').default,
+
     files: [
       'node_modules/phantomjs-polyfill/bind-polyfill.js',
       'test/bundle.js',
@@ -19,8 +19,8 @@ module.exports = function(config) {
     },
 
     webpackMiddleware: {
-      noInfo: true,
-      quiet: true,
+      noInfo: false,
+      quiet: false,
     },
   });
 }

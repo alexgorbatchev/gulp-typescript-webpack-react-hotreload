@@ -1,23 +1,21 @@
 import * as path from 'path';
 
 const gulp = require('gulp');
-const {log, colors} = require('gulp-util');
+const { log, colors } = require('gulp-util');
 
 const $ = {
   bg: require('gulp-bg'),
-  // changedInPlace: require('gulp-changed-in-place'),
   devExpress: require('gulp-dev-express'),
+  // changedInPlace: require('gulp-changed-in-place'),
   // print: require('gulp-print'),
-  // tsconfigFiles: require('gulp-tsconfig-files'),
   // tsfmt: require('gulp-tsfmt'),
-  // typescript: require('gulp-typescript'),
 };
 
-// const typescriptProject = $.typescript.createProject('tsconfig.json', { typescript: require('typescript') });
-const allTypescriptFiles = ['src/**/*.{ts,tsx}', 'test/**/*.{ts,tsx}', '*.ts'];
+const STATIC_FILES: Array<string> = [ 'src/index.html' ];
+const karma = $.bg('karma', 'start', '--single-run=false');
 
 gulp.task('typescript:format', function() {
-  log('typescript:format is not ready until TypeScript 1.8')
+  log('typescript:format is not ready until TypeScript 1.8');
   // gulp.src(allTypescriptFiles)
   //   .pipe($.changedInPlace())
   //   .pipe($.tsfmt({ options: require('./tsfmt.json') }))
@@ -25,19 +23,11 @@ gulp.task('typescript:format', function() {
   //   .pipe(gulp.dest(file => path.dirname(file.path)));
 });
 
-gulp.task('typescript:tsconfig', function() {
-  // gulp.src(['typings/tsd.d.ts'].concat(allTypescriptFiles), { read: false })
-  //   .pipe($.tsconfigFiles());
-});
-
-gulp.task('karma', ['typescript:tsconfig'], $.bg('karma', 'start', '--single-run=false'));
+gulp.task('karma', karma);
 gulp.task('webpack-dev-server', $.devExpress('webpack.js'));
 
-gulp.task('build-assets', function(done) {
-  const webpack = require('webpack');
-  const config = require('./webpack.config.ts').default;
-
-  webpack(config, function(err, stats) {
+function printStats(statsOpts, done) {
+  return function(err, stats) {
     if (err) {
       log(colors.red(err.message));
       return process.exit(-1);
@@ -54,17 +44,37 @@ gulp.task('build-assets', function(done) {
     }
 
     stats
-      .toString(config.stats)
+      .toString(statsOpts)
       .split(/\n/g)
       .forEach(logWithWarnings);
 
     done();
-  });
+  }
+}
+
+gulp.task('build:copy', function() {
+  gulp.src(STATIC_FILES)
+    .pipe(gulp.dest(path.join(__dirname, 'build', 'public')));
 });
 
-gulp.task('build', ['build-assets']);
+gulp.task('build:vendor', function(done) {
+  const webpack = require('webpack');
+  const { default: config } = require('./webpack-vendor.config');
+  const { stats } = require('./webpack-app.config');
+  webpack(config, printStats(stats, done));
+});
 
-gulp.task('dev', ['typescript:format', 'karma'], function() {
-  gulp.watch(allTypescriptFiles, ['typescript:format', 'typescript:tsconfig']);
-  gulp.watch(['webpack.ts', 'webpack.config.ts'], ['webpack-dev-server']);
+gulp.task('build:app', function(done) {
+  const webpack = require('webpack');
+  const { default: config, stats } = require('./webpack-app.config');
+  webpack(config, printStats(stats, done));
+});
+
+gulp.task('build:static', ['build:vendor', 'build:copy'])
+gulp.task('build', ['build:vendor', 'build:static']);
+
+gulp.task('dev', ['typescript:format', 'karma', 'build:static'], function() {
+  gulp.watch(STATIC_FILES, ['build:copy']);
+  gulp.watch(['webpack.ts', 'webpack-app.config.ts'], ['webpack-dev-server']);
+  gulp.watch(['karma.conf.ts'], ['karma']);
 });
