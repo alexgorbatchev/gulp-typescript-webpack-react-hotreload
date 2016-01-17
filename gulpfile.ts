@@ -26,21 +26,23 @@ gulp.task('karma', $.bg('karma', 'start', '--single-run=false'));
 gulp.task('dev:server', $.bg('node', 'webpack/dev-server.js'));
 gulp.task('build:copy', () => gulp.src(STATIC_FILES).pipe(gulp.dest(BUILD_DIR)));
 gulp.task('build:vendor', webpack('vendor'));
-gulp.task('build:app', webpack('app'));
-gulp.task('build:static', ['build:vendor', 'build:copy'])
+gulp.task('build:app', ['build:vendor', 'build:dev'], webpack('app'));
+gulp.task('build:dev', ['build:vendor'], webpack('dev'));
+gulp.task('build:static', ['build:vendor', 'build:dev', 'build:copy'])
 gulp.task('build', ['build:vendor', 'build:static']);
 
 gulp.task('dev', ['typescript:format', 'karma', 'build:static', 'dev:server'], function() {
   gulp.watch(STATIC_FILES, ['build:copy']);
-  gulp.watch(['webpack/**/*'], ['dev-server']);
+  gulp.watch(['webpack/**/*'], ['dev:server']);
   gulp.watch(['karma.conf.ts'], ['karma']);
 });
 
 
 function webpack(configName: string) {
-  return function (done) {
+  return function(done) {
     const webpack = require('webpack');
-    const { default: config, stats } = require(`./webpack/config-${configName}`);
+    const { default: config } = require(`./webpack/config-${configName}`);
+    const { default: stats } = require('./webpack/stats');
     webpack(config, printStats(stats, done));
   }
 }

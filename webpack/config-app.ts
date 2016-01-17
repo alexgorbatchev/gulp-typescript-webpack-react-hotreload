@@ -3,6 +3,7 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 
 import * as path from 'path';
 import { execSync } from 'child_process';
+import stats from './stats';
 
 import {
   PRODUCTION,
@@ -12,6 +13,7 @@ import {
   ROOT_DIR,
   BUILD_DIR,
   VENDOR_MANIFEST,
+  DEV_MANIFEST,
   PUBLIC_PATH,
 } from '../config';
 
@@ -51,6 +53,11 @@ plugins = [
     manifest: require(VENDOR_MANIFEST),
     sourceType: 'var',
   }),
+  new webpack.DllReferencePlugin({
+    context: ROOT_DIR,
+    manifest: require(DEV_MANIFEST),
+    sourceType: 'var',
+  }),
   definePlugin,
 ];
 
@@ -80,14 +87,15 @@ loaders = [
 ];
 
 if (DEVELOPMENT) {
-  entry.app.unshift(
+  entry.hmr = [
     'webpack-dev-server/client?http://localhost:3000',
     'webpack/hot/only-dev-server'
-  );
+  ];
 
   // loaders[0].exclude = [ /.*test\.ts(x)?$/ ];
 
   plugins.push(
+    new webpack.optimize.CommonsChunkPlugin({ name: 'hmr' }),
     new webpack.HotModuleReplacementPlugin()
   );
 }
@@ -108,18 +116,6 @@ if (TEST) {
   output = {};
   plugins = [ definePlugin ];
 }
-
-export let stats = {
-  colors: require('gulp-util').colors.enabled,
-  assets: true,
-  version: true,
-  timings: true,
-  hash: true,
-  chunks: true,
-  chunkModules: false,
-  errorDetails: true,
-  reasons: false,
-};
 
 export default {
   target: 'web',

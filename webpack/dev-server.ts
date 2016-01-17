@@ -1,11 +1,9 @@
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 
-import * as path from 'path';
-import config, { stats } from './config-app';
+import config from './config-app';
+import stats from './stats';
 import { BUILD_DIR, PUBLIC_PATH } from '../config';
-
-stats.chunkModules = true;
 
 const app = new WebpackDevServer(webpack(config), {
   progress: true,
