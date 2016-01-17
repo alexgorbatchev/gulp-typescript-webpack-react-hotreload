@@ -1,5 +1,3 @@
-const { DllPlugin, DllReferencePlugin } = require('webpack');
-
 import stats from './stats';
 
 import {
@@ -10,6 +8,11 @@ import {
   ROOT_DIR,
   VENDOR_MANIFEST,
 } from '../config';
+
+const {
+  DllPlugin,
+  DllReferencePlugin,
+} = require('webpack');
 
 let devtool, entry, output, plugins, resolve, dllOptions;
 

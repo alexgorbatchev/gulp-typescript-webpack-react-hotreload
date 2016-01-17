@@ -1,6 +1,3 @@
-const webpack = require('webpack');
-const ManifestPlugin = require('webpack-manifest-plugin');
-
 import stats from './stats';
 
 import {
@@ -10,6 +7,15 @@ import {
   VENDOR_MANIFEST,
   PUBLIC_PATH,
 } from '../config';
+
+const ManifestPlugin = require('webpack-manifest-plugin');
+
+const {
+  DllPlugin,
+  optimize: {
+    UglifyJsPlugin,
+  },
+} = require('webpack');
 
 let devtool, entry, output, plugins, resolve, dllOptions;
 
@@ -42,13 +48,13 @@ output = {
 
 dllOptions = {
   path: VENDOR_MANIFEST,
-  name: 'vendor',
+  name: '[name]',
 };
 
 if (PRODUCTION) {
   plugins.push(
-    new webpack.optimize.UglifyJsPlugin({ comments: false }),
-    new ManifestPlugin()
+    new UglifyJsPlugin({ comments: false }),
+    new ManifestPlugin({ fileName: 'vendor__-manifest.json' })
   );
 
   output.filename = '[name]-[hash].js';
@@ -56,7 +62,7 @@ if (PRODUCTION) {
   dllOptions.name = '[name]_[hash]';
 }
 
-plugins.push(new webpack.DllPlugin(dllOptions));
+plugins.push(new DllPlugin(dllOptions));
 
 export default {
   target: 'web',

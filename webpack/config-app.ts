@@ -1,6 +1,3 @@
-const webpack = require('webpack');
-const ManifestPlugin = require('webpack-manifest-plugin');
-
 import * as path from 'path';
 import { execSync } from 'child_process';
 import stats from './stats';
@@ -16,6 +13,20 @@ import {
   DEV_MANIFEST,
   PUBLIC_PATH,
 } from '../config';
+
+const ManifestPlugin = require('webpack-manifest-plugin');
+
+const {
+  DllReferencePlugin,
+  DefinePlugin,
+  HotModuleReplacementPlugin,
+  optimize: {
+    UglifyJsPlugin,
+    DedupePlugin,
+    OccurenceOrderPlugin,
+    CommonsChunkPlugin,
+  },
+} = require('webpack');
 
 let devtool, entry, output, plugins, resolve, preLoaders, loaders;
 
@@ -33,7 +44,7 @@ output = {
   chunkFilename: '[name].js',
 };
 
-const definePlugin = new webpack.DefinePlugin({
+const definePlugin = new DefinePlugin({
   SHA: getSHA(),
   DEVELOPMENT,
   PRODUCTION,
@@ -41,19 +52,19 @@ const definePlugin = new webpack.DefinePlugin({
 });
 
 plugins = [
-  new webpack.optimize.DedupePlugin(),
-  new webpack.optimize.OccurenceOrderPlugin(),
-  // new webpack.optimize.AggressiveMergingPlugin(),
-  new webpack.optimize.CommonsChunkPlugin({
+  new DedupePlugin(),
+  new OccurenceOrderPlugin(),
+  // new AggressiveMergingPlugin(),
+  new CommonsChunkPlugin({
     name: 'components',
     chunks: [ 'components', 'app' ]
   }),
-  new webpack.DllReferencePlugin({
+  new DllReferencePlugin({
     context: ROOT_DIR,
     manifest: require(VENDOR_MANIFEST),
     sourceType: 'var',
   }),
-  new webpack.DllReferencePlugin({
+  new DllReferencePlugin({
     context: ROOT_DIR,
     manifest: require(DEV_MANIFEST),
     sourceType: 'var',
@@ -95,15 +106,15 @@ if (DEVELOPMENT) {
   // loaders[0].exclude = [ /.*test\.ts(x)?$/ ];
 
   plugins.push(
-    new webpack.optimize.CommonsChunkPlugin({ name: 'hmr' }),
-    new webpack.HotModuleReplacementPlugin()
+    new CommonsChunkPlugin({ name: 'hmr' }),
+    new HotModuleReplacementPlugin()
   );
 }
 
 if (PRODUCTION) {
   plugins.push(
-    new webpack.optimize.UglifyJsPlugin({ comments: false }),
-    new ManifestPlugin()
+    new UglifyJsPlugin({ comments: false }),
+    new ManifestPlugin({ fileName: 'app-manifest.json' })
   );
 
   output.filename = '[name]-[hash].js';

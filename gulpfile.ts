@@ -1,11 +1,16 @@
 import * as path from 'path';
 
-import { BUILD_DIR } from './config';
+import {
+  BUILD_DIR,
+  DEVELOPMENT,
+} from './config';
 
 const gulp = require('gulp');
+const rimraf = require('rimraf');
 const { log, colors } = require('gulp-util');
 const $ = {
   bg: require('gulp-bg'),
+  sequence: require('run-sequence'),
   // changedInPlace: require('gulp-changed-in-place'),
   // print: require('gulp-print'),
   // tsfmt: require('gulp-tsfmt'),
@@ -21,15 +26,24 @@ gulp.task('typescript:format', function() {
   //   .pipe($.print(filepath => `Formatted ${filepath}`))
   //   .pipe(gulp.dest(file => path.dirname(file.path)));
 });
-
 gulp.task('karma', $.bg('karma', 'start', '--single-run=false'));
 gulp.task('dev:server', $.bg('node', 'webpack/dev-server.js'));
+gulp.task('build:clean', done => rimraf(BUILD_DIR, done));
 gulp.task('build:copy', () => gulp.src(STATIC_FILES).pipe(gulp.dest(BUILD_DIR)));
 gulp.task('build:vendor', webpack('vendor'));
 gulp.task('build:app', ['build:vendor', 'build:dev'], webpack('app'));
 gulp.task('build:dev', ['build:vendor'], webpack('dev'));
-gulp.task('build:static', ['build:vendor', 'build:dev', 'build:copy'])
-gulp.task('build', ['build:vendor', 'build:static']);
+gulp.task('build', ['build:static']);
+
+gulp.task('build:static', function(done) {
+  const buildSteps = ['build:vendor', 'build:app', 'build:copy'];
+
+  if (DEVELOPMENT) {
+    buildSteps.push('build:dev');
+  }
+
+  return $.sequence('build:clean', buildSteps, done);
+});
 
 gulp.task('dev', ['typescript:format', 'karma', 'build:static', 'dev:server'], function() {
   gulp.watch(STATIC_FILES, ['build:copy']);
