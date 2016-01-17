@@ -3,42 +3,57 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 
 import * as path from 'path';
 
-let devtool, entry, output, plugins, resolve, dllOptions;
+import {
+  PRODUCTION,
+  SRC_DIR,
+  BUILD_DIR,
+  VENDOR_MANIFEST,
+  PUBLIC_PATH,
+} from '../config';
 
-const PRODUCTION = process.env.NODE_ENV === 'production';
-const SRC_DIR = path.join(__dirname, 'src');
-const BUILD_DIR = path.join(__dirname, 'build', 'public');
+const REQUIRED_MODULES: Array<string> = [
+  'es6-promise',
+  'immutable',
+  'history',
+  'object.assign',
+  'radium',
+  'react',
+  'react-dom',
+  'react-redux',
+  'react-router',
+  'redux',
+  'redux-simple-router',
+];
+
+const DEVELOPMENT_MODULES: Array<string> = [
+  'redux-devtools',
+  'redux-devtools-log-monitor',
+  'redux-devtools-dock-monitor',
+  'react-hot-api',
+  'react-hot-loader',
+  'sockjs-client',
+];
+
+let devtool, entry, output, plugins, resolve, dllOptions;
 
 devtool = 'source-map';
 plugins = [];
 
 entry = {
-  vendor: [
-    'es6-promise',
-    'immutable',
-    'history',
-    'object.assign',
-    'radium',
-    'react',
-    'react-dom',
-    'react-redux',
-    'react-router',
-    'redux',
-    'redux-simple-router',
-  ],
+  vendor: REQUIRED_MODULES,
 };
 
 output = {
   path: BUILD_DIR,
-  publicPath: '/static/',
+  publicPath: PUBLIC_PATH,
   filename: '[name].js',
   library: 'vendor',
   libraryTarget: 'var',
 };
 
 dllOptions = {
-  path: path.join(BUILD_DIR, '[name]-manifest.json'),
-  name: '[name]',
+  path: VENDOR_MANIFEST,
+  name: 'vendor',
 };
 
 if (PRODUCTION) {
@@ -48,16 +63,10 @@ if (PRODUCTION) {
   );
 
   output.filename = '[name]-[hash].js';
-  dllOptions.name = '[name]-[hash].js';
+  output.library = '[name]_[hash]';
+  dllOptions.name = '[name]_[hash]';
 } else {
-  entry.vendor.push(
-    'redux-devtools',
-    'redux-devtools-log-monitor',
-    'redux-devtools-dock-monitor',
-    'react-hot-api',
-    'react-hot-loader',
-    'sockjs-client'
-  );
+  entry.vendor = entry.vendor.concat(DEVELOPMENT_MODULES);
 }
 
 plugins.push(new webpack.DllPlugin(dllOptions));

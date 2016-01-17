@@ -4,14 +4,18 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 import * as path from 'path';
 import { execSync } from 'child_process';
 
-let devtool, entry, output, plugins, resolve, preLoaders, loaders;
+import {
+  PRODUCTION,
+  TEST,
+  DEVELOPMENT,
+  SRC_DIR,
+  ROOT_DIR,
+  BUILD_DIR,
+  VENDOR_MANIFEST,
+  PUBLIC_PATH,
+} from '../config';
 
-const PRODUCTION = process.env.NODE_ENV === 'production';
-const TEST = process.env.NODE_ENV === 'test';
-const DEVELOPMENT = !PRODUCTION && !TEST;
-const SRC_DIR = path.join(__dirname, 'src');
-const TEST_DIR = path.join(__dirname, 'test');
-const BUILD_DIR = path.join(__dirname, 'build', 'public');
+let devtool, entry, output, plugins, resolve, preLoaders, loaders;
 
 devtool = 'source-map';
 
@@ -22,7 +26,7 @@ entry = {
 
 output = {
   path: BUILD_DIR,
-  publicPath: '/static/',
+  publicPath: PUBLIC_PATH,
   filename: '[name].js',
   chunkFilename: '[name].js',
 };
@@ -35,21 +39,24 @@ const definePlugin = new webpack.DefinePlugin({
 });
 
 plugins = [
-  new webpack.optimize.CommonsChunkPlugin({ name: 'components', chunks: ['components', 'app'] }),
   new webpack.optimize.DedupePlugin(),
   new webpack.optimize.OccurenceOrderPlugin(),
+  // new webpack.optimize.AggressiveMergingPlugin(),
+  new webpack.optimize.CommonsChunkPlugin({
+    name: 'components',
+    chunks: [ 'components', 'app' ]
+  }),
   new webpack.DllReferencePlugin({
-    context: __dirname,
-    manifest: require(`${BUILD_DIR}/vendor-manifest.json`),
+    context: ROOT_DIR,
+    manifest: require(VENDOR_MANIFEST),
     sourceType: 'var',
   }),
-  // new webpack.optimize.AggressiveMergingPlugin(),
   definePlugin,
 ];
 
 resolve = {
   alias: {},
-  extensions: ['', '.tsx', '.ts', '.js'],
+  extensions: [ '', '.tsx', '.ts', '.js' ],
 };
 
 preLoaders = [
@@ -78,7 +85,7 @@ if (DEVELOPMENT) {
     'webpack/hot/only-dev-server'
   );
 
-  loaders[0].exclude = [ /.*test\.ts(x)?$/ ];
+  // loaders[0].exclude = [ /.*test\.ts(x)?$/ ];
 
   plugins.push(
     new webpack.HotModuleReplacementPlugin()

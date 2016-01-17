@@ -15,7 +15,6 @@
     "gulp-bg": "^0.0.8",
     "gulp-changed-in-place": "^2.0.3",
     "gulp-cli": "^1.0.0",
-    "gulp-dev-express": "^1.0.1",
     "gulp-print": "^2.0.1",
     "gulp-tsfmt": "^0.0.3",
     "gulp-util": "^3.0.7",

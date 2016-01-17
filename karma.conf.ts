@@ -7,7 +7,7 @@ module.exports = function(config) {
     reporters: ['spec'],
     browsers: ['Chrome'],
     singleRun: true,
-    webpack: require('./webpack-app.config').default,
+    webpack: require('./webpack/config-app').default,
 
     files: [
       'node_modules/phantomjs-polyfill/bind-polyfill.js',

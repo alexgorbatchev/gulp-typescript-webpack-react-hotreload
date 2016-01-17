@@ -2,7 +2,8 @@ const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 
 import * as path from 'path';
-import config, { stats } from './webpack-app.config';
+import config, { stats } from './config-app';
+import { BUILD_DIR, PUBLIC_PATH } from '../config';
 
 stats.chunkModules = true;
 
@@ -11,8 +12,8 @@ const app = new WebpackDevServer(webpack(config), {
   inline: true,
   hot: true,
   historyApiFallback: true,
-  publicPath: '/webpack/',
-  contentBase: path.join(__dirname, 'build', 'public'),
+  publicPath: PUBLIC_PATH,
+  contentBase: BUILD_DIR,
   stats,
 });
 
