@@ -1,9 +1,12 @@
+import * as path from 'path';
 import stats from './stats';
 
 import {
+  ROOT_DIR,
   PRODUCTION,
   SRC_DIR,
   BUILD_DIR,
+  VENDOR_DLL,
   VENDOR_MANIFEST,
   PUBLIC_PATH,
 } from '../config';
@@ -47,14 +50,14 @@ output = {
 };
 
 dllOptions = {
-  path: VENDOR_MANIFEST,
+  path: VENDOR_DLL,
   name: '[name]',
 };
 
 if (PRODUCTION) {
   plugins.push(
-    new UglifyJsPlugin({ comments: false }),
-    new ManifestPlugin({ fileName: 'vendor__-manifest.json' })
+    new ManifestPlugin({ fileName: path.relative(BUILD_DIR, VENDOR_MANIFEST) }),
+    new UglifyJsPlugin({ comments: false })
   );
 
   output.filename = '[name]-[hash].js';

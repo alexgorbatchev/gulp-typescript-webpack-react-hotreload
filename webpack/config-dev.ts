@@ -1,12 +1,14 @@
+import * as path from 'path';
 import stats from './stats';
 
 import {
   SRC_DIR,
   BUILD_DIR,
-  DEV_MANIFEST,
+  DEV_DLL,
   PUBLIC_PATH,
   ROOT_DIR,
-  VENDOR_MANIFEST,
+  VENDOR_DLL,
+  DEV_MANIFEST,
 } from '../config';
 
 const {
@@ -38,12 +40,12 @@ output = {
 
 plugins = [
   new DllPlugin({
-    path: DEV_MANIFEST,
+    path: DEV_DLL,
     name: 'dev',
   }),
   new DllReferencePlugin({
     context: ROOT_DIR,
-    manifest: require(VENDOR_MANIFEST),
+    manifest: require(VENDOR_DLL),
     sourceType: 'var',
   }),
 ];

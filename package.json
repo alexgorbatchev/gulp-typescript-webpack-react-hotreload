@@ -9,8 +9,10 @@
   },
   "devDependencies": {
     "chai": "^3.4.1",
+    "dustjs-linkedin": "^2.7.2",
     "eslint-plugin-react": "^3.11.3",
     "file-loader": "^0.8.5",
+    "glob": "^6.0.4",
     "gulp": "^3.9.0",
     "gulp-bg": "^0.0.8",
     "gulp-changed-in-place": "^2.0.3",
@@ -26,6 +28,7 @@
     "karma-sourcemap-loader": "^0.3.6",
     "karma-spec-reporter": "^0.0.23",
     "karma-webpack": "^1.7.0",
+    "mkdirp": "^0.5.1",
     "mocha": "^2.3.4",
     "phantomjs": "^1.9.19",
     "phantomjs-polyfill": "^0.0.1",

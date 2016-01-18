@@ -9,8 +9,9 @@ import {
   SRC_DIR,
   ROOT_DIR,
   BUILD_DIR,
-  VENDOR_MANIFEST,
-  DEV_MANIFEST,
+  VENDOR_DLL,
+  DEV_DLL,
+  APP_MANIFEST,
   PUBLIC_PATH,
 } from '../config';
 
@@ -34,7 +35,7 @@ devtool = 'source-map';
 
 entry = {
   components: './src/components',
-  app: [ path.join(SRC_DIR, 'index.tsx') ],
+  app: [path.join(SRC_DIR, 'index.tsx')],
 };
 
 output = {
@@ -57,24 +58,14 @@ plugins = [
   // new AggressiveMergingPlugin(),
   new CommonsChunkPlugin({
     name: 'components',
-    chunks: [ 'components', 'app' ]
-  }),
-  new DllReferencePlugin({
-    context: ROOT_DIR,
-    manifest: require(VENDOR_MANIFEST),
-    sourceType: 'var',
-  }),
-  new DllReferencePlugin({
-    context: ROOT_DIR,
-    manifest: require(DEV_MANIFEST),
-    sourceType: 'var',
+    chunks: ['components', 'app']
   }),
   definePlugin,
 ];
 
 resolve = {
   alias: {},
-  extensions: [ '', '.tsx', '.ts', '.js' ],
+  extensions: ['', '.tsx', '.ts', '.js'],
 };
 
 preLoaders = [
@@ -88,12 +79,12 @@ loaders = [
   {
     test: /\.ts(x)?$/,
     loaders: ['react-hot', 'ts?silent'],
-    include: [ SRC_DIR ],
+    include: [SRC_DIR],
   },
   {
     test: /\.(png|jpg|svg)$/,
     loader: 'url-loader?limit=8192',
-    include: [ SRC_DIR ],
+    include: [SRC_DIR],
   },
 ];
 
@@ -106,26 +97,41 @@ if (DEVELOPMENT) {
   // loaders[0].exclude = [ /.*test\.ts(x)?$/ ];
 
   plugins.push(
-    new CommonsChunkPlugin({ name: 'hmr' }),
-    new HotModuleReplacementPlugin()
+    new HotModuleReplacementPlugin(),
+    new CommonsChunkPlugin({ name: 'hmr' })
   );
 }
 
 if (PRODUCTION) {
   plugins.push(
-    new UglifyJsPlugin({ comments: false }),
-    new ManifestPlugin({ fileName: 'app-manifest.json' })
+    new ManifestPlugin({ fileName: path.relative(BUILD_DIR, APP_MANIFEST) }),
+    new UglifyJsPlugin({ comments: false })
   );
 
   output.filename = '[name]-[hash].js';
   output.chunkFilename = '[name]-[hash].js';
 }
 
+if (!TEST) {
+  plugins.push(
+    new DllReferencePlugin({
+      context: ROOT_DIR,
+      manifest: require(VENDOR_DLL),
+      sourceType: 'var',
+    }),
+    new DllReferencePlugin({
+      context: ROOT_DIR,
+      manifest: require(DEV_DLL),
+      sourceType: 'var',
+    })
+  );
+}
+
 if (TEST) {
   devtool = '#inline-source-map';
   entry = {};
   output = {};
-  plugins = [ definePlugin ];
+  plugins = [definePlugin];
 }
 
 export default {
