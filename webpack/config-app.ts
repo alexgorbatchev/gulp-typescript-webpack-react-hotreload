@@ -64,7 +64,9 @@ plugins = [
 ];
 
 resolve = {
-  alias: {},
+  alias: {
+    sinon: 'sinon/pkg/sinon.js',
+  },
   extensions: ['', '.tsx', '.ts', '.js'],
 };
 
@@ -76,6 +78,10 @@ preLoaders = [
 ];
 
 loaders = [
+  {
+    test: /sinon/,
+    loader: 'imports?define=>false,require=>false',
+  },
   {
     test: /\.ts(x)?$/,
     loaders: ['react-hot', 'ts?silent'],
