@@ -10,10 +10,13 @@ import {
   ROOT_DIR,
   BUILD_DIR,
   VENDOR_DLL,
+  TEST_DLL,
   DEV_DLL,
   APP_MANIFEST,
   PUBLIC_PATH,
 } from '../config';
+
+import { testDll, vendorDll, devDll } from './dlls';
 
 const ManifestPlugin = require('webpack-manifest-plugin');
 
@@ -79,10 +82,6 @@ preLoaders = [
 
 loaders = [
   {
-    test: /sinon/,
-    loader: 'imports?define=>false,require=>false',
-  },
-  {
     test: /\.ts(x)?$/,
     loaders: ['react-hot', 'ts?silent'],
     include: [SRC_DIR],
@@ -118,27 +117,14 @@ if (PRODUCTION) {
   output.chunkFilename = '[name]-[hash].js';
 }
 
-if (!TEST) {
-  plugins.push(
-    new DllReferencePlugin({
-      context: ROOT_DIR,
-      manifest: require(VENDOR_DLL),
-      sourceType: 'var',
-    }),
-    new DllReferencePlugin({
-      context: ROOT_DIR,
-      manifest: require(DEV_DLL),
-      sourceType: 'var',
-    })
-  );
-}
-
 if (TEST) {
   devtool = '#inline-source-map';
   entry = {};
   output = {};
-  plugins = [definePlugin];
+  plugins = [definePlugin, testDll()];
 }
+
+plugins.push(vendorDll(), devDll());
 
 export default {
   target: 'web',

@@ -3,7 +3,7 @@ import stats from './stats';
 
 import {
   BUILD_DIR,
-  DEV_DLL,
+  TEST_DLL,
   PUBLIC_PATH,
 } from '../config';
 
@@ -14,41 +14,44 @@ const {
   DllReferencePlugin,
 } = require('webpack');
 
-let devtool, entry, output, plugins, resolve, dllOptions;
-
-devtool = 'source-map';
+let entry, output, plugins, loaders;
 
 entry = {
-  dev: [
-    'redux-devtools',
-    'redux-devtools-log-monitor',
-    'redux-devtools-dock-monitor',
-    'react-hot-api',
-    'react-hot-loader',
+  test: [
+    'chai',
+    'sinon/pkg/sinon.js',
+    'react-addons-test-utils',
   ],
 };
+
+loaders = [
+  {
+    test: /sinon/,
+    loader: 'imports?define=>false,require=>false',
+  },
+];
 
 output = {
   path: BUILD_DIR,
   publicPath: PUBLIC_PATH,
   filename: '[name].js',
-  library: 'dev',
+  library: 'test',
   libraryTarget: 'var',
 };
 
 plugins = [
   vendorDll(),
   new DllPlugin({
-    path: DEV_DLL,
-    name: 'dev',
+    path: TEST_DLL,
+    name: '[name]',
   }),
 ];
 
 export default {
   target: 'web',
-  devtool,
   entry,
   output,
   plugins,
+  module: { loaders },
   stats,
 };

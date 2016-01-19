@@ -11,6 +11,8 @@ module.exports = function(config) {
 
     files: [
       'node_modules/phantomjs-polyfill/bind-polyfill.js',
+      'build/public/vendor.js',
+      'build/public/test.js',
       'test/bundle.js',
     ],
 
@@ -21,6 +23,7 @@ module.exports = function(config) {
     webpackMiddleware: {
       noInfo: false,
       quiet: false,
+      stats: { colors: true },
     },
   });
 }

@@ -2,9 +2,7 @@ import * as path from 'path';
 import stats from './stats';
 
 import {
-  ROOT_DIR,
   PRODUCTION,
-  SRC_DIR,
   BUILD_DIR,
   VENDOR_DLL,
   VENDOR_MANIFEST,

@@ -3,6 +3,7 @@ import * as path from 'path';
 import {
   BUILD_DIR,
   DEVELOPMENT,
+  TEST,
   ROOT_DIR,
   SRC_DIR,
   CDN_PATH,
@@ -36,11 +37,13 @@ gulp.task('build:clean', done => rimraf(BUILD_DIR, () => mkdirp(BUILD_DIR, done)
 gulp.task('build:vendor', webpack('vendor'));
 gulp.task('build:app', ['build:vendor', 'build:dev'], webpack('app'));
 gulp.task('build:dev', ['build:vendor'], webpack('dev'));
+gulp.task('build:test', ['build:vendor'], webpack('test'));
 gulp.task('build:index', buildIndex);
 gulp.task('build:static', buildStatic);
 gulp.task('build', ['build:static']);
 
-gulp.task('karma', $.bg('karma', 'start', '--single-run=false'));
+gulp.task('karma:start', $.bg('karma', 'start', '--single-run=false'));
+gulp.task('karma', karma);
 gulp.task('dev:server', ['build:static'], $.bg('node', 'webpack/dev-server.js'));
 
 gulp.task('dev', ['typescript:format', 'karma', 'build:static', 'dev:server'], function() {
@@ -57,7 +60,15 @@ function buildStatic(done) {
     buildSteps.push('build:dev');
   }
 
+  if (TEST) {
+    buildSteps.push('build:test');
+  }
+
   return $.sequence('build:clean', buildSteps, done);
+}
+
+function karma(done) {
+  return $.sequence(['build:static', 'build:test'], 'karma:start', done);
 }
 
 function buildIndex() {
