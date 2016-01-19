@@ -16,7 +16,7 @@ const styles = {
     borderBottom: '1px solid black',
     margin: '0.5em 0',
   },
- 
+
   [HeaderKind.h1]: {
     fontSize: '2em',
   },
@@ -33,8 +33,10 @@ export default class HeaderComponent extends React.Component<IHeaderProps, any> 
   // };
 
   render() {
-    return <div ref="root" style={[styles.base, styles[this.props.kind]]}>
-      {this.props.children}
-    </div>
+    return (
+      <div ref="root" style={[styles.base, styles[this.props.kind]]}>
+        {this.props.children}
+      </div>
+    );
   }
 }

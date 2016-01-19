@@ -1,7 +1,17 @@
 {
   "rules": {
-    "indent": "spaces",
+    "indent": [true, "spaces"],
     "curly": true,
-    "class-name": true
+
+    "class-name": true,
+    "no-internal-module": true,
+    "no-unused-variable": [true, "react"],
+    "no-unused-expression": true,
+    "no-var-keyword": true,
+    "no-trailing-whitespace": true,
+    "triple-equals": true,
+
+    "eofline": true,
+    "semicolon": true
   }
 }

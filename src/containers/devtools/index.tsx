@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 
 const { createDevTools } = require('redux-devtools');
 const { default: LogMonitor } = require('redux-devtools-log-monitor');

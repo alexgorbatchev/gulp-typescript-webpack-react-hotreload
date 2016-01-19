@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import { CounterState } from '../../models';
 import { CounterAction } from '../../actions';
 

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import Header, { HeaderKind } from '../header';
 import Banner, { BannerKind } from '../banner';
 

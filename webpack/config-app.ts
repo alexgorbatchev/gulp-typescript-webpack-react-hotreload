@@ -32,7 +32,7 @@ const {
   },
 } = require('webpack');
 
-let devtool, entry, output, plugins, resolve, preLoaders, loaders;
+let devtool, entry, output, plugins, resolve, preLoaders, loaders, tslint;
 
 devtool = 'source-map';
 
@@ -76,9 +76,15 @@ resolve = {
 preLoaders = [
   {
     test: /\.ts(x)?$/,
-    loader: 'tslint'
+    loader: 'tslint',
+    include: [SRC_DIR],
   },
 ];
+
+tslint = {
+  emitErrors: true,
+  configuration: require('../tslint.json'),
+};
 
 loaders = [
   {
@@ -127,6 +133,7 @@ plugins.push(vendorDll(), devDll());
 export default {
   target: 'web',
   devtool,
+  tslint,
   entry,
   output,
   plugins,

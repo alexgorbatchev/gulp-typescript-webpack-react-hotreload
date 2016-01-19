@@ -1,6 +1,5 @@
 import { expect } from 'chai';
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import * as TestUtils from 'react-addons-test-utils';
 import BlogContainer from './index';
 
@@ -9,7 +8,7 @@ describe('BlogContainer', function () {
     const instance = TestUtils.renderIntoDocument(
       <BlogContainer />
     );
-    
+
     expect(instance).to.be.ok;
   });
 });
