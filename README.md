@@ -1,20 +1,35 @@
 # gulp-typescript-webpack-react-hotreload
 
-This is a starter kit for a client side project using the following stack:
+This is a starter kit for a client side project that uses TypeScript and React at its core. The goal of this starter kit is to provide a foundation for a production ready application following the following criteria:
+
+* Fast development cycle
+* Production build
+
+## Stack
 
 * Gulp
 * TypeScript
 * Webpack
 * Karma
 * React
+* React Router
+* Redux
 
 ## Features
 
+* TypeScript.
 * Hot module reload.
 * Correct line numbers reported in stack traces.
-* Variable renaming across whole project.
-* Async route and component loading using Webpack chunking.
 * Production assets build.
+* Precompiled DLLs with external modules speed up application & test updates.
+* Async route and component loading using Webpack:
+  * Each page is a chunk.
+  * Vendor modules are in a separate DLL that is only built once.
+  * Development modules are in a separate DLL that is only built once.
+  * Components are in a separate chunk.
+* Fast Karma compilation due to:
+  * Vendor, test and development modules statically precompiled as separate DLLs.
+  * Only application files are recompiled on build.
 
 ## Installation
 
@@ -25,13 +40,13 @@ npm install
 
 ## Usage
 
-### npm run dev
+### gulp dev
 
-* Starts webpack server on [http://localhost:3000](http://localhost:3000).
-* Restarts webpack server when `webpack.ts` and `webpack.config.ts` change.
+* Starts Webpack server on [http://localhost:3000](http://localhost:3000).
+* Restarts Webpack server configuration changes.
 * Whenever `.ts` and `.tsx` files in `src` change, visible module will be reload without whole page needing a refresh.
-* ~~(Re)formats all TypeScript files on change to keep consistent style.~~
-* ~~Keeps `files` node in `tsconfig.json` project file in sync with all `.ts`, `.tsx` files in `src` and `test` folders.~~
+* Starts Karma.
+* Restarts Karma when configuration changes.
 
 ## License
 
