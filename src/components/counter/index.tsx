@@ -13,7 +13,7 @@ export default class CounterComponent extends React.Component<CounterProps, any>
 
     return (
       <div>
-        value: {this.props.counter.value}
+        value: <span ref="value">{this.props.counter.value}</span>
         <button ref="increase" onClick={() => increaseCounter(+1)}>increase</button>
         <button ref="decrease" onClick={() => increaseCounter(-1)}>decrease</button>
       </div>
