@@ -34,41 +34,31 @@ gulp.task('typescript:format', function() {
 });
 
 gulp.task('build:clean', done => rimraf(BUILD_DIR, () => mkdirp(BUILD_DIR, done)));
-gulp.task('build:vendor', webpack('vendor'));
+gulp.task('build:vendor', webpack('vendor', 'vendor.js'));
 gulp.task('build:app', ['build:vendor', 'build:dev'], webpack('app'));
-gulp.task('build:dev', ['build:vendor'], webpack('dev'));
-gulp.task('build:test', ['build:vendor'], webpack('test'));
+gulp.task('build:dev', ['build:vendor'], webpack('dev', 'dev.js'));
+gulp.task('build:test', ['build:vendor', 'build:dev'], webpack('test', 'test.js'));
 gulp.task('build:index', buildIndex);
-gulp.task('build:static', buildStatic);
-gulp.task('build', ['build:static']);
+gulp.task('build', ['build:app', 'build:index']);
 
-gulp.task('karma:start', $.bg('karma', 'start', '--single-run=false'));
-gulp.task('karma', karma);
-gulp.task('dev:server', ['build:static'], $.bg('node', 'webpack/dev-server.js'));
+gulp.task('karma', ['build:test'], $.bg('karma', 'start', '--single-run=false'));
+gulp.task('dev:server', ['build:vendor', 'build:dev', 'build:index'], $.bg('node', 'webpack/dev-server.js'));
 
-gulp.task('dev', ['typescript:format', 'karma', 'build:static', 'dev:server'], function() {
+gulp.task('dev', ['typescript:format', 'karma', 'dev:server'], function() {
   gulp.watch(['webpack/**/*'], ['dev:server']);
   gulp.watch(['karma.conf.ts'], ['karma']);
 });
 
 
-
-function buildStatic(done) {
-  const buildSteps = ['build:vendor', 'build:app', 'build:index'];
-
-  if (DEVELOPMENT) {
-    buildSteps.push('build:dev');
-  }
-
-  if (TEST) {
-    buildSteps.push('build:test');
-  }
-
-  return $.sequence('build:clean', buildSteps, done);
+function isClean(): boolean {
+  const yargs = require('yargs').argv;
+  return yargs.clean === true;
 }
 
-function karma(done) {
-  return $.sequence(['build:static', 'build:test'], 'karma:start', done);
+function promised(callback: Function, shouldReject: boolean = true): Promise<any> {
+  return new Promise((resolve, reject) =>
+    callback((err, content) => err && shouldReject ? reject(err) : resolve(content))
+  );
 }
 
 function buildIndex() {
@@ -87,13 +77,7 @@ function buildIndex() {
     )
   );
 
-  function promised(callback) {
-    return new Promise((resolve, reject) =>
-      callback((err, content) => err ? reject(err) : resolve(content))
-    );
-  }
-
-  function filterFiles(manifest): Array<string> {
+  function filterFiles(manifest: Object): Array<string> {
     const results: Array<string> = [];
     Object.keys(manifest)
       .filter(key => path.extname(key) === '.js')
@@ -120,18 +104,35 @@ function buildIndex() {
   }
 
   return manifests
-    .then(manifests => merge.apply(null, [{}].concat(manifests)))
+    .then(manifests => merge(...[{}].concat(manifests)))
     .then(filterFiles)
     .then(create)
     .catch(e => console.error(e.stack));
 }
 
-function webpack(configName: string) {
+function webpack(configName: string, ...expectedFiles: Array<string>): Function {
   return function(done) {
-    const webpack = require('webpack');
-    const { default: config } = require(`./webpack/config-${configName}`);
-    const { default: stats } = require('./webpack/stats');
-    webpack(config, printStats(stats, done));
+    const fs = require('fs');
+
+    Promise.all(expectedFiles.map(filepath => promised(cb => fs.stat(`${BUILD_DIR}/${filepath}`, cb), false)))
+      .then(stats => stats.reduce((all, current) => all && current, true))
+      .then(allFilesExist => {
+        if (expectedFiles.length > 0) {
+          if (allFilesExist && !isClean()) {
+            log(`Found ${expectedFiles.join(', ')} required for "${configName}", run with --clean to rebuild.`);
+            return done();
+          }
+        } else {
+          log(`Will always build ${configName}`);
+        }
+
+        const webpack = require('webpack');
+        const { default: config } = require(`./webpack/config-${configName}`);
+        const { default: stats } = require('./webpack/stats');
+
+        webpack(config, printStats(stats, done));
+      })
+      .catch(e => console.error(e.stack));
   }
 }
 
