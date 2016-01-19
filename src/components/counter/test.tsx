@@ -30,7 +30,7 @@ describe.only('CounterComponent', function() {
   describe('interaction', function() {
     it('triggers the action when increase button is clicked to increase counter by 1', function() {
       TestUtils.Simulate.click(instance.refs.increase);
-      expect(increaseCounterSpy.calledOnce).to.be.ok;
+      expect(increaseCounterSpy).to.have.been.calledOnce;
     });
   });
 

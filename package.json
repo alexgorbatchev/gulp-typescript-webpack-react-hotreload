@@ -41,6 +41,7 @@
     "rimraf": "^2.5.0",
     "run-sequence": "^1.1.5",
     "sinon": "^1.17.2",
+    "sinon-chai": "^2.8.0",
     "ts-loader": "^0.7.2",
     "ts-node": "^0.5.4",
     "tsd": "^0.6.5",

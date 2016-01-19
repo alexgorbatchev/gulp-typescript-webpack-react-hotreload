@@ -99,8 +99,6 @@ if (DEVELOPMENT) {
     'webpack/hot/only-dev-server'
   ];
 
-  // loaders[0].exclude = [ /.*test\.ts(x)?$/ ];
-
   plugins.push(
     new HotModuleReplacementPlugin(),
     new CommonsChunkPlugin({ name: 'hmr' })

@@ -20,13 +20,14 @@ entry = {
   test: [
     'chai',
     'sinon/pkg/sinon.js',
+    'sinon-chai',
     'react-addons-test-utils',
   ],
 };
 
 loaders = [
   {
-    test: /sinon/,
+    test: /pkg\/sinon\.js/,
     loader: 'imports?define=>false,require=>false',
   },
 ];
