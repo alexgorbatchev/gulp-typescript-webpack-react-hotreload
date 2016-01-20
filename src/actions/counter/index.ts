@@ -1,4 +1,4 @@
-import { INCREASE_COUNTER } from './constants';
+import { INCREASE_COUNTER } from '../constants';
 
 export interface CounterAction {
   type: string;

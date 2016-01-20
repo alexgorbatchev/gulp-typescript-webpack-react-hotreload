@@ -1,11 +1,10 @@
 import { expect } from 'chai';
+import * as sinon from 'sinon';
 import * as React from 'react';
 import * as TestUtils from 'react-addons-test-utils';
-import * as sinon from 'sinon';
 import Counter, { CounterProps } from './index';
-import { CounterAction } from '../../actions';
 
-describe.only('CounterComponent', function() {
+describe('CounterComponent', function() {
   let props: CounterProps;
   let instance;
 
@@ -19,21 +18,26 @@ describe.only('CounterComponent', function() {
   });
 
   describe('interaction', function() {
-    it('triggers the action when increase button is clicked to increase counter by 1', function() {
+    it('triggers the action when increase button is clicked', function() {
       TestUtils.Simulate.click(instance.refs.increase);
-      expect(props.increaseCounter).to.have.been.calledOnce;
+      expect(props.increaseCounter).to.have.been.calledWith(+1);
+    });
+
+    it('triggers the action when decrease button is clicked', function() {
+      TestUtils.Simulate.click(instance.refs.decrease);
+      expect(props.increaseCounter).to.have.been.calledWith(-1);
     });
   });
 
-  describe('state', function() {
-    it('renders correct value', function() {
+  describe('display', function() {
+    it('renders initial value', function() {
+      expect(instance.refs.displayValue.innerHTML).to.equal(props.counter.value.toString());
+    });
+
+    it('renders new value', function() {
       props.counter.value = 100;
       instance.forceUpdate();
-      expect(instance.refs.value.innerHTML).to.equal('100');
+      expect(instance.refs.displayValue.innerHTML).to.equal('100');
     });
-  });
-
-  it('works???', function () {
-    expect(instance).to.be.ok;
   });
 });
