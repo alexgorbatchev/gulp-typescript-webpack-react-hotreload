@@ -50,8 +50,16 @@ gulp.task('dev', ['typescript:format', 'karma', 'dev:server'], function() {
 });
 
 
-function isClean(): boolean {
+
+const isCleanCache = {};
+
+function isClean(configName: string): boolean {
+  if (isCleanCache[configName]) {
+    return false;
+  }
+
   const yargs = require('yargs').argv;
+  isCleanCache[configName] = true;
   return yargs.clean === true;
 }
 
@@ -118,7 +126,7 @@ function webpack(configName: string, ...expectedFiles: Array<string>): Function 
       .then(stats => stats.reduce((all, current) => all && current, true))
       .then(allFilesExist => {
         if (expectedFiles.length > 0) {
-          if (allFilesExist && !isClean()) {
+          if (allFilesExist && !isClean(configName)) {
             log(`Found ${expectedFiles.join(', ')} required for "${configName}", run with --clean to rebuild.`);
             return done();
           }
