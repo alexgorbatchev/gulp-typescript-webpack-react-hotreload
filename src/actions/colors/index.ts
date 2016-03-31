@@ -10,6 +10,6 @@ export interface CounterAction {
   colors: Array<Color>;
 }
 
-export function increaseCounter(amount: number): CounterAction {
-  return { type: INCREASE_COUNTER, amount };
-};
+// export function increaseCounter(amount: number): CounterAction {
+//   return { type: INCREASE_COUNTER, amount };
+// };

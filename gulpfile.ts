@@ -35,20 +35,20 @@ gulp.task('typescript:format', function() {
 
 gulp.task('build:clean', done => rimraf(BUILD_DIR, () => mkdirp(BUILD_DIR, done)));
 gulp.task('build:vendor', webpack('vendor', 'vendor.js'));
-gulp.task('build:app', ['build:vendor', 'build:dev'], webpack('app'));
-gulp.task('build:dev', ['build:vendor'], webpack('dev', 'dev.js'));
-gulp.task('build:test', ['build:vendor', 'build:dev'], webpack('test', 'test.js'));
-gulp.task('build:index', buildIndex);
+gulp.task('build:app', [ 'build:vendor', 'build:dev' ], webpack('app'));
+gulp.task('build:dev', [ 'build:vendor' ], webpack('dev', 'dev.js'));
+gulp.task('build:test', [ 'build:vendor', 'build:dev' ], webpack('test', 'test.js'));
+gulp.task('build:index', buildIndexHtmlFile);
 gulp.task('build:static', () => gulp.src('data').pipe(gulp.dest(BUILD_DIR)));
-gulp.task('build', ['build:app', 'build:index']);
+gulp.task('build', [ 'build:app', 'build:index' ]);
 
-gulp.task('karma', ['build:test'], $.bg('karma', 'start', '--single-run=false'));
-gulp.task('dev:server', ['build:vendor', 'build:dev', 'build:index', 'build:static'], $.bg('node', 'webpack/dev-server.js'));
+gulp.task('karma', [ 'build:test' ], $.bg('karma', 'start', '--single-run=false'));
+gulp.task('dev:server', [ 'build:vendor', 'build:dev', 'build:index', 'build:static' ], $.bg('node', 'webpack/dev-server.js'));
 
-gulp.task('dev', ['typescript:format', 'karma', 'dev:server'], function() {
-  gulp.watch(['webpack/**/*'], ['dev:server']);
-  gulp.watch(['data/**/*'], ['build:static']);
-  gulp.watch(['karma.conf.ts'], ['karma']);
+gulp.task('dev', [ 'typescript:format', 'karma', 'dev:server' ], function() {
+  gulp.watch([ 'webpack/**/*' ], [ 'dev:server' ]);
+  gulp.watch([ 'data/**/*' ], [ 'build:static' ]);
+  gulp.watch([ 'karma.conf.ts' ], [ 'karma' ]);
 });
 
 
@@ -71,7 +71,7 @@ function promised(callback: Function, shouldReject: boolean = true): Promise<any
   );
 }
 
-function buildIndex() {
+function buildIndexHtmlFile() {
   const glob = require('glob');
   const fs = require('fs');
   const dust = require('dustjs-linkedin');
@@ -120,12 +120,18 @@ function buildIndex() {
     .catch(e => console.error(e.stack));
 }
 
-function webpack(configName: string, ...expectedFiles: Array<string>): Function {
-  return function(done) {
-    const fs = require('fs');
+function allFilesExist(files: Array<string>): Promise<any> {
+  const fs = require('fs');
 
-    Promise.all(expectedFiles.map(filepath => promised(cb => fs.stat(`${BUILD_DIR}/${filepath}`, cb), false)))
-      .then(stats => stats.reduce((all, current) => all && current, true))
+  return Promise.all(files.map(filepath => promised(cb => fs.stat(`${BUILD_DIR}/${filepath}`, cb), false)))
+    // make sure that all stats are truthy
+    .then(stats => stats.reduce((all, current) => all && current, true));
+}
+
+function webpack(configName: string, ...expectedFiles: Array<string>): Function {
+  // return a function for gulp.task()
+  return function(done) {
+    allFilesExist(expectedFiles)
       .then(allFilesExist => {
         if (expectedFiles.length > 0) {
           if (allFilesExist && !isClean(configName)) {

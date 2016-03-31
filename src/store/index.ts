@@ -1,6 +1,6 @@
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 import { createHistory } from 'history';
-import * as thunkMiddleware from 'redux-thunk';
+import thunkMiddleware from 'redux-thunk';
 import reducers from '../reducers';
 
 const { syncReduxAndRouter, routeReducer } = require('redux-simple-router');
