@@ -17,3 +17,6 @@
 /// <reference path="sinon-chai/sinon-chai.d.ts" />
 /// <reference path="whatwg-fetch/whatwg-fetch.d.ts" />
 /// <reference path="redux-thunk/redux-thunk.d.ts" />
+/// <reference path="gulp/gulp.d.ts" />
+/// <reference path="orchestrator/orchestrator.d.ts" />
+/// <reference path="q/Q.d.ts" />

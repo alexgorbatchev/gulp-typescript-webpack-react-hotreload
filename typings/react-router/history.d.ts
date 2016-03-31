@@ -1,7 +1,7 @@
-// Type definitions for history v1.11.1
+// Type definitions for history v2.0.0
 // Project: https://github.com/rackt/history
-// Definitions by: Sergey Buturlakin <http://github.com/sergey-buturlakin>
-// Definitions: https://github.com/borisyankov/DefinitelyTyped
+// Definitions by: Sergey Buturlakin <https://github.com/sergey-buturlakin>, Nathan Brown <https://github.com/ngbrown>
+// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
 
 declare namespace HistoryModule {
@@ -10,39 +10,75 @@ declare namespace HistoryModule {
 
     type Action = string
 
-    type BeforeUnloadHook = () => string
+    type BeforeUnloadHook = () => string | boolean
 
     type CreateHistory<T> = (options?: HistoryOptions) => T
 
     type CreateHistoryEnhancer<T, E> = (createHistory: CreateHistory<T>) => CreateHistory<T & E>
 
     interface History {
-        listenBefore(hook: TransitionHook): Function
-        listen(listener: LocationListener): Function
+        listenBefore(hook: TransitionHook): () => void
+        listen(listener: LocationListener): () => void
         transitionTo(location: Location): void
-        pushState(state: LocationState, path: Path): void
-        replaceState(state: LocationState, path: Path): void
-        setState(state: LocationState): void
+        push(path: LocationDescriptor): void
+        replace(path: LocationDescriptor): void
         go(n: number): void
         goBack(): void
         goForward(): void
         createKey(): LocationKey
-        createPath(path: Path): Path
-        createHref(path: Path): Href
+        createPath(path: LocationDescriptor): Path
+        createHref(path: LocationDescriptor): Href
+        createLocation(path?: LocationDescriptor, action?: Action, key?: LocationKey): Location
+
+        /** @deprecated use a location descriptor instead */
+        createLocation(path?: Path, state?: LocationState, action?: Action, key?: LocationKey): Location
+        /** @deprecated use location.key to save state instead */
+        pushState(state: LocationState, path: Path): void
+        /** @deprecated use location.key to save state instead */
+        replaceState(state: LocationState, path: Path): void
+        /** @deprecated use location.key to save state instead */
+        setState(state: LocationState): void
+        /** @deprecated use listenBefore instead */
+        registerTransitionHook(hook: TransitionHook): void
+        /** @deprecated use the callback returned from listenBefore instead */
+        unregisterTransitionHook(hook: TransitionHook): void
     }
 
-    type HistoryOptions = Object
+    type HistoryOptions = {
+        getCurrentLocation?: () => Location
+        finishTransition?: (nextLocation: Location) => boolean
+        saveState?: (key: LocationKey, state: LocationState) => void
+        go?: (n: number) => void
+        getUserConfirmation?: (message: string, callback: (result: boolean) => void) => void
+        keyLength?: number
+        queryKey?: string | boolean
+        stringifyQuery?: (obj: any) => string
+        parseQueryString?: (str: string) => any
+        basename?: string
+        entries?: string | [any]
+        current?: number
+    }
 
     type Href = string
 
     type Location = {
         pathname: Pathname
-        search: QueryString
+        search: Search
         query: Query
         state: LocationState
         action: Action
         key: LocationKey
+        basename?: string
     }
+
+    type LocationDescriptorObject = {
+        pathname?: Pathname
+        search?: Search
+        query?: Query
+        state?: LocationState
+    }
+
+    type LocationDescriptor = LocationDescriptorObject | Path
 
     type LocationKey = string
 
@@ -58,11 +94,13 @@ declare namespace HistoryModule {
 
     type QueryString = string
 
-    type TransitionHook = (location: Location, callback: Function) => any
+    type Search = string
+
+    type TransitionHook = (location: Location, callback: (result: any) => void) => any
 
 
     interface HistoryBeforeUnload {
-        listenBeforeUnload(hook: () => string | boolean): Function
+        listenBeforeUnload(hook: BeforeUnloadHook): () => void
     }
 
     interface HistoryQueries {
@@ -80,7 +118,7 @@ declare namespace HistoryModule {
         createHistory: CreateHistory<History>
         createHashHistory: CreateHistory<History>
         createMemoryHistory: CreateHistory<History>
-        createLocation(): Location
+        createLocation(path?: Path, state?: LocationState, action?: Action, key?: LocationKey): Location
         useBasename<T>(createHistory: CreateHistory<T>): CreateHistory<T>
         useBeforeUnload<T>(createHistory: CreateHistory<T>): CreateHistory<T & HistoryBeforeUnload>
         useQueries<T>(createHistory: CreateHistory<T>): CreateHistory<T & HistoryQueries>
@@ -117,7 +155,7 @@ declare module "history/lib/createMemoryHistory" {
 
 declare module "history/lib/createLocation" {
 
-    export default function createLocation(): HistoryModule.Location
+    export default function createLocation(path?: HistoryModule.Path, state?: HistoryModule.LocationState, action?: HistoryModule.Action, key?: HistoryModule.LocationKey): HistoryModule.Location
 
 }
 
@@ -157,6 +195,18 @@ declare module "history/lib/actions" {
         POP
     }
 
+}
+
+declare module "history/lib/DOMUtils" {
+    export function addEventListener(node: EventTarget, event: string, listener: EventListenerOrEventListenerObject): void;
+    export function removeEventListener(node: EventTarget, event: string, listener: EventListenerOrEventListenerObject): void;
+    export function getHashPath(): string;
+    export function replaceHashPath(path: string): void;
+    export function getWindowPath(): string;
+    export function go(n: number): void;
+    export function getUserConfirmation(message: string, callback: (result: boolean) => void): void;
+    export function supportsHistory(): boolean;
+    export function supportsGoWithoutReloadUsingHash(): boolean;
 }
 
 

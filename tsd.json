@@ -6,61 +6,64 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "react/react.d.ts": {
-      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
+      "commit": "bf4ecf5b68887ed5a065e3922885c34d0f5739df"
     },
     "node/node.d.ts": {
-      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
+      "commit": "bf4ecf5b68887ed5a065e3922885c34d0f5739df"
     },
     "lodash/lodash.d.ts": {
-      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
+      "commit": "bf4ecf5b68887ed5a065e3922885c34d0f5739df"
     },
     "chai/chai.d.ts": {
-      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
+      "commit": "bf4ecf5b68887ed5a065e3922885c34d0f5739df"
     },
     "assertion-error/assertion-error.d.ts": {
-      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
+      "commit": "bf4ecf5b68887ed5a065e3922885c34d0f5739df"
     },
     "sinon/sinon.d.ts": {
-      "commit": "70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e"
+      "commit": "bf4ecf5b68887ed5a065e3922885c34d0f5739df"
     },
     "gulp/gulp.d.ts": {
-      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
+      "commit": "bf4ecf5b68887ed5a065e3922885c34d0f5739df"
     },
     "orchestrator/orchestrator.d.ts": {
-      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
+      "commit": "bf4ecf5b68887ed5a065e3922885c34d0f5739df"
     },
     "q/Q.d.ts": {
-      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
+      "commit": "bf4ecf5b68887ed5a065e3922885c34d0f5739df"
     },
     "mocha/mocha.d.ts": {
-      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
+      "commit": "bf4ecf5b68887ed5a065e3922885c34d0f5739df"
     },
     "react-router/react-router.d.ts": {
-      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
+      "commit": "bf4ecf5b68887ed5a065e3922885c34d0f5739df"
     },
     "redux/redux.d.ts": {
-      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
+      "commit": "bf4ecf5b68887ed5a065e3922885c34d0f5739df"
     },
     "react-redux/react-redux.d.ts": {
-      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
+      "commit": "bf4ecf5b68887ed5a065e3922885c34d0f5739df"
     },
     "react/react-addons-test-utils.d.ts": {
-      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
+      "commit": "bf4ecf5b68887ed5a065e3922885c34d0f5739df"
     },
     "react/react-dom.d.ts": {
-      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
+      "commit": "bf4ecf5b68887ed5a065e3922885c34d0f5739df"
     },
     "es6-shim/es6-shim.d.ts": {
-      "commit": "dc9dabe74a5be62613b17a3605309783a12ff28a"
+      "commit": "bf4ecf5b68887ed5a065e3922885c34d0f5739df"
     },
     "sinon-chai/sinon-chai.d.ts": {
-      "commit": "70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e"
+      "commit": "bf4ecf5b68887ed5a065e3922885c34d0f5739df"
     },
     "whatwg-fetch/whatwg-fetch.d.ts": {
-      "commit": "46719185c564694c5583c4b7ad94dbb786ecad46"
+      "commit": "bf4ecf5b68887ed5a065e3922885c34d0f5739df"
     },
     "redux-thunk/redux-thunk.d.ts": {
-      "commit": "46719185c564694c5583c4b7ad94dbb786ecad46"
+      "commit": "bf4ecf5b68887ed5a065e3922885c34d0f5739df"
+    },
+    "react-router/history.d.ts": {
+      "commit": "bf4ecf5b68887ed5a065e3922885c34d0f5739df"
     }
   }
 }
