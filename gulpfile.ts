@@ -153,7 +153,7 @@ function printStats(statsOpts, done) {
       return process.exit(-1);
     }
 
-    const reset = colors.enabled ? '\033[0m' : '';
+    const reset = colors.enabled ? '\u001b[0m' : '';
 
     function logWithWarnings(line) {
       const hasWarning = line.indexOf('WARNING') === 0;
