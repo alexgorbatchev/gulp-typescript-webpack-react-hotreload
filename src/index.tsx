@@ -1,4 +1,3 @@
-require('es6-promise').polyfill();
 require('object.assign/polyfill')();
 
 import * as React from 'react';

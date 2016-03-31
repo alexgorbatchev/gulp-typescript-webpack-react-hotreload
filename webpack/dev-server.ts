@@ -5,7 +5,7 @@ import config from './config-app';
 import stats from './stats';
 import { BUILD_DIR, PUBLIC_PATH } from '../config';
 
-const app = new WebpackDevServer(webpack(config), {
+const devServer = new WebpackDevServer(webpack(config), {
   progress: true,
   inline: true,
   hot: true,
@@ -15,7 +15,7 @@ const app = new WebpackDevServer(webpack(config), {
   stats,
 });
 
-app.listen(3000, 'localhost', function() {
+devServer.listen(3000, 'localhost', function() {
   process.send && process.send('express ready');
 
   console.log('http://localhost:3000');

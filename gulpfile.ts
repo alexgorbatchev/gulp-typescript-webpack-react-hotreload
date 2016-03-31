@@ -39,13 +39,15 @@ gulp.task('build:app', ['build:vendor', 'build:dev'], webpack('app'));
 gulp.task('build:dev', ['build:vendor'], webpack('dev', 'dev.js'));
 gulp.task('build:test', ['build:vendor', 'build:dev'], webpack('test', 'test.js'));
 gulp.task('build:index', buildIndex);
+gulp.task('build:static', () => gulp.src('data').pipe(gulp.dest(BUILD_DIR)));
 gulp.task('build', ['build:app', 'build:index']);
 
 gulp.task('karma', ['build:test'], $.bg('karma', 'start', '--single-run=false'));
-gulp.task('dev:server', ['build:vendor', 'build:dev', 'build:index'], $.bg('node', 'webpack/dev-server.js'));
+gulp.task('dev:server', ['build:vendor', 'build:dev', 'build:index', 'build:static'], $.bg('node', 'webpack/dev-server.js'));
 
 gulp.task('dev', ['typescript:format', 'karma', 'dev:server'], function() {
   gulp.watch(['webpack/**/*'], ['dev:server']);
+  gulp.watch(['data/**/*'], ['build:static']);
   gulp.watch(['karma.conf.ts'], ['karma']);
 });
 

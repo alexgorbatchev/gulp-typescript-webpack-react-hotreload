@@ -24,6 +24,7 @@ const {
   DllReferencePlugin,
   DefinePlugin,
   HotModuleReplacementPlugin,
+  ProvidePlugin,
   optimize: {
     UglifyJsPlugin,
     DedupePlugin,
@@ -62,6 +63,10 @@ plugins = [
   new CommonsChunkPlugin({
     name: 'components',
     chunks: ['components', 'app']
+  }),
+  new ProvidePlugin({
+    'Promise': 'exports?global.Promise!es6-promise',
+    'fetch': 'exports?self.fetch!whatwg-fetch',
   }),
   definePlugin,
 ];

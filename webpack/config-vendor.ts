@@ -32,10 +32,13 @@ entry = {
     'radium',
     'react',
     'react-dom',
+    'react-intl',
     'react-redux',
     'react-router',
     'redux',
+    'redux-thunk',
     'redux-simple-router',
+    'whatwg-fetch',
   ],
 };
 

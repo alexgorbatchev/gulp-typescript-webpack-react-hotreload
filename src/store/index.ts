@@ -1,22 +1,36 @@
-import { createStore, combineReducers, compose } from 'redux';
+import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 import { createHistory } from 'history';
+import * as thunkMiddleware from 'redux-thunk';
 import reducers from '../reducers';
-
-declare const DEVELOPMENT;
 
 const { syncReduxAndRouter, routeReducer } = require('redux-simple-router');
 
-const reducersWithRouting = combineReducers(Object.assign({}, reducers, { routing: routeReducer }));
+declare const DEVELOPMENT;
+
 const history = createHistory();
-const middlewares = [];
+
+const allReducers = combineReducers(Object.assign({},
+  reducers,
+  {
+    routing: routeReducer
+  }
+));
+
+const middlewares = applyMiddleware(
+  thunkMiddleware
+);
+
+const composeList = [
+  middlewares,
+];
 
 if (DEVELOPMENT) {
   const DevTools = require('../containers/devtools').default;
-  middlewares.push(DevTools.instrument());
+  composeList.push(DevTools.instrument());
 }
 
-const applicationCreateStore = compose.apply(null, middlewares)(createStore);
-const store = applicationCreateStore(reducersWithRouting);
+const applicationCreateStore = compose(...composeList)(createStore);
+const store = applicationCreateStore(allReducers);
 
 syncReduxAndRouter(history, store);
 

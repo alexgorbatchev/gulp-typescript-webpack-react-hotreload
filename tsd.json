@@ -53,11 +53,14 @@
     "es6-shim/es6-shim.d.ts": {
       "commit": "dc9dabe74a5be62613b17a3605309783a12ff28a"
     },
-    "es6-promise/es6-promise.d.ts": {
-      "commit": "70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e"
-    },
     "sinon-chai/sinon-chai.d.ts": {
       "commit": "70bf7e2bfeb0d5b1b651ef3219bcc65c8eec117e"
+    },
+    "whatwg-fetch/whatwg-fetch.d.ts": {
+      "commit": "46719185c564694c5583c4b7ad94dbb786ecad46"
+    },
+    "redux-thunk/redux-thunk.d.ts": {
+      "commit": "46719185c564694c5583c4b7ad94dbb786ecad46"
     }
   }
 }
