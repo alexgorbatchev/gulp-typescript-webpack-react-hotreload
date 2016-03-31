@@ -39,7 +39,7 @@ devtool = 'source-map';
 
 entry = {
   components: './src/components',
-  app: [path.join(SRC_DIR, 'index.tsx')],
+  app: [ path.join(SRC_DIR, 'index.tsx') ],
 };
 
 output = {
@@ -75,14 +75,14 @@ resolve = {
   alias: {
     sinon: 'sinon/pkg/sinon.js',
   },
-  extensions: ['', '.tsx', '.ts', '.js'],
+  extensions: [ '', '.tsx', '.ts', '.js' ],
 };
 
 preLoaders = [
   {
     test: /\.ts(x)?$/,
     loader: 'tslint',
-    include: [SRC_DIR],
+    include: [ SRC_DIR ],
   },
 ];
 
@@ -94,13 +94,13 @@ tslint = {
 loaders = [
   {
     test: /\.ts(x)?$/,
-    loaders: ['react-hot', 'ts?silent'],
-    include: [SRC_DIR],
+    loaders: [ 'react-hot', 'ts?silent' ],
+    include: [ SRC_DIR ],
   },
   {
     test: /\.(png|jpg|svg)$/,
     loader: 'url-loader?limit=8192',
-    include: [SRC_DIR],
+    include: [ SRC_DIR ],
   },
 ];
 
@@ -130,7 +130,7 @@ if (TEST) {
   devtool = '#inline-source-map';
   entry = {};
   output = {};
-  plugins = [definePlugin, testDll()];
+  plugins = [ definePlugin, testDll() ];
 }
 
 plugins.push(vendorDll(), devDll());
