@@ -30,7 +30,7 @@ const $ = {
   mocha: require('gulp-spawn-mocha'),
 };
 
-const STATIC_FILES: Array<string> = [ 'src/index.html' ];
+const STATIC_FILES: Array<string> = ['src/index.html'];
 const TYPESCRIPT_FILES: Array<string> = ['src/!(node_modules)/**/*.{ts,tsx}'];
 
 var typescript = $.typescript.createProject(require('./tsconfig.json').compilerOptions);
@@ -45,15 +45,15 @@ gulp.task('typescript:format', () =>
 
 gulp.task('build:clean', done => rimraf(BUILD_PUBLIC_DIR, () => mkdirp(BUILD_PUBLIC_DIR, done)));
 gulp.task('build:vendor', webpackTask('vendor', 'vendor.js'));
-gulp.task('build:app', [ 'build:vendor', 'build:dev' ], webpackTask('app'));
-gulp.task('build:dev', [ 'build:vendor' ], webpackTask('dev', 'dev.js'));
-gulp.task('build:test', [ 'build:vendor', 'build:dev' ], webpackTask('test', 'test.js'));
+gulp.task('build:app', ['build:vendor', 'build:dev'], webpackTask('app'));
+gulp.task('build:dev', ['build:vendor'], webpackTask('dev', 'dev.js'));
+gulp.task('build:test', ['build:vendor', 'build:dev'], webpackTask('test', 'test.js'));
 gulp.task('build:static', () => gulp.src('data').pipe(gulp.dest(BUILD_PUBLIC_DIR)));
-gulp.task('build:index', [ 'build:static' ], buildIndexHtmlFile);
-gulp.task('build', [ 'build:app', 'build:index' ]);
+gulp.task('build:index', ['build:static'], buildIndexHtmlFile);
+gulp.task('build', ['build:app', 'build:index']);
 
-gulp.task('karma', [ 'build:test' ], $.bg('karma', 'start', '--single-run=false'));
-gulp.task('dev:server', [ 'build:vendor', 'build:dev', 'build:index', 'build:static' ], $.bg('node', 'webpack/dev-server.js'));
+gulp.task('karma', ['build:test'], $.bg('karma', 'start', '--single-run=false'));
+gulp.task('dev:server', ['build:vendor', 'build:dev', 'build:index', 'build:static'], $.bg('node', 'webpack/dev-server.js'));
 
 gulp.task('static:files', () =>
   gulp.src([`${SRC_DIR}/**/*`, '!**/*.{ts,tsx}'])
@@ -87,11 +87,11 @@ gulp.task('watch', ['typescript:compile'], function() {
   gulp.watch(`${BUILD_SRC_DIR}/**/*.js`, ['mocha']);
 });
 
-gulp.task('dev', [ 'typescript:format', 'karma', 'dev:server' ], function() {
-  gulp.watch(TYPESCRIPT_FILES, [ 'typescript:format' ]);
-  gulp.watch([ 'webpack/**/*' ], [ 'dev:server' ]);
-  gulp.watch([ 'data/**/*' ], [ 'build:static' ]);
-  gulp.watch([ 'karma.conf.ts' ], [ 'karma' ]);
+gulp.task('dev', ['typescript:format', 'karma', 'dev:server'], function() {
+  gulp.watch(TYPESCRIPT_FILES, ['typescript:format']);
+  gulp.watch(['webpack/**/*'], ['dev:server']);
+  gulp.watch(['data/**/*'], ['build:static']);
+  gulp.watch(['karma.conf.ts'], ['karma']);
 });
 
 
@@ -213,8 +213,8 @@ function printStats(configName: string, statsOpts: Object, done: Function): Func
     }
 
 
-      // .split(/\n/g)
-      // .forEach(logWithWarnings);
+    // .split(/\n/g)
+    // .forEach(logWithWarnings);
 
     done();
   }
