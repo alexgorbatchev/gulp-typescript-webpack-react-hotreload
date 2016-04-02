@@ -38,7 +38,7 @@ let devtool, entry, output, plugins, resolve, preLoaders, loaders, tslint;
 devtool = 'source-map';
 
 entry = {
-  components: './src/components',
+  components: [ path.join(SRC_DIR, 'components') ],
   app: [ path.join(SRC_DIR, 'index.tsx') ],
 };
 
@@ -62,7 +62,7 @@ plugins = [
   // new AggressiveMergingPlugin(),
   new CommonsChunkPlugin({
     name: 'components',
-    chunks: ['components', 'app']
+    chunks: [ 'components', 'app' ]
   }),
   new ProvidePlugin({
     'Promise': 'exports?global.Promise!es6-promise',

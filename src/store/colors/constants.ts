@@ -1,0 +1,2 @@
+export const REQUEST_COLORS = 'REQUEST_COLORS';
+export const RECEIVE_COLORS = 'RECEIVE_COLORS';
