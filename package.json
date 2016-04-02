@@ -20,6 +20,7 @@
     "gulp-print": "^2.0.1",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-spawn-mocha": "^2.2.2",
+    "gulp-task-graph-visualizer": "^1.0.0",
     "gulp-tsfmt": "^1.0.2",
     "gulp-typescript": "^2.12.1",
     "gulp-util": "^3.0.7",

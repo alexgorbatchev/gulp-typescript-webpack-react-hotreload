@@ -36,6 +36,7 @@ const BUILD_SRC_FILES: Array<string> = [`${BUILD_SRC_DIR}/**/*.js`];
 
 const typescriptProject = $.typescript.createProject(require('./tsconfig.json').compilerOptions);
 
+gulp.task('viz', require('gulp-task-graph-visualizer')(yargs.task));
 gulp.task('build:clean', done => rimraf(BUILD_PUBLIC_DIR, () => mkdirp(BUILD_DIR, done)));
 gulp.task('build:vendor', ['build:typescript'], webpackTask('vendor', 'vendor.js'));
 gulp.task('build:app', ['build:vendor', 'build:dev'], webpackTask('app'));
