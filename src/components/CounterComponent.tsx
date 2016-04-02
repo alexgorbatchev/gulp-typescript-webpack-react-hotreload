@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { CounterState, CounterAction } from 'store/counter';
+import { CounterState, CounterAction } from '../store/counter';
 
 export interface CounterProps {
   increaseCounter(amount: number): CounterAction;

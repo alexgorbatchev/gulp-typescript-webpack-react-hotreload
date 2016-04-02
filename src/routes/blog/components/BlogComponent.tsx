@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Banner, { BannerKind } from 'components/BannerComponent';
+import Banner, { BannerKind } from '../../../components/BannerComponent';
 
 export default class BlogComponent extends React.Component<any, any> {
   render() {

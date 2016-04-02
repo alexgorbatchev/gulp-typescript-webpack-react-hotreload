@@ -8,7 +8,7 @@ import {
   DEVELOPMENT,
   SRC_DIR,
   ROOT_DIR,
-  BUILD_DIR,
+  BUILD_PUBLIC_DIR,
   VENDOR_DLL,
   TEST_DLL,
   DEV_DLL,
@@ -43,7 +43,7 @@ entry = {
 };
 
 output = {
-  path: BUILD_DIR,
+  path: BUILD_PUBLIC_DIR,
   publicPath: PUBLIC_PATH,
   filename: '[name].js',
   chunkFilename: '[name].js',
@@ -118,7 +118,7 @@ if (DEVELOPMENT) {
 
 if (PRODUCTION) {
   plugins.push(
-    new ManifestPlugin({ fileName: path.relative(BUILD_DIR, APP_MANIFEST) }),
+    new ManifestPlugin({ fileName: path.relative(BUILD_PUBLIC_DIR, APP_MANIFEST) }),
     new UglifyJsPlugin({ comments: false })
   );
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
-import Header, { HeaderKind } from 'components/HeaderComponent';
-import Banner, { BannerKind } from 'components/BannerComponent';
+import Header, { HeaderKind } from '../../../components/HeaderComponent';
+import Banner, { BannerKind } from '../../../components/BannerComponent';
 
 export default class TeamComponent extends React.Component<any, any> {
   render() {

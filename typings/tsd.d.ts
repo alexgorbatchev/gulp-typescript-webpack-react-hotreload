@@ -13,6 +13,7 @@
 /// <reference path="react/react-addons-test-utils.d.ts" />
 /// <reference path="_custom/radium.d.ts" />
 /// <reference path="_custom/require.d.ts" />
+/// <reference path="_custom/jsx-chai.d.ts" />
 /// <reference path="es6-shim/es6-shim.d.ts" />
 /// <reference path="sinon-chai/sinon-chai.d.ts" />
 /// <reference path="whatwg-fetch/whatwg-fetch.d.ts" />

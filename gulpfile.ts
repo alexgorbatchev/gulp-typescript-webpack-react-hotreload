@@ -1,7 +1,8 @@
 import * as path from 'path';
 
 import {
-  BUILD_DIR,
+  BUILD_PUBLIC_DIR,
+  BUILD_SRC_DIR,
   DEVELOPMENT,
   TEST,
   ROOT_DIR,
@@ -12,6 +13,8 @@ import {
 const gulp = require('gulp');
 const rimraf = require('rimraf');
 const mkdirp = require('mkdirp');
+const webpack = require('webpack');
+const merge = require('merge2');
 const yargs = require('yargs').argv;
 const { Promise } = require('es6-promise');
 const { log, colors } = require('gulp-util');
@@ -21,10 +24,16 @@ const $ = {
   changedInPlace: require('gulp-changed-in-place'),
   print: require('gulp-print'),
   tsfmt: require('gulp-tsfmt'),
+  typescript: require('gulp-typescript'),
+  sourcemaps: require('gulp-sourcemaps'),
+  changed: require('gulp-changed'),
+  mocha: require('gulp-spawn-mocha'),
 };
 
 const STATIC_FILES: Array<string> = [ 'src/index.html' ];
 const TYPESCRIPT_FILES: Array<string> = ['src/!(node_modules)/**/*.{ts,tsx}'];
+
+var typescript = $.typescript.createProject(require('./tsconfig.json').compilerOptions);
 
 gulp.task('typescript:format', () =>
   gulp.src(TYPESCRIPT_FILES)
@@ -34,17 +43,49 @@ gulp.task('typescript:format', () =>
     .pipe(gulp.dest(SRC_DIR))
 );
 
-gulp.task('build:clean', done => rimraf(BUILD_DIR, () => mkdirp(BUILD_DIR, done)));
-gulp.task('build:vendor', webpack('vendor', 'vendor.js'));
-gulp.task('build:app', [ 'build:vendor', 'build:dev' ], webpack('app'));
-gulp.task('build:dev', [ 'build:vendor' ], webpack('dev', 'dev.js'));
-gulp.task('build:test', [ 'build:vendor', 'build:dev' ], webpack('test', 'test.js'));
-gulp.task('build:static', () => gulp.src('data').pipe(gulp.dest(BUILD_DIR)));
+gulp.task('build:clean', done => rimraf(BUILD_PUBLIC_DIR, () => mkdirp(BUILD_PUBLIC_DIR, done)));
+gulp.task('build:vendor', webpackTask('vendor', 'vendor.js'));
+gulp.task('build:app', [ 'build:vendor', 'build:dev' ], webpackTask('app'));
+gulp.task('build:dev', [ 'build:vendor' ], webpackTask('dev', 'dev.js'));
+gulp.task('build:test', [ 'build:vendor', 'build:dev' ], webpackTask('test', 'test.js'));
+gulp.task('build:static', () => gulp.src('data').pipe(gulp.dest(BUILD_PUBLIC_DIR)));
 gulp.task('build:index', [ 'build:static' ], buildIndexHtmlFile);
 gulp.task('build', [ 'build:app', 'build:index' ]);
 
 gulp.task('karma', [ 'build:test' ], $.bg('karma', 'start', '--single-run=false'));
 gulp.task('dev:server', [ 'build:vendor', 'build:dev', 'build:index', 'build:static' ], $.bg('node', 'webpack/dev-server.js'));
+
+gulp.task('static:files', () =>
+  gulp.src([`${SRC_DIR}/**/*`, '!**/*.{ts,tsx}'])
+    .pipe($.changed(BUILD_SRC_DIR))
+    .pipe($.print(filepath => `Copied ${filepath}`))
+    .pipe(gulp.dest(BUILD_SRC_DIR))
+);
+
+gulp.task('typescript:compile', ['static:files'], () =>
+  gulp.src(TYPESCRIPT_FILES.concat(['typings/tsd.d.ts']))
+    .pipe($.changed(BUILD_SRC_DIR, { extension: '.js' }))
+    .pipe($.sourcemaps.init())
+    .pipe($.typescript(typescript))
+    .js
+    .pipe($.sourcemaps.write({ sourceRoot: SRC_DIR }))
+    .pipe($.print(filepath => `Compiled ${filepath}`))
+    .pipe(gulp.dest(BUILD_SRC_DIR))
+);
+
+gulp.task('mocha', ['typescript:compile'], () =>
+  gulp.src([`${BUILD_SRC_DIR}/test/*-helper.js`, `${BUILD_SRC_DIR}/**/*-spec.js`])
+    .pipe($.mocha({
+      recursive: true,
+      reporter: 'min',
+      ui: 'bdd',
+    }))
+);
+
+gulp.task('watch', ['typescript:compile'], function() {
+  gulp.watch(TYPESCRIPT_FILES, ['typescript:compile']);
+  gulp.watch(`${BUILD_SRC_DIR}/**/*.js`, ['mocha']);
+});
 
 gulp.task('dev', [ 'typescript:format', 'karma', 'dev:server' ], function() {
   gulp.watch(TYPESCRIPT_FILES, [ 'typescript:format' ]);
@@ -80,7 +121,7 @@ function buildIndexHtmlFile() {
   const opts = { cwd: ROOT_DIR };
 
   const manifests = new Promise(resolve =>
-    glob(`${BUILD_DIR}/*-manifest.json`, opts, (err, files) =>
+    glob(`${BUILD_PUBLIC_DIR}/*-manifest.json`, opts, (err, files) =>
       resolve(Promise.all(files.map(filepath =>
         promised(cb => fs.readFile(filepath, 'utf8', cb))
           .then(JSON.parse)
@@ -101,7 +142,7 @@ function buildIndexHtmlFile() {
       .then(content => dust.compile(content, 'index'))
       .then(dust.loadSource)
       .then(() => promised(cb => dust.render('index', { manifest }, cb)))
-      .then(html => promised(cb => fs.writeFile(`${BUILD_DIR}/index.html`, html, cb)));
+      .then(html => promised(cb => fs.writeFile(`${BUILD_PUBLIC_DIR}/index.html`, html, cb)));
   }
 
   if (DEVELOPMENT) {
@@ -124,12 +165,12 @@ function buildIndexHtmlFile() {
 function allFilesExist(files: Array<string>): Promise<any> {
   const fs = require('fs');
 
-  return Promise.all(files.map(filepath => promised(cb => fs.stat(`${BUILD_DIR}/${filepath}`, cb), false)))
+  return Promise.all(files.map(filepath => promised(cb => fs.stat(`${BUILD_PUBLIC_DIR}/${filepath}`, cb), false)))
     // make sure that all stats are truthy
     .then(stats => stats.reduce((all, current) => all && current, true));
 }
 
-function webpack(configName: string, ...expectedFiles: Array<string>): Function {
+function webpackTask(configName: string, ...expectedFiles: Array<string>): Function {
   // return a function for gulp.task()
   return function(done) {
     allFilesExist(expectedFiles)
@@ -143,17 +184,18 @@ function webpack(configName: string, ...expectedFiles: Array<string>): Function 
           log(`Will always build ${configName}`);
         }
 
-        const webpack = require('webpack');
         const { default: config } = require(`./webpack/config-${configName}`);
         const { default: stats } = require('./webpack/stats');
 
-        webpack(config, printStats(stats, done));
+        webpack(config, printStats(configName, stats, done));
       })
       .catch(e => console.error(e.stack));
   }
 }
 
-function printStats(statsOpts, done) {
+const statsCache = {};
+
+function printStats(configName: string, statsOpts: Object, done: Function): Function {
   return function(err, stats) {
     if (err) {
       log(colors.red(err.message));
@@ -170,10 +212,9 @@ function printStats(statsOpts, done) {
       if (hasWarning) { log(dashes); }
     }
 
-    stats
-      .toString(statsOpts)
-      .split(/\n/g)
-      .forEach(logWithWarnings);
+
+      // .split(/\n/g)
+      // .forEach(logWithWarnings);
 
     done();
   }

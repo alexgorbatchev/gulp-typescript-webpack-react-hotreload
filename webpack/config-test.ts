@@ -2,7 +2,7 @@ import * as path from 'path';
 import stats from './stats';
 
 import {
-  BUILD_DIR,
+  BUILD_PUBLIC_DIR,
   TEST_DLL,
   PUBLIC_PATH,
 } from '../config';
@@ -34,7 +34,7 @@ entry = {
 };
 
 output = {
-  path: BUILD_DIR,
+  path: BUILD_PUBLIC_DIR,
   publicPath: PUBLIC_PATH,
   filename: '[name].js',
   library: 'test',

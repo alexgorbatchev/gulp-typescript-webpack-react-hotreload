@@ -3,7 +3,7 @@ import stats from './stats';
 
 import {
   PRODUCTION,
-  BUILD_DIR,
+  BUILD_PUBLIC_DIR,
   VENDOR_DLL,
   VENDOR_MANIFEST,
   PUBLIC_PATH,
@@ -43,7 +43,7 @@ entry = {
 };
 
 output = {
-  path: BUILD_DIR,
+  path: BUILD_PUBLIC_DIR,
   publicPath: PUBLIC_PATH,
   filename: '[name].js',
   library: 'vendor',
@@ -57,7 +57,7 @@ dllOptions = {
 
 if (PRODUCTION) {
   plugins.push(
-    new ManifestPlugin({ fileName: path.relative(BUILD_DIR, VENDOR_MANIFEST) }),
+    new ManifestPlugin({ fileName: path.relative(BUILD_PUBLIC_DIR, VENDOR_MANIFEST) }),
     new UglifyJsPlugin({ comments: false })
   );
 
