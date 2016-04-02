@@ -1,6 +1,0 @@
---compilers ts:ts-node/register tsx:ts-node/register
---recursive
---reporter min
---watch
---ui bdd
---timeout 3000

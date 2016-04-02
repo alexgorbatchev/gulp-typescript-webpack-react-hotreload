@@ -1,6 +1,7 @@
 import * as path from 'path';
 
 import {
+  BUILD_DIR,
   BUILD_PUBLIC_DIR,
   BUILD_SRC_DIR,
   DEVELOPMENT,
@@ -14,7 +15,6 @@ const gulp = require('gulp');
 const rimraf = require('rimraf');
 const mkdirp = require('mkdirp');
 const webpack = require('webpack');
-const merge = require('merge2');
 const yargs = require('yargs').argv;
 const { Promise } = require('es6-promise');
 const { log, colors } = require('gulp-util');
@@ -30,50 +30,49 @@ const $ = {
   mocha: require('gulp-spawn-mocha'),
 };
 
-const STATIC_FILES: Array<string> = ['src/index.html'];
 const TYPESCRIPT_FILES: Array<string> = ['src/!(node_modules)/**/*.{ts,tsx}'];
+const STATIC_FILES: Array<string> = [`${SRC_DIR}/**/*`, '!**/*.{ts,tsx}'];
+const BUILD_SRC_FILES: Array<string> = [`${BUILD_SRC_DIR}/**/*.js`];
 
-var typescript = $.typescript.createProject(require('./tsconfig.json').compilerOptions);
+const typescriptProject = $.typescript.createProject(require('./tsconfig.json').compilerOptions);
 
-gulp.task('typescript:format', () =>
-  gulp.src(TYPESCRIPT_FILES)
-    .pipe($.changedInPlace({ firstPass: yargs.force }))
-    .pipe($.tsfmt({ options: require('./tsfmt.json') }))
-    .pipe($.print(filepath => `Formatted ${filepath}`))
-    .pipe(gulp.dest(SRC_DIR))
-);
-
-gulp.task('build:clean', done => rimraf(BUILD_PUBLIC_DIR, () => mkdirp(BUILD_PUBLIC_DIR, done)));
-gulp.task('build:vendor', webpackTask('vendor', 'vendor.js'));
+gulp.task('build:clean', done => rimraf(BUILD_PUBLIC_DIR, () => mkdirp(BUILD_DIR, done)));
+gulp.task('build:vendor', ['build:typescript'], webpackTask('vendor', 'vendor.js'));
 gulp.task('build:app', ['build:vendor', 'build:dev'], webpackTask('app'));
 gulp.task('build:dev', ['build:vendor'], webpackTask('dev', 'dev.js'));
 gulp.task('build:test', ['build:vendor', 'build:dev'], webpackTask('test', 'test.js'));
-gulp.task('build:static', () => gulp.src('data').pipe(gulp.dest(BUILD_PUBLIC_DIR)));
-gulp.task('build:index', ['build:static'], buildIndexHtmlFile);
+gulp.task('build:index', ['build:static', 'build:app'], buildIndexHtmlFile);
 gulp.task('build', ['build:app', 'build:index']);
-
 gulp.task('karma', ['build:test'], $.bg('karma', 'start', '--single-run=false'));
 gulp.task('dev:server', ['build:vendor', 'build:dev', 'build:index', 'build:static'], $.bg('node', 'webpack/dev-server.js'));
 
-gulp.task('static:files', () =>
-  gulp.src([`${SRC_DIR}/**/*`, '!**/*.{ts,tsx}'])
+gulp.task('format:typescript', () =>
+  gulp.src(TYPESCRIPT_FILES)
+    .pipe($.changedInPlace({ firstPass: yargs.force }))
+    .pipe($.tsfmt({ options: require('./tsfmt.json') }))
+    .pipe($.print(filepath => `format:typescript ➡ ${filepath}`))
+    .pipe(gulp.dest(SRC_DIR))
+);
+
+gulp.task('build:static', () =>
+  gulp.src(STATIC_FILES)
     .pipe($.changed(BUILD_SRC_DIR))
-    .pipe($.print(filepath => `Copied ${filepath}`))
+    .pipe($.print(filepath => `build:static ➡ ${filepath}`))
     .pipe(gulp.dest(BUILD_SRC_DIR))
 );
 
-gulp.task('typescript:compile', ['static:files'], () =>
+gulp.task('build:typescript', ['build:static'], () =>
   gulp.src(TYPESCRIPT_FILES.concat(['typings/tsd.d.ts']))
     .pipe($.changed(BUILD_SRC_DIR, { extension: '.js' }))
     .pipe($.sourcemaps.init())
-    .pipe($.typescript(typescript))
+    .pipe($.typescript(typescriptProject))
     .js
     .pipe($.sourcemaps.write({ sourceRoot: SRC_DIR }))
-    .pipe($.print(filepath => `Compiled ${filepath}`))
+    .pipe($.print(filepath => `build:typescript ➡ ${filepath}`))
     .pipe(gulp.dest(BUILD_SRC_DIR))
 );
 
-gulp.task('mocha', ['typescript:compile'], () =>
+gulp.task('test:mocha', ['build:typescript'], () =>
   gulp.src([`${BUILD_SRC_DIR}/test/*-helper.js`, `${BUILD_SRC_DIR}/**/*-spec.js`])
     .pipe($.mocha({
       recursive: true,
@@ -82,16 +81,11 @@ gulp.task('mocha', ['typescript:compile'], () =>
     }))
 );
 
-gulp.task('watch', ['typescript:compile'], function() {
-  gulp.watch(TYPESCRIPT_FILES, ['typescript:compile']);
-  gulp.watch(`${BUILD_SRC_DIR}/**/*.js`, ['mocha']);
-});
-
-gulp.task('dev', ['typescript:format', 'karma', 'dev:server'], function() {
-  gulp.watch(TYPESCRIPT_FILES, ['typescript:format']);
+gulp.task('dev', ['format:typescript', 'build:typescript', 'dev:server'], () => {
+  gulp.watch(TYPESCRIPT_FILES, ['build:typescript', 'format:typescript']);
+  gulp.watch(STATIC_FILES, ['build:static']);
+  gulp.watch(BUILD_SRC_FILES, ['test:mocha']);
   gulp.watch(['webpack/**/*'], ['dev:server']);
-  gulp.watch(['data/**/*'], ['build:static']);
-  gulp.watch(['karma.conf.ts'], ['karma']);
 });
 
 
@@ -177,7 +171,7 @@ function webpackTask(configName: string, ...expectedFiles: Array<string>): Funct
       .then(allFilesExist => {
         if (expectedFiles.length > 0) {
           if (allFilesExist && !isClean(configName)) {
-            log(`Found ${expectedFiles.join(', ')} required for "${configName}", run with --clean to rebuild.`);
+            log(`Found "${expectedFiles.join(', ')}" required for "${configName}", run with --clean to rebuild.`);
             return done();
           }
         } else {
@@ -212,9 +206,12 @@ function printStats(configName: string, statsOpts: Object, done: Function): Func
       if (hasWarning) { log(dashes); }
     }
 
-
-    // .split(/\n/g)
-    // .forEach(logWithWarnings);
+    if (yargs.verbose) {
+      stats
+        .toString()
+        .split(/\n/g)
+        .forEach(logWithWarnings);
+    }
 
     done();
   }
