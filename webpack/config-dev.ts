@@ -50,5 +50,6 @@ export default {
   entry,
   output,
   plugins,
+  resolve,
   stats,
 };

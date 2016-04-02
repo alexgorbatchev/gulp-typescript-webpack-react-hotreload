@@ -35,9 +35,9 @@ entry = {
     'react-intl',
     'react-redux',
     'react-router',
+    'react-router-redux',
     'redux',
     'redux-thunk',
-    'redux-simple-router',
     'whatwg-fetch',
   ],
 };

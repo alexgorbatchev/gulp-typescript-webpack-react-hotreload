@@ -7,14 +7,22 @@ import {
   PUBLIC_PATH,
 } from '../config';
 
-import { vendorDll } from './dlls';
+import { vendorDll, devDll } from './dlls';
 
 const {
   DllPlugin,
   DllReferencePlugin,
 } = require('webpack');
 
-let entry, output, plugins, loaders;
+let entry, output, plugins, loaders, resolve, noParse;
+
+noParse = [/\/sinon\//];
+
+resolve = {
+  alias: {
+    sinon: 'sinon/pkg/sinon.js',
+  },
+};
 
 entry = {
   test: [
@@ -24,13 +32,6 @@ entry = {
     'react-addons-test-utils',
   ],
 };
-
-loaders = [
-  {
-    test: /pkg\/sinon\.js/,
-    loader: 'imports?define=>false,require=>false',
-  },
-];
 
 output = {
   path: BUILD_DIR,
@@ -42,6 +43,7 @@ output = {
 
 plugins = [
   vendorDll(),
+  devDll(),
   new DllPlugin({
     path: TEST_DLL,
     name: '[name]',
@@ -53,6 +55,7 @@ export default {
   entry,
   output,
   plugins,
-  module: { loaders },
+  module: { loaders, noParse },
+  resolve,
   stats,
 };

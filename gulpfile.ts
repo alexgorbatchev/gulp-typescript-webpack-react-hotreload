@@ -38,8 +38,8 @@ gulp.task('build:vendor', webpack('vendor', 'vendor.js'));
 gulp.task('build:app', [ 'build:vendor', 'build:dev' ], webpack('app'));
 gulp.task('build:dev', [ 'build:vendor' ], webpack('dev', 'dev.js'));
 gulp.task('build:test', [ 'build:vendor', 'build:dev' ], webpack('test', 'test.js'));
-gulp.task('build:index', buildIndexHtmlFile);
 gulp.task('build:static', () => gulp.src('data').pipe(gulp.dest(BUILD_DIR)));
+gulp.task('build:index', [ 'build:static' ], buildIndexHtmlFile);
 gulp.task('build', [ 'build:app', 'build:index' ]);
 
 gulp.task('karma', [ 'build:test' ], $.bg('karma', 'start', '--single-run=false'));

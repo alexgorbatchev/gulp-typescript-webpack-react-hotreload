@@ -130,7 +130,7 @@ if (TEST) {
   devtool = '#inline-source-map';
   entry = {};
   output = {};
-  plugins = [ definePlugin, testDll() ];
+  plugins = [ definePlugin, testDll(), vendorDll(), devDll() ];
 }
 
 plugins.push(vendorDll(), devDll());
