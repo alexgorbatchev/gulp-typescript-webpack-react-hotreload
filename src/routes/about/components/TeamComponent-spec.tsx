@@ -3,8 +3,8 @@ import * as React from 'react';
 import * as TestUtils from 'react-addons-test-utils';
 import TeamComponent from './TeamComponent';
 
-describe('TeamComponent', function () {
-  it('works', function () {
+describe('TeamComponent', function() {
+  it('works', function() {
     const instance = TestUtils.renderIntoDocument(
       <TeamComponent />
     );

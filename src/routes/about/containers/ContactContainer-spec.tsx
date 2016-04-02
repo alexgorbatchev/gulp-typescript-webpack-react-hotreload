@@ -3,8 +3,8 @@ import * as React from 'react';
 import * as TestUtils from 'react-addons-test-utils';
 import ContactContainer from './ContactContainer';
 
-describe('ContactContainer', function () {
-  it('works', function () {
+describe('ContactContainer', function() {
+  it('works', function() {
     const instance = TestUtils.renderIntoDocument(
       <ContactContainer />
     );

@@ -12,26 +12,27 @@ import {
 const gulp = require('gulp');
 const rimraf = require('rimraf');
 const mkdirp = require('mkdirp');
+const yargs = require('yargs').argv;
 const { Promise } = require('es6-promise');
 const { log, colors } = require('gulp-util');
 const $ = {
   bg: require('gulp-bg'),
   sequence: require('run-sequence'),
-  // changedInPlace: require('gulp-changed-in-place'),
-  // print: require('gulp-print'),
-  // tsfmt: require('gulp-tsfmt'),
+  changedInPlace: require('gulp-changed-in-place'),
+  print: require('gulp-print'),
+  tsfmt: require('gulp-tsfmt'),
 };
 
 const STATIC_FILES: Array<string> = [ 'src/index.html' ];
+const TYPESCRIPT_FILES: Array<string> = ['src/!(node_modules)/**/*.{ts,tsx}'];
 
-gulp.task('typescript:format', function() {
-  log('typescript:format is not ready until TypeScript 1.8');
-  // gulp.src(allTypescriptFiles)
-  //   .pipe($.changedInPlace())
-  //   .pipe($.tsfmt({ options: require('./tsfmt.json') }))
-  //   .pipe($.print(filepath => `Formatted ${filepath}`))
-  //   .pipe(gulp.dest(file => path.dirname(file.path)));
-});
+gulp.task('typescript:format', () =>
+  gulp.src(TYPESCRIPT_FILES)
+    .pipe($.changedInPlace({ firstPass: yargs.force }))
+    .pipe($.tsfmt({ options: require('./tsfmt.json') }))
+    .pipe($.print(filepath => `Formatted ${filepath}`))
+    .pipe(gulp.dest(SRC_DIR))
+);
 
 gulp.task('build:clean', done => rimraf(BUILD_DIR, () => mkdirp(BUILD_DIR, done)));
 gulp.task('build:vendor', webpack('vendor', 'vendor.js'));
@@ -46,6 +47,7 @@ gulp.task('karma', [ 'build:test' ], $.bg('karma', 'start', '--single-run=false'
 gulp.task('dev:server', [ 'build:vendor', 'build:dev', 'build:index', 'build:static' ], $.bg('node', 'webpack/dev-server.js'));
 
 gulp.task('dev', [ 'typescript:format', 'karma', 'dev:server' ], function() {
+  gulp.watch(TYPESCRIPT_FILES, [ 'typescript:format' ]);
   gulp.watch([ 'webpack/**/*' ], [ 'dev:server' ]);
   gulp.watch([ 'data/**/*' ], [ 'build:static' ]);
   gulp.watch([ 'karma.conf.ts' ], [ 'karma' ]);
@@ -60,7 +62,6 @@ function isClean(configName: string): boolean {
     return false;
   }
 
-  const yargs = require('yargs').argv;
   isCleanCache[configName] = true;
   return yargs.clean === true;
 }

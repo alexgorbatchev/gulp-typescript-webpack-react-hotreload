@@ -3,8 +3,8 @@ import * as React from 'react';
 import * as TestUtils from 'react-addons-test-utils';
 import AboutContainer from './AboutContainer';
 
-describe('AboutContainer', function () {
-  it('works', function () {
+describe('AboutContainer', function() {
+  it('works', function() {
     const instance = TestUtils.renderIntoDocument(
       <AboutContainer />
     );
