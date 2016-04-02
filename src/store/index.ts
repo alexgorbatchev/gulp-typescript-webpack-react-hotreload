@@ -1,5 +1,5 @@
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
-import { createHistory } from 'history';
+import { browserHistory } from 'react-router';
 import thunkMiddleware from 'redux-thunk';
 import CounterReducer from './counter/CounterReducer';
 import ColorsReducer from './colors/ColorsReducer';
@@ -7,8 +7,6 @@ import ColorsReducer from './colors/ColorsReducer';
 const { syncHistoryWithStore, routerReducer } = require('react-router-redux');
 
 declare const DEVELOPMENT;
-
-const history = createHistory();
 
 const allReducers = combineReducers(Object.assign({},
   {
@@ -34,6 +32,7 @@ if (DEVELOPMENT) {
 const applicationCreateStore = compose(...composeList)(createStore);
 const store = applicationCreateStore(allReducers);
 
-syncHistoryWithStore(history, store);
+// Create an enhanced history that syncs navigation events with the store
+const history = syncHistoryWithStore(browserHistory, store);
 
-export default store;
+export { store, history };
