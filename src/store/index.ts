@@ -4,17 +4,17 @@ import thunkMiddleware from 'redux-thunk';
 import CounterReducer from './counter/CounterReducer';
 import ColorsReducer from './colors/ColorsReducer';
 
-const { syncReduxAndRouter, routeReducer } = require('redux-simple-router');
+const { syncHistoryWithStore, routerReducer } = require('react-router-redux');
 
 declare const DEVELOPMENT;
 
 const history = createHistory();
 
 const allReducers = combineReducers(Object.assign({},
-  CounterReducer,
-  ColorsReducer,
   {
-    routing: routeReducer
+    counter: CounterReducer,
+    colors: ColorsReducer,
+    routing: routerReducer
   }
 ));
 
@@ -34,6 +34,6 @@ if (DEVELOPMENT) {
 const applicationCreateStore = compose(...composeList)(createStore);
 const store = applicationCreateStore(allReducers);
 
-syncReduxAndRouter(history, store);
+syncHistoryWithStore(history, store);
 
 export default store;
