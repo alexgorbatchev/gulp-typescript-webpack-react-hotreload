@@ -90,7 +90,7 @@ gulp.task('test:remap-istanbul', ['test:mocha'], () =>
 );
 
 gulp.task('test:mocha', ['build:typescript'], () =>
-  gulp.src([`${BUILD_SRC_DIR}/test/*-helper.js`, `${BUILD_SRC_DIR}/**/*-spec.js`])
+  gulp.src([`${BUILD_SRC_DIR}/tests/*-helper.js`, `${BUILD_SRC_DIR}/**/*-spec.js`])
     .pipe($.mocha({
       recursive: true,
       reporter: 'min',
