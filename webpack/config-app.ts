@@ -9,6 +9,7 @@ import {
   SRC_DIR,
   ROOT_DIR,
   BUILD_PUBLIC_DIR,
+  BUILD_SRC_DIR,
   VENDOR_DLL,
   TEST_DLL,
   DEV_DLL,
@@ -33,13 +34,13 @@ const {
   },
 } = require('webpack');
 
-let devtool, entry, output, plugins, resolve, preLoaders, loaders, tslint;
+let devtool, entry, output, plugins, resolve, preLoaders, loaders;
 
 devtool = 'source-map';
 
 entry = {
-  components: [ path.join(SRC_DIR, 'components') ],
-  app: [ path.join(SRC_DIR, 'index.tsx') ],
+  components: [ path.join(BUILD_SRC_DIR, 'components') ],
+  app: [ path.join(BUILD_SRC_DIR, 'index.js') ],
 };
 
 output = {
@@ -75,32 +76,18 @@ resolve = {
   alias: {
     sinon: 'sinon/pkg/sinon.js',
   },
-  extensions: [ '', '.tsx', '.ts', '.js' ],
-};
-
-preLoaders = [
-  {
-    test: /\.ts(x)?$/,
-    loader: 'tslint',
-    include: [ SRC_DIR ],
-  },
-];
-
-tslint = {
-  emitErrors: true,
-  configuration: require('../tslint.json'),
 };
 
 loaders = [
   {
-    test: /\.ts(x)?$/,
-    loaders: [ 'react-hot', 'ts?silent' ],
-    include: [ SRC_DIR ],
+    test: /\.js?$/,
+    loaders: [ 'react-hot' ],
+    include: [ BUILD_SRC_DIR ],
   },
   {
     test: /\.(png|jpg|svg)$/,
     loader: 'url-loader?limit=8192',
-    include: [ SRC_DIR ],
+    include: [ BUILD_SRC_DIR ],
   },
 ];
 
@@ -138,7 +125,6 @@ plugins.push(vendorDll(), devDll());
 export default {
   target: 'web',
   devtool,
-  tslint,
   entry,
   output,
   plugins,

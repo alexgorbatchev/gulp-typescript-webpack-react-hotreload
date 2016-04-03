@@ -31,7 +31,7 @@ const $ = {
   exec: require('gulp-exec'),
 };
 
-const TYPESCRIPT_FILES: Array<string> = ['src/!(node_modules)/**/*.{ts,tsx}'];
+const TYPESCRIPT_FILES: Array<string> = ['src/**/*.{ts,tsx}'];
 const STATIC_FILES: Array<string> = [`${SRC_DIR}/**/*`, '!**/*.{ts,tsx}'];
 const BUILD_SRC_FILES: Array<string> = [`${BUILD_SRC_DIR}/**/*.js`];
 
