@@ -23,6 +23,7 @@
     "gulp-spawn-mocha": "^2.2.2",
     "gulp-task-graph-visualizer": "^1.0.0",
     "gulp-tsfmt": "^1.0.2",
+    "gulp-tslint": "^4.3.4",
     "gulp-typescript": "^2.12.1",
     "gulp-util": "^3.0.7",
     "imports-loader": "^0.6.5",

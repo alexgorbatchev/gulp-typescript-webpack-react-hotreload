@@ -29,6 +29,7 @@ const $ = {
   changed: require('gulp-changed'),
   mocha: require('gulp-spawn-mocha'),
   exec: require('gulp-exec'),
+  tslint: require('gulp-tslint'),
 };
 
 const TYPESCRIPT_FILES: Array<string> = ['src/**/*.{ts,tsx}'];
@@ -48,12 +49,21 @@ gulp.task('build', ['build:app', 'build:index']);
 gulp.task('karma', ['build:test'], $.bg('karma', 'start', '--single-run=false'));
 gulp.task('dev:server', ['build:vendor', 'build:dev', 'build:index', 'build:static'], $.bg('node', 'webpack/dev-server.js'));
 
-gulp.task('format:typescript', () =>
+gulp.task('typescript:format', () =>
   gulp.src(TYPESCRIPT_FILES)
     .pipe($.changedInPlace({ firstPass: yargs.force }))
     .pipe($.tsfmt({ options: require('./tsfmt.json') }))
-    .pipe($.print(filepath => `format:typescript ➡ ${filepath}`))
+    .pipe($.print(filepath => `typescript:format ➡ ${filepath}`))
     .pipe(gulp.dest(SRC_DIR))
+);
+
+gulp.task('typescript:lint', () =>
+  gulp.src(TYPESCRIPT_FILES)
+    .pipe($.tslint())
+    .pipe($.tslint.report('verbose', {
+      summarizeFailureOutput: true,
+      emitError: yargs._.indexOf('dev') === -1,
+    }))
 );
 
 gulp.task('build:static', () =>
@@ -63,7 +73,7 @@ gulp.task('build:static', () =>
     .pipe(gulp.dest(BUILD_SRC_DIR))
 );
 
-gulp.task('build:typescript', ['build:static'], () =>
+gulp.task('build:typescript', ['typescript:lint', 'build:static'], () =>
   gulp.src(TYPESCRIPT_FILES.concat(['typings/tsd.d.ts']))
     .pipe($.changed(BUILD_SRC_DIR, { extension: '.js' }))
     .pipe($.sourcemaps.init())
@@ -91,8 +101,8 @@ gulp.task('test:mocha', ['build:typescript'], () =>
 
 gulp.task('test', ['test:mocha', 'test:remap-istanbul']);
 
-gulp.task('dev', ['format:typescript', 'build:typescript', 'dev:server'], () => {
-  gulp.watch(TYPESCRIPT_FILES, ['build:typescript', 'format:typescript']);
+gulp.task('dev', ['typescript:format', 'build:typescript', 'dev:server'], () => {
+  gulp.watch(TYPESCRIPT_FILES, ['build:typescript', 'typescript:format', 'typescript:lint']);
   gulp.watch(STATIC_FILES, ['build:static']);
   gulp.watch(BUILD_SRC_FILES, ['test']);
   gulp.watch(['webpack/**/*'], ['dev:server']);
