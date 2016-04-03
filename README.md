@@ -10,10 +10,11 @@ This is a starter kit for a client side project that uses TypeScript and React a
 * Gulp
 * TypeScript
 * Webpack
-* Karma
 * React
 * React Router
 * Redux
+* Mocha
+* Istanbul
 
 ## Features
 
@@ -27,9 +28,9 @@ This is a starter kit for a client side project that uses TypeScript and React a
   * Vendor modules are in a separate DLL that is only built once.
   * Development modules are in a separate DLL that is only built once.
   * Components are in a separate chunk.
-* Fast Karma compilation due to:
-  * Vendor, test and development modules statically precompiled as separate DLLs.
-  * Only application files are recompiled on build.
+* Server side React testing with JSDom.
+* Code coverage report with TypeScript.
+* TypeScript formatting.
 
 ## Installation
 
@@ -44,9 +45,10 @@ npm install
 
 * Starts Webpack server on [http://localhost:3000](http://localhost:3000).
 * Restarts Webpack server configuration changes.
-* Whenever `.ts` and `.tsx` files in `src` change, visible module will be reload without whole page needing a refresh.
-* Starts Karma.
-* Restarts Karma when configuration changes.
+* Whenever `.ts` and `.tsx` files in `src` change:
+  * Visible module will be reload without whole page needing a refresh.
+  * Mocha tests are executed.
+  * TypeScript files are reformatted.
 
 ## License
 
