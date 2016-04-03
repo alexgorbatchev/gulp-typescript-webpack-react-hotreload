@@ -28,6 +28,7 @@ const $ = {
   sourcemaps: require('gulp-sourcemaps'),
   changed: require('gulp-changed'),
   mocha: require('gulp-spawn-mocha'),
+  exec: require('gulp-exec'),
 };
 
 const TYPESCRIPT_FILES: Array<string> = ['src/!(node_modules)/**/*.{ts,tsx}'];
@@ -73,19 +74,27 @@ gulp.task('build:typescript', ['build:static'], () =>
     .pipe(gulp.dest(BUILD_SRC_DIR))
 );
 
+gulp.task('test:remap-istanbul', ['test:mocha'], () =>
+  gulp.src('coverage/coverage.json', { buffer: false })
+    .pipe($.exec(`./node_modules/.bin/remap-istanbul -i coverage/coverage.json -o coverage/html-report -t html`))
+);
+
 gulp.task('test:mocha', ['build:typescript'], () =>
   gulp.src([`${BUILD_SRC_DIR}/test/*-helper.js`, `${BUILD_SRC_DIR}/**/*-spec.js`])
     .pipe($.mocha({
       recursive: true,
       reporter: 'min',
       ui: 'bdd',
+      istanbul: true,
     }))
 );
+
+gulp.task('test', ['test:mocha', 'test:remap-istanbul']);
 
 gulp.task('dev', ['format:typescript', 'build:typescript', 'dev:server'], () => {
   gulp.watch(TYPESCRIPT_FILES, ['build:typescript', 'format:typescript']);
   gulp.watch(STATIC_FILES, ['build:static']);
-  gulp.watch(BUILD_SRC_FILES, ['test:mocha']);
+  gulp.watch(BUILD_SRC_FILES, ['test']);
   gulp.watch(['webpack/**/*'], ['dev:server']);
 });
 
