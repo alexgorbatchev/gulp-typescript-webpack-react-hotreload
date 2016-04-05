@@ -67,7 +67,7 @@ plugins = [
   }),
   new ProvidePlugin({
     'Promise': 'exports?global.Promise!es6-promise',
-    'fetch': 'exports?self.fetch!whatwg-fetch',
+    'fetch': 'exports?self.fetch!isomorphic-fetch',
   }),
   definePlugin,
 ];

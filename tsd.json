@@ -56,14 +56,14 @@
     "sinon-chai/sinon-chai.d.ts": {
       "commit": "bf4ecf5b68887ed5a065e3922885c34d0f5739df"
     },
-    "whatwg-fetch/whatwg-fetch.d.ts": {
-      "commit": "bf4ecf5b68887ed5a065e3922885c34d0f5739df"
-    },
     "redux-thunk/redux-thunk.d.ts": {
       "commit": "bf4ecf5b68887ed5a065e3922885c34d0f5739df"
     },
     "react-router/history.d.ts": {
       "commit": "bf4ecf5b68887ed5a065e3922885c34d0f5739df"
+    },
+    "isomorphic-fetch/isomorphic-fetch.d.ts": {
+      "commit": "d969b903d1fce89a5e43828ec68458b4f852db4d"
     }
   }
 }
