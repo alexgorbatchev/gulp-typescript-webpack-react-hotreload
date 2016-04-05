@@ -18,19 +18,19 @@ This is a starter kit for a client side project that uses TypeScript and React a
 
 ## Features
 
-* TypeScript.
-* Hot module reload.
-* Correct line numbers reported in stack traces.
-* Production assets build.
-* Precompiled DLLs with external modules speed up application & test updates.
+* TypeScript
+* Auto TypeScript formatting
+* Hot module reload
+* Correct line numbers reported in stack traces
+* Production assets build
+* Precompiled DLLs with external modules speed up application & test updates
 * Async route and component loading using Webpack:
-  * Each page is a chunk.
-  * Vendor modules are in a separate DLL that is only built once.
-  * Development modules are in a separate DLL that is only built once.
-  * Components are in a separate chunk.
-* Server side React testing with JSDom.
-* Code coverage report with TypeScript.
-* TypeScript formatting.
+  * Each page is a chunk
+  * Vendor modules are in a separate DLL that is only built once
+  * Development modules are in a separate DLL that is only built once
+  * Components are in a separate chunk
+* Server side React testing with Mocha & JSDom
+* Code coverage reports using Istanbul for TypeScript files
 
 ## Installation
 
@@ -43,12 +43,12 @@ npm install
 
 ### gulp dev
 
-* Starts Webpack server on [http://localhost:3000](http://localhost:3000).
-* Restarts Webpack server configuration changes.
+* Starts Webpack server on [http://localhost:3000](http://localhost:3000)
+* Restarts Webpack server configuration changes
 * Whenever `.ts` and `.tsx` files in `src` change:
-  * Visible module will be reload without whole page needing a refresh.
-  * Mocha tests are executed.
-  * TypeScript files are reformatted.
+  * Visible module will be reload without whole page needing a refresh
+  * Mocha tests are executed
+  * TypeScript files are reformatted
 
 ## License
 
