@@ -46,7 +46,6 @@ gulp.task('build:dev', ['build:vendor'], webpackTask('dev', 'dev.js'));
 gulp.task('build:test', ['build:vendor', 'build:dev'], webpackTask('test', 'test.js'));
 gulp.task('build:index', ['build:static', 'build:app'], buildIndexHtmlFile);
 gulp.task('build', ['build:app', 'build:index']);
-gulp.task('karma', ['build:test'], $.bg('karma', 'start', '--single-run=false'));
 gulp.task('dev:server', ['build:vendor', 'build:dev', 'build:index', 'build:static'], $.bg('node', 'webpack/dev-server.js'));
 
 gulp.task('typescript:format', () =>
