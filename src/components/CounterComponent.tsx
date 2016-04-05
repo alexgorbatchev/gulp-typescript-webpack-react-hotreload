@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { CounterState, CounterAction } from '../store/counter';
+import { ICounterState, ICounterAction } from '../store/counter';
 
 export interface CounterProps {
-  increaseCounter(amount: number): CounterAction;
-  counter: CounterState;
+  increaseCounter(amount: number): ICounterAction;
+  counter: ICounterState;
 }
 
 export default class CounterComponent extends React.Component<CounterProps, any> {

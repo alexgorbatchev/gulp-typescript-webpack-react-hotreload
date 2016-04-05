@@ -1,8 +1,8 @@
-import { INCREASE_COUNTER, CounterState, CounterAction } from './';
+import { INCREASE_COUNTER, ICounterState, ICounterAction } from './';
 
-const initialState: CounterState = { value: 0 };
+const initialState: ICounterState = { value: 0 };
 
-export default function counterReducer(state: CounterState = initialState, action: CounterAction): CounterState {
+export default function counterReducer(state: ICounterState = initialState, action: ICounterAction): ICounterState {
   switch (action.type) {
     case INCREASE_COUNTER:
       return Object.assign({}, state, { value: state.value + action.amount });

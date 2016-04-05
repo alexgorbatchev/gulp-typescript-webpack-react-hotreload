@@ -1,2 +1,2 @@
-export const REQUEST_COLORS = 'REQUEST_COLORS';
-export const RECEIVE_COLORS = 'RECEIVE_COLORS';
+export const REQUEST_COLORS: string = 'REQUEST_COLORS';
+export const RECEIVE_COLORS: string = 'RECEIVE_COLORS';

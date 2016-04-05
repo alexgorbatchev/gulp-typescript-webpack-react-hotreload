@@ -1,5 +1,4 @@
 import * as chai from 'chai';
-import { expect } from 'chai';
 import jsxChai from 'jsx-chai';
 
 require('mocha-clean');

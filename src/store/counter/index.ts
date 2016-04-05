@@ -1,3 +1,3 @@
 export * from './CounterActions';
-export * from './CounterModel';
+export * from './CounterState';
 export * from './constants';

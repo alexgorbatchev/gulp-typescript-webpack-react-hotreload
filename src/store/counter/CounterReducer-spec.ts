@@ -1,9 +1,9 @@
 import { expect } from 'chai';
-import { CounterAction } from './CounterActions';
+import { ICounterAction } from './CounterActions';
 import { INCREASE_COUNTER } from './constants';
 import counterReducer from './CounterReducer';
 
-const action = (amount: number = 0): CounterAction => ({ type: INCREASE_COUNTER, amount });
+const action = (amount: number = 0): ICounterAction => ({ type: INCREASE_COUNTER, amount });
 
 describe('counterReducer', function() {
   it('returns the initial state', () => expect(counterReducer(undefined, action())).to.eql({ value: 0 }));
