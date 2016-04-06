@@ -7,19 +7,21 @@ This is a starter kit for a client side project that uses TypeScript and React a
 
 ## Stack
 
-* Gulp
-* TypeScript
-* Webpack
-* React
-* React Router
-* Redux
-* Mocha
-* Istanbul
+* gulp
+* typescript
+* webpack
+* react
+* react-router
+* redux
+* redux-thunk
+* mocha
+* istanbul
 
 ## Features
 
 * TypeScript
 * Auto TypeScript formatting
+* Lightning fast TypeScript compilation and bundling
 * Hot module reload
 * Correct line numbers reported in stack traces
 * Production assets build
@@ -37,18 +39,24 @@ This is a starter kit for a client side project that uses TypeScript and React a
 ```
 git clone https://github.com/alexgorbatchev/gulp-typescript-webpack-react-hotreload
 npm install
+./node_modules/.bin/tsd install
 ```
 
 ## Usage
 
 ### gulp dev
 
+`gulp dev` is the main command to start developing with the project.
+
 * Starts Webpack server on [http://localhost:3000](http://localhost:3000)
-* Restarts Webpack server configuration changes
-* Whenever `.ts` and `.tsx` files in `src` change:
-  * Visible module will be reload without whole page needing a refresh
-  * Mocha tests are executed
-  * TypeScript files are reformatted
+* Restarts Webpack server when configuration changes
+* Watches `src` folder for file changes and:
+  * Reformats and lints TypeScript files
+  * Compiles all `.ts` and `.tsx` into the `build/src` folder
+  * Rebuild Webpack bundles into the `build/public` folder
+  * Updates opened webpage with Hot Module Reload (HMR)
+  * Run Mocha tests
+  * Generates coverage report
 
 ## License
 
