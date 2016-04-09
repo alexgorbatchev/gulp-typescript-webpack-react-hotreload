@@ -142,24 +142,20 @@ function buildIndexHtmlFile() {
     )
   );
 
-  function filterFiles(manifest: Object): Array<string> {
-    const results: Array<string> = [];
+  const keepJSFilesOnly = (manifest: Object): Array<string> =>
     Object.keys(manifest)
       .filter(key => path.extname(key) === '.js')
-      .forEach(key => results.push(`${CDN_PATH}/${manifest[key]}`));
-    return results;
-  }
+      .map(key => `${CDN_PATH}/${manifest[key]}`);
 
-  function create(manifest: Array<string>) {
-    return promised(cb => fs.readFile(`${SRC_DIR}/index.dust`, 'utf8', cb))
+  const writeIndexHtmlUsingManifests = (manifest: Array<string>): Promise<any> =>
+    promised(cb => fs.readFile(`${SRC_DIR}/index.dust`, 'utf8', cb))
       .then(content => dust.compile(content, 'index'))
       .then(dust.loadSource)
       .then(() => promised(cb => dust.render('index', { manifest }, cb)))
       .then(html => promised(cb => fs.writeFile(`${BUILD_PUBLIC_DIR}/index.html`, html, cb)));
-  }
 
   if (DEVELOPMENT) {
-    return create([
+    return writeIndexHtmlUsingManifests([
       '/vendor.js',
       '/dev.js',
       '/webpack/hmr.js',
@@ -170,8 +166,8 @@ function buildIndexHtmlFile() {
 
   return manifests
     .then(manifests => merge(...[{}].concat(manifests)))
-    .then(filterFiles)
-    .then(create)
+    .then(keepJSFilesOnly)
+    .then(writeIndexHtmlUsingManifests)
     .catch(e => console.error(e.stack));
 }
 
