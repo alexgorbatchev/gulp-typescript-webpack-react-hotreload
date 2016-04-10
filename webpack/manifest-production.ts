@@ -1,3 +1,6 @@
+// This is a file manifest that is used by gulp task to build index.html
+// in the public build folder.
+
 import { CDN_PATH, ASSETS_MANIFEST } from '../config';
 
 function manifest(key) {
