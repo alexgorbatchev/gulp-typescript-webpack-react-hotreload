@@ -1,2 +1,3 @@
 // entry point for building webpack dll
-var appContext = require.context(__dirname, true, /^[\w\.\/]+\.ts(x)?$/);
+var context = require.context(__dirname, true, /^[\w\.\/]+\.js$/);
+context.keys().map(context);
