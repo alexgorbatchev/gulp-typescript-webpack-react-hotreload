@@ -1,8 +1,8 @@
 import * as path from 'path';
 import { execSync } from 'child_process';
 import stats from './stats';
-import { testDll, vendorDll, devDll } from './dlls';
 import ManifestPlugin from './manifest-plugin';
+import { TestDllReferencePlugin, VendorDllReferencePlugin, DevDllReferencePlugin } from './dlls';
 
 import {
   PRODUCTION,
@@ -47,16 +47,18 @@ output = {
   chunkFilename: '[name].js',
 };
 
-const definePlugin = new DefinePlugin({
+const definePlugin = {
   SHA: getSHA(),
   DEVELOPMENT,
   PRODUCTION,
   TEST,
-});
+};
 
 plugins = [
   new DedupePlugin(),
   new OccurenceOrderPlugin(),
+  new VendorDllReferencePlugin(),
+  new DefinePlugin(definePlugin),
   // new AggressiveMergingPlugin(),
   new CommonsChunkPlugin({
     name: 'components',
@@ -66,8 +68,6 @@ plugins = [
     'Promise': 'exports?global.Promise!es6-promise',
     'fetch': 'exports?self.fetch!isomorphic-fetch',
   }),
-  definePlugin,
-  vendorDll(),
 ];
 
 resolve = {
@@ -104,7 +104,7 @@ if (DEVELOPMENT) {
 
   plugins.push(
     new HotModuleReplacementPlugin(),
-    devDll()
+    new DevDllReferencePlugin()
   );
 }
 
@@ -123,7 +123,11 @@ if (PRODUCTION) {
 if (TEST) {
   entry = {};
   output = {};
-  plugins = [ definePlugin, testDll(), vendorDll(), devDll() ];
+  plugins = [
+    new DefinePlugin(definePlugin),
+    new TestDllReferencePlugin(),
+    new VendorDllReferencePlugin(),
+  ];
 }
 
 export default {

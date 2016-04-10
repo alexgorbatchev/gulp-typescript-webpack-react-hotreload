@@ -6,7 +6,7 @@ import {
 } from '../config';
 
 interface IManifestPlugin {
-  new (opts: Object): Function
+  new (opts: Object): Function;
 }
 
 const ManifestPlugin: IManifestPlugin = require('webpack-manifest-plugin');

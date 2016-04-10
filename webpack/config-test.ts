@@ -7,7 +7,7 @@ import {
   WEBPACK_PUBLIC_PATH,
 } from '../config';
 
-import { vendorDll, devDll } from './dlls';
+import { VendorDllReferencePlugin, DevDllReferencePlugin } from './dlls';
 
 const {
   DllPlugin,
@@ -42,8 +42,8 @@ output = {
 };
 
 plugins = [
-  vendorDll(),
-  devDll(),
+  new VendorDllReferencePlugin(),
+  new DevDllReferencePlugin(),
   new DllPlugin({
     path: TEST_DLL,
     name: '[name]',

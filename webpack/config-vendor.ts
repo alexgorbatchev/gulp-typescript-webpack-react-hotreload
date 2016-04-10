@@ -44,6 +44,7 @@ entry = {
     'redux',
     'redux-thunk',
     'whatwg-fetch',
+    'lodash',
   ],
 };
 

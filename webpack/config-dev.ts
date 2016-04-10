@@ -1,6 +1,6 @@
 import * as path from 'path';
 import stats from './stats';
-import { vendorDll } from './dlls';
+import { VendorDllReferencePlugin } from './dlls';
 
 import {
   BUILD_PUBLIC_DIR,
@@ -36,7 +36,7 @@ output = {
 };
 
 plugins = [
-  vendorDll(),
+  new VendorDllReferencePlugin(),
   new DllPlugin({
     path: DEV_DLL,
     name: 'dev',
