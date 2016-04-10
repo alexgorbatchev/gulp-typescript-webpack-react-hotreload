@@ -1,6 +1,8 @@
 import * as path from 'path';
 import { execSync } from 'child_process';
 import stats from './stats';
+import { testDll, vendorDll, devDll } from './dlls';
+import ManifestPlugin from './manifest-plugin';
 
 import {
   PRODUCTION,
@@ -13,13 +15,8 @@ import {
   VENDOR_DLL,
   TEST_DLL,
   DEV_DLL,
-  APP_MANIFEST,
-  PUBLIC_PATH,
+  WEBPACK_PUBLIC_PATH,
 } from '../config';
-
-import { testDll, vendorDll, devDll } from './dlls';
-
-const ManifestPlugin = require('webpack-manifest-plugin');
 
 const {
   DllReferencePlugin,
@@ -36,7 +33,7 @@ const {
 
 let devtool, entry, output, plugins, resolve, preLoaders, loaders;
 
-devtool = 'source-map';
+devtool = 'inline-source-map';
 
 entry = {
   components: [ path.join(BUILD_SRC_DIR, 'components') ],
@@ -45,7 +42,7 @@ entry = {
 
 output = {
   path: BUILD_PUBLIC_DIR,
-  publicPath: PUBLIC_PATH,
+  publicPath: WEBPACK_PUBLIC_PATH,
   filename: '[name].js',
   chunkFilename: '[name].js',
 };
@@ -63,13 +60,14 @@ plugins = [
   // new AggressiveMergingPlugin(),
   new CommonsChunkPlugin({
     name: 'components',
-    chunks: [ 'components', 'app' ]
+    chunks: [ 'components', 'app' ],
   }),
   new ProvidePlugin({
     'Promise': 'exports?global.Promise!es6-promise',
     'fetch': 'exports?self.fetch!isomorphic-fetch',
   }),
   definePlugin,
+  vendorDll(),
 ];
 
 resolve = {
@@ -77,6 +75,13 @@ resolve = {
     sinon: 'sinon/pkg/sinon.js',
   },
 };
+
+preLoaders = [
+  {
+    test: /\.js$/,
+    loader: 'source-map-loader',
+  },
+];
 
 loaders = [
   {
@@ -94,19 +99,21 @@ loaders = [
 if (DEVELOPMENT) {
   entry.hmr = [
     'webpack-dev-server/client?http://localhost:3000',
-    'webpack/hot/only-dev-server'
+    'webpack/hot/only-dev-server',
   ];
 
   plugins.push(
     new HotModuleReplacementPlugin(),
-    new CommonsChunkPlugin({ name: 'hmr' })
+    devDll()
   );
 }
 
 if (PRODUCTION) {
+  devtool = 'source-map';
+
   plugins.push(
-    new ManifestPlugin({ fileName: path.relative(BUILD_PUBLIC_DIR, APP_MANIFEST) }),
-    new UglifyJsPlugin({ comments: false })
+    new UglifyJsPlugin({ comments: false }),
+    new ManifestPlugin()
   );
 
   output.filename = '[name]-[hash].js';
@@ -114,13 +121,10 @@ if (PRODUCTION) {
 }
 
 if (TEST) {
-  devtool = '#inline-source-map';
   entry = {};
   output = {};
   plugins = [ definePlugin, testDll(), vendorDll(), devDll() ];
 }
-
-plugins.push(vendorDll(), devDll());
 
 export default {
   target: 'web',

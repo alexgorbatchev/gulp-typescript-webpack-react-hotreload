@@ -7,6 +7,10 @@ export default {
   ],
 
   getComponents(location, callback) {
-    require.ensure([], () => callback(null, require('./containers/AboutContainer').default));
+    require.ensure(
+      [],
+      () => callback(null, require('./containers/AboutContainer').default),
+      'about'
+    );
   }
 };

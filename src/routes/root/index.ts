@@ -13,6 +13,10 @@ export default {
   ],
 
   getComponents(location, callback) {
-    require.ensure([], () => callback(null, require('./containers/ApplicationContainer').default));
+    require.ensure(
+      [],
+      () => callback(null, require('./containers/ApplicationContainer').default),
+      'root'
+    );
   },
 };

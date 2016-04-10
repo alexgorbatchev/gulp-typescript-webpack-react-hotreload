@@ -4,6 +4,8 @@ import {
   BUILD_DIR,
   BUILD_PUBLIC_DIR,
   BUILD_SRC_DIR,
+  ENV,
+  PRODUCTION,
   DEVELOPMENT,
   TEST,
   ROOT_DIR,
@@ -39,14 +41,15 @@ const BUILD_SRC_FILES: Array<string> = [`${BUILD_SRC_DIR}/**/*.js`];
 const typescriptProject = $.typescript.createProject(require('./tsconfig.json').compilerOptions);
 
 gulp.task('viz', require('gulp-task-graph-visualizer')(yargs.task));
-gulp.task('build:clean', done => rimraf(BUILD_PUBLIC_DIR, () => mkdirp(BUILD_DIR, done)));
+gulp.task('build:clean', done => !DEVELOPMENT || yargs['force-clean'] ? rimraf(BUILD_PUBLIC_DIR, () => mkdirp(BUILD_DIR, done)) : done());
 gulp.task('build:vendor', ['build:typescript'], webpackTask('vendor', 'vendor.js'));
-gulp.task('build:app', ['build:vendor', 'build:dev'], webpackTask('app'));
 gulp.task('build:dev', ['build:vendor'], webpackTask('dev', 'dev.js'));
-gulp.task('build:test', ['build:vendor', 'build:dev'], webpackTask('test', 'test.js'));
-gulp.task('build:index', ['build:static', 'build:app'], buildIndexHtmlFile);
+gulp.task('build:test', ['build:vendor'], webpackTask('test', 'test.js'));
+gulp.task('build:index', ['build:app'], buildIndexHtmlFile);
+gulp.task('build:app', PRODUCTION ? ['build:vendor'] : ['build:vendor', 'build:dev'], webpackTask('app'));
 gulp.task('build', ['build:app', 'build:index']);
-gulp.task('dev:server', ['build:vendor', 'build:dev', 'build:index', 'build:static'], $.bg('node', 'webpack/dev-server.js'));
+
+gulp.task('dev:server', ['build:index'], $.bg('node', 'webpack/dev-server.js'));
 
 gulp.task('typescript:format', () =>
   gulp.src(TYPESCRIPT_FILES)
@@ -65,14 +68,14 @@ gulp.task('typescript:lint', () =>
     }))
 );
 
-gulp.task('build:static', () =>
+gulp.task('build:static', ['build:clean'], () =>
   gulp.src(STATIC_FILES)
     .pipe($.changed(BUILD_SRC_DIR))
     .pipe($.print(filepath => `build:static ➡ ${filepath}`))
     .pipe(gulp.dest(BUILD_SRC_DIR))
 );
 
-gulp.task('build:typescript', ['typescript:lint', 'build:static'], () =>
+gulp.task('build:typescript', ['build:clean', 'build:static'], () =>
   gulp.src(TYPESCRIPT_FILES.concat(['typings/tsd.d.ts']))
     .pipe($.changed(BUILD_SRC_DIR, { extension: '.js' }))
     .pipe($.sourcemaps.init())
@@ -109,15 +112,8 @@ gulp.task('dev', ['typescript:format', 'build:typescript', 'dev:server'], () => 
 
 
 
-const isCleanCache = {};
-
-function isClean(configName: string): boolean {
-  if (isCleanCache[configName]) {
-    return false;
-  }
-
-  isCleanCache[configName] = true;
-  return yargs.clean === true;
+function forceWebpackBuild(configName: string): boolean {
+  return yargs[`clean-${configName}`] === true || yargs['clean-all'] === true;
 }
 
 function promised(callback: Function, shouldReject: boolean = true): Promise<any> {
@@ -127,25 +123,9 @@ function promised(callback: Function, shouldReject: boolean = true): Promise<any
 }
 
 function buildIndexHtmlFile() {
-  const glob = require('glob');
   const fs = require('fs');
   const dust = require('dustjs-linkedin');
-  const { merge } = require('lodash');
-  const opts = { cwd: ROOT_DIR };
-
-  const manifests = new Promise(resolve =>
-    glob(`${BUILD_PUBLIC_DIR}/*-manifest.json`, opts, (err, files) =>
-      resolve(Promise.all(files.map(filepath =>
-        promised(cb => fs.readFile(filepath, 'utf8', cb))
-          .then(JSON.parse)
-      )))
-    )
-  );
-
-  const keepJSFilesOnly = (manifest: Object): Array<string> =>
-    Object.keys(manifest)
-      .filter(key => path.extname(key) === '.js')
-      .map(key => `${CDN_PATH}/${manifest[key]}`);
+  const manifest = require(`./webpack/manifest-${ENV}`).default;
 
   const writeIndexHtmlUsingManifests = (manifest: Array<string>): Promise<any> =>
     promised(cb => fs.readFile(`${SRC_DIR}/index.dust`, 'utf8', cb))
@@ -154,19 +134,7 @@ function buildIndexHtmlFile() {
       .then(() => promised(cb => dust.render('index', { manifest }, cb)))
       .then(html => promised(cb => fs.writeFile(`${BUILD_PUBLIC_DIR}/index.html`, html, cb)));
 
-  if (DEVELOPMENT) {
-    return writeIndexHtmlUsingManifests([
-      '/vendor.js',
-      '/dev.js',
-      '/webpack/hmr.js',
-      '/webpack/components.js',
-      '/webpack/app.js',
-    ]);
-  }
-
-  return manifests
-    .then(manifests => merge(...[{}].concat(manifests)))
-    .then(keepJSFilesOnly)
+  return manifest
     .then(writeIndexHtmlUsingManifests)
     .catch(e => console.error(e.stack));
 }
@@ -185,12 +153,10 @@ function webpackTask(configName: string, ...expectedFiles: Array<string>): Funct
     allFilesExist(expectedFiles)
       .then(allFilesExist => {
         if (expectedFiles.length > 0) {
-          if (allFilesExist && !isClean(configName)) {
-            log(`Found "${expectedFiles.join(', ')}" required for "${configName}", run with --clean to rebuild.`);
+          if (allFilesExist && !forceWebpackBuild(configName)) {
+            log(`Using cached "${expectedFiles.join(', ')}" required for WebPack bundle "${configName}" (use "--clean-${configName}" to rebuild)`);
             return done();
           }
-        } else {
-          log(`Will always build ${configName}`);
         }
 
         const { default: config } = require(`./webpack/config-${configName}`);

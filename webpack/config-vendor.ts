@@ -1,18 +1,18 @@
 import * as path from 'path';
 import stats from './stats';
+import ManifestPlugin from './manifest-plugin';
 
 import {
+  ENV,
   PRODUCTION,
   BUILD_PUBLIC_DIR,
   VENDOR_DLL,
-  VENDOR_MANIFEST,
-  PUBLIC_PATH,
+  WEBPACK_PUBLIC_PATH,
 } from '../config';
-
-const ManifestPlugin = require('webpack-manifest-plugin');
 
 const {
   DllPlugin,
+  DefinePlugin,
   optimize: {
     UglifyJsPlugin,
   },
@@ -20,8 +20,13 @@ const {
 
 let devtool, entry, output, plugins, resolve, dllOptions;
 
-devtool = 'source-map';
-plugins = [];
+devtool = 'inline-source-map';
+
+plugins = [
+  new DefinePlugin({
+    'process.env.NODE_ENV': JSON.stringify(ENV),
+  })
+];
 
 entry = {
   vendor: [
@@ -44,7 +49,7 @@ entry = {
 
 output = {
   path: BUILD_PUBLIC_DIR,
-  publicPath: PUBLIC_PATH,
+  publicPath: WEBPACK_PUBLIC_PATH,
   filename: '[name].js',
   library: 'vendor',
   libraryTarget: 'var',
@@ -56,9 +61,11 @@ dllOptions = {
 };
 
 if (PRODUCTION) {
+  devtool = 'source-map';
+
   plugins.push(
-    new ManifestPlugin({ fileName: path.relative(BUILD_PUBLIC_DIR, VENDOR_MANIFEST) }),
-    new UglifyJsPlugin({ comments: false })
+    new UglifyJsPlugin({ comments: false }),
+    new ManifestPlugin()
   );
 
   output.filename = '[name]-[hash].js';

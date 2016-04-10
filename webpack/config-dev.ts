@@ -1,13 +1,12 @@
 import * as path from 'path';
 import stats from './stats';
+import { vendorDll } from './dlls';
 
 import {
   BUILD_PUBLIC_DIR,
   DEV_DLL,
-  PUBLIC_PATH,
+  WEBPACK_PUBLIC_PATH,
 } from '../config';
-
-import { vendorDll } from './dlls';
 
 const {
   DllPlugin,
@@ -16,7 +15,7 @@ const {
 
 let devtool, entry, output, plugins, resolve, dllOptions;
 
-devtool = 'source-map';
+devtool = 'inline-source-map';
 
 entry = {
   dev: [
@@ -30,7 +29,7 @@ entry = {
 
 output = {
   path: BUILD_PUBLIC_DIR,
-  publicPath: PUBLIC_PATH,
+  publicPath: WEBPACK_PUBLIC_PATH,
   filename: '[name].js',
   library: 'dev',
   libraryTarget: 'var',
