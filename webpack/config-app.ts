@@ -36,8 +36,8 @@ let devtool, entry, output, plugins, resolve, preLoaders, loaders;
 devtool = 'inline-source-map';
 
 entry = {
-  components: [ path.join(BUILD_SRC_DIR, 'components') ],
-  app: [ path.join(BUILD_SRC_DIR, 'index.js') ],
+  components: [path.join(BUILD_SRC_DIR, 'components')],
+  app: [path.join(BUILD_SRC_DIR, 'index.js')],
 };
 
 output = {
@@ -62,7 +62,7 @@ plugins = [
   // new AggressiveMergingPlugin(),
   new CommonsChunkPlugin({
     name: 'components',
-    chunks: [ 'components', 'app' ],
+    chunks: ['components', 'app'],
   }),
   new ProvidePlugin({
     'Promise': 'exports?global.Promise!es6-promise',
@@ -86,13 +86,13 @@ preLoaders = [
 loaders = [
   {
     test: /\.js?$/,
-    loaders: [ 'react-hot' ],
-    include: [ BUILD_SRC_DIR ],
+    loaders: ['react-hot'],
+    include: [BUILD_SRC_DIR],
   },
   {
     test: /\.(png|jpg|svg)$/,
     loader: 'url-loader?limit=8192',
-    include: [ BUILD_SRC_DIR ],
+    include: [BUILD_SRC_DIR],
   },
 ];
 
