@@ -85,11 +85,6 @@ preLoaders = [
 
 loaders = [
   {
-    test: /\.js?$/,
-    loaders: ['react-hot'],
-    include: [BUILD_SRC_DIR],
-  },
-  {
     test: /\.(png|jpg|svg)$/,
     loader: 'url-loader?limit=8192',
     include: [BUILD_SRC_DIR],
@@ -105,6 +100,14 @@ if (DEVELOPMENT) {
   plugins.push(
     new HotModuleReplacementPlugin(),
     new DevDllReferencePlugin()
+  );
+
+  loaders.push(
+    {
+      test: /\.js$/,
+      loaders: ['react-hot'],
+      include: [BUILD_SRC_DIR],
+    }
   );
 }
 
