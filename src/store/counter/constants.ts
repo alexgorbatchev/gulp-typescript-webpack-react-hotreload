@@ -1,1 +1,1 @@
-export const INCREASE_COUNTER = 'INCREASE_COUNTER';
+export const INCREASE_COUNTER: string = 'INCREASE_COUNTER';
