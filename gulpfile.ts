@@ -108,6 +108,7 @@ gulp.task('dev', ['typescript:format', 'build:typescript', 'dev:server'], () => 
   gulp.watch(STATIC_FILES, ['build:static']);
   gulp.watch(BUILD_SRC_FILES, ['test']);
   gulp.watch(['webpack/**/*'], ['dev:server']);
+  gulp.watch(['webpack/**/manifest-*'], ['build:index']);
 });
 
 
@@ -187,7 +188,7 @@ function printStats(configName: string, statsOpts: Object, done: Function): Func
       if (hasWarning) { log(dashes); }
     }
 
-    if (yargs.verbose) {
+    if (yargs['verbose']) {
       stats
         .toString()
         .split(/\n/g)
