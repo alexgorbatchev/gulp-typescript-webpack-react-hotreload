@@ -119,6 +119,10 @@ if (PRODUCTION) {
     new ManifestPlugin()
   );
 
+  resolve.alias['redux-devtools'] = `${__dirname}/noop.js`;
+  resolve.alias['redux-devtools-log-monitor'] = `${__dirname}/noop.js`;
+  resolve.alias['redux-devtools-dock-monitor'] = `${__dirname}/noop.js`;
+
   output.filename = '[name]-[hash].js';
   output.chunkFilename = '[name]-[hash].js';
 }
