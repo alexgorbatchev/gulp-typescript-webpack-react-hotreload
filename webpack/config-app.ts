@@ -100,12 +100,11 @@ if (PRODUCTION) {
     new ManifestPlugin()
   );
 
-  config.resolve.alias['redux-devtools'] = `${__dirname}/noop.js`;
-  config.resolve.alias['redux-devtools-log-monitor'] = `${__dirname}/noop.js`;
-  config.resolve.alias['redux-devtools-dock-monitor'] = `${__dirname}/noop.js`;
+  const noop = `${__dirname}/noop.js`;
 
-  config.output.filename = '[name]-[hash].js';
-  config.output.chunkFilename = '[name]-[hash].js';
+  config.resolve.alias['redux-devtools'] = noop;
+  config.resolve.alias['redux-devtools-log-monitor'] = noop;
+  config.resolve.alias['redux-devtools-dock-monitor'] = noop;
 }
 
 if (TEST) {
@@ -117,7 +116,6 @@ if (TEST) {
     new VendorDllReferencePlugin(),
   ];
 }
-
 
 function getSHA(): string {
   const result: string = execSync('git describe --exact-match --tags HEAD 2>&1; exit 0').toString();
