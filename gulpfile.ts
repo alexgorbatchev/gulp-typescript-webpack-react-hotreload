@@ -60,7 +60,7 @@ gulp.task('typescript:format', () =>
 );
 
 gulp.task('typescript:lint', () =>
-  gulp.src(TYPESCRIPT_FILES)
+  gulp.src(TYPESCRIPT_FILES.concat(['webpack/**/*.ts']))
     .pipe($.tslint())
     .pipe($.tslint.report('verbose', {
       summarizeFailureOutput: true,
