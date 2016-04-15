@@ -108,7 +108,6 @@ gulp.task('dev', ['typescript:format', 'build:typescript', 'dev:server'], () => 
   gulp.watch(STATIC_FILES, ['build:static']);
   gulp.watch(BUILD_SRC_FILES, ['test']);
   gulp.watch(['webpack/**/*'], ['dev:server']);
-  gulp.watch(['webpack/**/manifest-*'], ['build:index']);
 });
 
 
