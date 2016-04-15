@@ -1,54 +1,27 @@
-import * as path from 'path';
-import stats from './stats';
-import { VendorDllReferencePlugin } from './dlls';
+import configBase from './config-base';
+import { DevDllPlugin, VendorDllReferencePlugin } from './dlls';
 
-import {
-  BUILD_PUBLIC_DIR,
-  DEV_DLL,
-  WEBPACK_PUBLIC_PATH,
-} from '../config';
+interface IEntries {
+  dev?: Array<string>;
+}
 
-const {
-  DllPlugin,
-  DllReferencePlugin,
-} = require('webpack');
+const config = configBase<IEntries>();
+export default config;
 
-let devtool, entry, output, plugins, resolve, dllOptions;
-
-devtool = 'inline-source-map';
-
-entry = {
-  dev: [
-    'redux-devtools',
-    'redux-devtools-log-monitor',
-    'redux-devtools-dock-monitor',
-    'react-hot-api',
-    'react-hot-loader',
-  ],
-};
-
-output = {
-  path: BUILD_PUBLIC_DIR,
-  publicPath: WEBPACK_PUBLIC_PATH,
-  filename: '[name].js',
-  library: 'dev',
-  libraryTarget: 'var',
-};
-
-plugins = [
-  new VendorDllReferencePlugin(),
-  new DllPlugin({
-    path: DEV_DLL,
-    name: 'dev',
-  }),
+config.entry.dev = [
+  'redux-devtools',
+  'redux-devtools-log-monitor',
+  'redux-devtools-dock-monitor',
+  'react-hot-api',
+  'react-hot-loader',
+  'webpack-dev-server/client?http://localhost:3000',
+  'webpack/hot/only-dev-server',
 ];
 
-export default {
-  target: 'web',
-  devtool,
-  entry,
-  output,
-  plugins,
-  resolve,
-  stats,
-};
+config.output.library = 'dev';
+config.output.libraryTarget = 'var';
+
+config.plugins.push(
+  new VendorDllReferencePlugin(),
+  new DevDllPlugin()
+);

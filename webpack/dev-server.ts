@@ -4,12 +4,12 @@ const express = require('express');
 
 import config from './config-app';
 import stats from './stats';
-import { BUILD_PUBLIC_DIR, BUILD_SRC_DIR, WEBPACK_PUBLIC_PATH } from '../config';
+import { DEVELOPMENT, BUILD_PUBLIC_DIR, BUILD_SRC_DIR, WEBPACK_PUBLIC_PATH } from '../config';
 
 const devServer = new WebpackDevServer(webpack(config), {
+  hot: DEVELOPMENT,
   progress: true,
   inline: true,
-  hot: true,
   historyApiFallback: true,
   publicPath: WEBPACK_PUBLIC_PATH,
   contentBase: BUILD_PUBLIC_DIR,

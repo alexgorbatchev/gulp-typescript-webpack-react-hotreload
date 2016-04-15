@@ -1,86 +1,39 @@
-import * as path from 'path';
-import stats from './stats';
-import ManifestPlugin from './manifest-plugin';
+import configBase from './config-base';
+import { VendorDllPlugin } from './dlls';
+import { ENV } from '../config';
+const { DefinePlugin } = require('webpack');
 
-import {
-  ENV,
-  PRODUCTION,
-  BUILD_PUBLIC_DIR,
-  VENDOR_DLL,
-  WEBPACK_PUBLIC_PATH,
-} from '../config';
-
-const {
-  DllPlugin,
-  DefinePlugin,
-  optimize: {
-    UglifyJsPlugin,
-  },
-} = require('webpack');
-
-let devtool, entry, output, plugins, resolve, dllOptions;
-
-devtool = 'inline-source-map';
-
-plugins = [
-  new DefinePlugin({
-    'process.env.NODE_ENV': JSON.stringify(ENV),
-  })
-];
-
-entry = {
-  vendor: [
-    'es6-promise',
-    'immutable',
-    'history',
-    'object.assign',
-    'radium',
-    'react',
-    'react-dom',
-    'react-intl',
-    'react-redux',
-    'react-router',
-    'react-router-redux',
-    'redux',
-    'redux-thunk',
-    'whatwg-fetch',
-    'lodash',
-  ],
-};
-
-output = {
-  path: BUILD_PUBLIC_DIR,
-  publicPath: WEBPACK_PUBLIC_PATH,
-  filename: '[name].js',
-  library: 'vendor',
-  libraryTarget: 'var',
-};
-
-dllOptions = {
-  path: VENDOR_DLL,
-  name: '[name]',
-};
-
-if (PRODUCTION) {
-  devtool = 'source-map';
-
-  plugins.push(
-    new UglifyJsPlugin({ comments: false }),
-    new ManifestPlugin()
-  );
-
-  output.filename = '[name]-[hash].js';
-  output.library = '[name]_[hash]';
-  dllOptions.name = '[name]_[hash]';
+interface IEntries {
+  vendor?: Array<string>;
 }
 
-plugins.push(new DllPlugin(dllOptions));
+const config = configBase<IEntries>();
+export default config;
 
-export default {
-  target: 'web',
-  devtool,
-  entry,
-  output,
-  plugins,
-  stats,
-};
+config.entry.vendor = [
+  'es6-promise',
+  'immutable',
+  'history',
+  'object.assign',
+  'radium',
+  'react',
+  'react-dom',
+  'react-intl',
+  'react-redux',
+  'react-router',
+  'react-router-redux',
+  'redux',
+  'redux-thunk',
+  'whatwg-fetch',
+  'lodash',
+];
+
+config.output.library = 'vendor';
+config.output.libraryTarget = 'var';
+
+config.plugins.push(
+  new DefinePlugin({
+    'process.env.NODE_ENV': JSON.stringify(ENV),
+  }),
+  new VendorDllPlugin()
+);
