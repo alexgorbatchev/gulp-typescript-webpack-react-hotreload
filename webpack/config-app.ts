@@ -75,10 +75,7 @@ config.module.loaders.push(
 );
 
 if (DEVELOPMENT) {
-  config.entry.hmr = [
-    'webpack-dev-server/client?http://localhost:3000',
-    'webpack/hot/only-dev-server',
-  ];
+  config.entry.app.push('webpack-hot-middleware/client');
 
   config.plugins.push(
     new HotModuleReplacementPlugin(),

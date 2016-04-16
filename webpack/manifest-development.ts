@@ -2,9 +2,8 @@
 // in the public build folder.
 
 export default Promise.resolve([
-  '/vendor.js',
-  '/dev.js',
-  '/webpack/hmr.js',
+  '/static/vendor.js',
+  '/static/dev.js',
   '/webpack/components.js',
   '/webpack/app.js',
   '/webpack/root.js',

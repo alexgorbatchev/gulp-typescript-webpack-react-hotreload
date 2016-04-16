@@ -14,8 +14,12 @@ config.entry.dev = [
   'redux-devtools-dock-monitor',
   'react-hot-api',
   'react-hot-loader',
-  'webpack-dev-server/client?http://localhost:3000',
-  'webpack/hot/only-dev-server',
+
+  // packages used by webpack-hot-middleware
+  'ansi-html',
+  'ansi-regex',
+  'html-entities',
+  'strip-ansi',
 ];
 
 config.output.library = 'dev';

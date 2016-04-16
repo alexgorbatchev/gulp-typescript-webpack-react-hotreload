@@ -6,6 +6,7 @@ import {
   BUILD_SRC_DIR,
   ENV,
   PRODUCTION,
+  STAGING,
   DEVELOPMENT,
   TEST,
   ROOT_DIR,
@@ -41,15 +42,15 @@ const BUILD_SRC_FILES: Array<string> = [`${BUILD_SRC_DIR}/**/*.js`];
 const typescriptProject = $.typescript.createProject(require('./tsconfig.json').compilerOptions);
 
 gulp.task('viz', require('gulp-task-graph-visualizer')(yargs.task));
-gulp.task('build:clean', done => !DEVELOPMENT || yargs['force-clean'] ? rimraf(BUILD_PUBLIC_DIR, () => mkdirp(BUILD_DIR, done)) : done());
+gulp.task('build:clean', done => !DEVELOPMENT || yargs['force-clean'] ? rimraf(BUILD_PUBLIC_DIR, () => mkdirp(BUILD_PUBLIC_DIR, done)) : done());
 gulp.task('build:vendor', ['build:typescript'], webpackTask('vendor', 'vendor.js'));
 gulp.task('build:dev', ['build:vendor'], webpackTask('dev', 'dev.js'));
 gulp.task('build:test', ['build:vendor'], webpackTask('test', 'test.js'));
-gulp.task('build:index', ['build:app'], buildIndexHtmlFile);
+gulp.task('build:index', PRODUCTION || STAGING ? ['build:app'] : ['build:static'], buildIndexHtmlFile); // In production and staging, index.html uses actual manifest
 gulp.task('build:app', PRODUCTION ? ['build:vendor'] : ['build:vendor', 'build:dev'], webpackTask('app'));
 gulp.task('build', ['build:app', 'build:index']);
 
-gulp.task('dev:server', ['build:index'], $.bg('node', 'webpack/dev-server.js'));
+gulp.task('dev:server', ['build:index', 'build:vendor', 'build:dev'], $.bg('node', 'webpack/dev-server.js'));
 
 gulp.task('typescript:format', () =>
   gulp.src(TYPESCRIPT_FILES)
@@ -128,8 +129,11 @@ function buildIndexHtmlFile() {
   const manifest = require(`./webpack/manifest-${ENV}`).default;
 
   const writeIndexHtmlUsingManifests = (manifest: Array<string>): Promise<any> =>
-    promised(cb => fs.readFile(`${SRC_DIR}/index.dust`, 'utf8', cb))
-      .then(content => dust.compile(content, 'index'))
+    Promise.all([
+      promised(cb => fs.readFile(`${SRC_DIR}/index.dust`, 'utf8', cb)),
+      promised(cb => mkdirp(BUILD_PUBLIC_DIR, cb)),
+    ])
+      .then(([content]) => dust.compile(content, 'index'))
       .then(dust.loadSource)
       .then(() => promised(cb => dust.render('index', { manifest }, cb)))
       .then(html => promised(cb => fs.writeFile(`${BUILD_PUBLIC_DIR}/index.html`, html, cb)));
