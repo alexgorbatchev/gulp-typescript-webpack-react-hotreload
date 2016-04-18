@@ -27,4 +27,6 @@ const store = createStore(reducer, initialState, enhancer);
 // Create an enhanced history that syncs navigation events with the store
 const history = syncHistoryWithStore(browserHistory, store);
 
+store.dispatch(fetchColors());
+
 export { store, history };

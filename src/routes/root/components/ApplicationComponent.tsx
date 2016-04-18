@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router';
 import { bindActionCreators } from 'redux';
-import * as counterActions from '../../../store/counter/CounterActions';
+import * as counterActions from '../../../store/counter/actions';
 import Counter from '../../../components/CounterComponent';
 
 declare const DEVELOPMENT;
@@ -15,7 +15,8 @@ export default class ApplicationContainer extends React.Component<any, any> {
 
     return (
       <div>
-        <Link to="/blog">blog</Link> |
+        <Link to="/blog">blog</Link>
+        |
         <Link to="/about">about</Link>
 
         <Counter counter={counter} {...boundCounterActions} />

@@ -1,3 +1,7 @@
+/**
+ * Base config for all Webpack configurations.
+ */
+
 import ManifestPlugin from './manifest-plugin';
 
 import {
@@ -9,7 +13,6 @@ import {
 } from '../config';
 
 const {
-  DefinePlugin,
   optimize: {
     UglifyJsPlugin,
   },
