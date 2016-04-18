@@ -1,3 +1,4 @@
-export * from './ColorsActions';
-export * from './ColorsState';
+export * from './actions';
+export * from './state';
 export * from './constants';
+export * from './reducer';

@@ -7,3 +7,7 @@ export interface IAction {
 export interface IThunk {
   (dispatch: Dispatch): Promise<any>;
 }
+
+export interface IData {
+  data: any;
+}

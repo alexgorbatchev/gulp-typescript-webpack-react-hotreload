@@ -1,8 +1,8 @@
+import thunk from 'redux-thunk';
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 import { browserHistory } from 'react-router';
-import thunk from 'redux-thunk';
-import CounterReducer from './counter/CounterReducer';
-import ColorsReducer from './colors/ColorsReducer';
+import { counterReducer } from './counter';
+import { colorsReducer, fetchColors } from './colors';
 
 const { syncHistoryWithStore, routerReducer } = require('react-router-redux');
 
@@ -16,8 +16,8 @@ if (DEVELOPMENT) {
 }
 
 const reducer = combineReducers({
-  counter: CounterReducer,
-  colors: ColorsReducer,
+  counter: counterReducer,
+  colors: colorsReducer,
   routing: routerReducer
 });
 const initialState = {};

@@ -1,3 +1,4 @@
-export * from './CounterActions';
-export * from './CounterState';
+export * from './actions';
+export * from './state';
 export * from './constants';
+export * from './reducer';

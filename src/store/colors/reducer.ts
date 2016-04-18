@@ -10,7 +10,7 @@ const initialState: IColorsState = {
   items: [],
 };
 
-export default function colorsReducer(state: IColorsState = initialState, action: IColorAction): IColorsState {
+export function colorsReducer(state: IColorsState = initialState, action: IColorAction): IColorsState {
   switch (action.type) {
     case RECEIVE_COLORS:
       return Object.assign({}, state, { items: action.items, isFetching: false });
