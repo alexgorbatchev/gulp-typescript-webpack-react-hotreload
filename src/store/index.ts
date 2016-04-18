@@ -2,7 +2,7 @@ import thunk from 'redux-thunk';
 import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 import { browserHistory } from 'react-router';
 import { counterReducer } from './counter';
-import { colorsReducer, fetchColors } from './colors';
+import { postsReducer, fetchPosts } from './posts';
 
 const { syncHistoryWithStore, routerReducer } = require('react-router-redux');
 
@@ -17,7 +17,7 @@ if (DEVELOPMENT) {
 
 const reducer = combineReducers({
   counter: counterReducer,
-  colors: colorsReducer,
+  colors: postsReducer,
   routing: routerReducer
 });
 const initialState = {};
@@ -27,6 +27,6 @@ const store = createStore(reducer, initialState, enhancer);
 // Create an enhanced history that syncs navigation events with the store
 const history = syncHistoryWithStore(browserHistory, store);
 
-store.dispatch(fetchColors());
+store.dispatch(fetchPosts());
 
 export { store, history };

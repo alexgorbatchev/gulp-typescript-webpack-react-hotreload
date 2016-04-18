@@ -1,20 +1,20 @@
 import {
-  RECEIVE_COLORS,
-  REQUEST_COLORS,
-  IColorsState,
-  IColorAction,
+  RECEIVE_POSTS,
+  REQUEST_POSTS,
+  IPostsState,
+  IPostsAction,
 } from './';
 
-const initialState: IColorsState = {
+const initialState: IPostsState = {
   isFetching: false,
   items: [],
 };
 
-export function colorsReducer(state: IColorsState = initialState, action: IColorAction): IColorsState {
+export function postsReducer(state: IPostsState = initialState, action: IPostsAction): IPostsState {
   switch (action.type) {
-    case RECEIVE_COLORS:
+    case RECEIVE_POSTS:
       return Object.assign({}, state, { items: action.items, isFetching: false });
-    case REQUEST_COLORS:
+    case REQUEST_POSTS:
       return Object.assign({}, state, { isFetching: true });
     default:
       return state;
