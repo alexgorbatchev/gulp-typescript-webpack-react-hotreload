@@ -22,7 +22,9 @@ app.use('/fixtures', express.static(`${BUILD_SRC_DIR}/tests/fixtures`));
 app.use(['/static', '/*'], express.static(BUILD_PUBLIC_DIR));
 
 app.listen(3000, 'localhost', function() {
-  process.send && process.send('express ready');
+  if (process.send) {
+    process.send('express ready');
+  }
 
   console.log('http://localhost:3000');
   console.log('http://localhost:3000/webpack-dev-server');

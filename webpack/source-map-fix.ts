@@ -7,7 +7,9 @@ module.exports = function (input, inputMap) {
   const callback = this.async();
   let err = null;
 
-  this.cacheable && this.cacheable();
+  if (this.cacheable) {
+    this.cacheable();
+  }
 
   if (typeof (inputMap) === 'string') {
     inputMap = JSON.parse(inputMap);
