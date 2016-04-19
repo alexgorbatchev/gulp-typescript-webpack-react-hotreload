@@ -1,5 +1,14 @@
 import * as Radium from 'radium';
 import * as React from 'react';
+import { readFileSync } from 'fs';
+
+const toDataURI = (mediaType: string, value: Buffer): string =>
+  `data:${mediaType};base64,${value.toString('base64')}`;
+
+const svg = (value: Buffer): string =>
+  toDataURI('image/svg+xml', value);
+
+const TWITTER_SVG = svg(readFileSync(`${__dirname}/twitter.svg`));
 
 export enum BannerKind {
   primary,
@@ -33,7 +42,7 @@ export default class BannerComponent extends React.Component<BannerProps, any> {
   render() {
     return (
       <div ref="root" style={[styles.base, styles[this.props.kind]]}>
-        <img ref="logo" src={require('./twitter.svg') } width="20" />
+        <img ref="logo" src={TWITTER_SVG} width="20" />
       </div>
     );
   }

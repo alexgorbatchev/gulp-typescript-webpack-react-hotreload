@@ -56,7 +56,7 @@ const babel = {
   include: BUILD_SRC_DIR,
   query: {
     presets: ['es2015'],
-    plugins: [],
+    plugins: <string | any>['static-fs'],
   }
 };
 
