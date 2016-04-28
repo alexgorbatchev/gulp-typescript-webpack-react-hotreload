@@ -1,9 +1,18 @@
 import { expect } from 'chai';
-import { INCREASE_COUNTER, ICounterAction, increaseCounter } from './';
+import { INCREASE_COUNTER, DECREASE_COUNTER, increaseCounter, decreaseCounter } from './';
 
-describe('counter-actions', function() {
-  it('creates an action to increase the counter', function() {
-    const expectedAction: ICounterAction = { type: INCREASE_COUNTER, amount: +1 };
-    expect(increaseCounter(+1)).to.eql(expectedAction);
-  });
+describe('counter-actions', () => {
+  it('increaseCounter', () =>
+    expect(increaseCounter(1)).to.eql({
+      type: INCREASE_COUNTER,
+      payload: { value: 1 }
+    })
+  );
+
+  it('decreaseCounter', () =>
+    expect(decreaseCounter(1)).to.eql({
+      type: DECREASE_COUNTER,
+      payload: { value: 1 }
+    })
+  );
 });

@@ -64,6 +64,9 @@
     },
     "isomorphic-fetch/isomorphic-fetch.d.ts": {
       "commit": "d969b903d1fce89a5e43828ec68458b4f852db4d"
+    },
+    "redux-actions/redux-actions.d.ts": {
+      "commit": "544a35a10866b32afda9c7f029c0764558563f4f"
     }
   }
 }

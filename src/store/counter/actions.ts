@@ -1,10 +1,6 @@
-import { INCREASE_COUNTER } from './constants';
-import { IAction } from '../interfaces';
+import { INCREASE_COUNTER, DECREASE_COUNTER } from './constants';
+import { ICounterState } from './state';
+import { createAction } from 'redux-actions';
 
-export interface ICounterAction extends IAction {
-  amount: number;
-};
-
-export function increaseCounter(amount: number): ICounterAction {
-  return { type: INCREASE_COUNTER, amount };
-};
+export const increaseCounter = createAction<number, ICounterState>(INCREASE_COUNTER, value => ({ value }));
+export const decreaseCounter = createAction<number, ICounterState>(DECREASE_COUNTER, value => ({ value }));

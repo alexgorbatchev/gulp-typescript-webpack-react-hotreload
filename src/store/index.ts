@@ -16,8 +16,11 @@ if (DEVELOPMENT) {
 }
 
 const reducer = combineReducers({
+  // entities: combineReducers({
+  //   posts: postsEntitiesReducer,
+  // }),
   counter: counterReducer,
-  colors: postsReducer,
+  posts: postsReducer,
   routing: routerReducer
 });
 const initialState = {};

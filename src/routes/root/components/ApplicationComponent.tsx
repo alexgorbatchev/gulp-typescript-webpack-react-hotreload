@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Link } from 'react-router';
 import { bindActionCreators } from 'redux';
-import * as counterActions from '../../../store/counter/actions';
+import { increaseCounter, decreaseCounter } from '../../../store/counter';
 import Counter from '../../../components/CounterComponent';
 
 declare const DEVELOPMENT;
@@ -11,7 +11,7 @@ const DevTools = DEVELOPMENT && require('../containers/DevToolsContainer').defau
 export default class ApplicationContainer extends React.Component<any, any> {
   render() {
     const { counter, dispatch } = this.props;
-    const boundCounterActions = bindActionCreators(counterActions, dispatch);
+    const boundCounterActions = bindActionCreators({ increaseCounter, decreaseCounter }, dispatch);
 
     return (
       <div>

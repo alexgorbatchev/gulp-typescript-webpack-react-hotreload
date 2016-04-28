@@ -18,4 +18,4 @@ module.exports = function (input, inputMap) {
   }
 
   callback(err, input, inputMap);
-}
+};
