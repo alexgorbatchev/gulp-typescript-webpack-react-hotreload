@@ -1,17 +1,13 @@
-import { REQUEST_POSTS, RECEIVE_POSTS, IPost } from './';
-import { IAction, IThunk, IData } from '../interfaces';
+import { REQUEST_POSTS, RECEIVE_POSTS, IPostsJSON, IPostsAction } from './types';
+import { IAction, IThunk, IPayloadAction } from '../interfaces';
 import fetch from 'isomorphic-fetch';
 
-export interface IPostsAction extends IAction {
-  items: Array<IPost>;
+export function requestPosts(): IAction {
+  return { type: REQUEST_POSTS };
 }
 
-export function requestPosts(): IPostsAction {
-  return { type: REQUEST_POSTS, items: null };
-}
-
-export function receivePosts(json: IData): IPostsAction {
-  return { type: RECEIVE_POSTS, items: json.data };
+export function receivePosts(json: IPostsJSON): IPostsAction {
+  return { type: RECEIVE_POSTS, payload: json };
 }
 
 export function fetchPosts(): IThunk {
