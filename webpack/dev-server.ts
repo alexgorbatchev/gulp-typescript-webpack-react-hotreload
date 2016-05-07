@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const express = require('express');
+const yargs = require('yargs').argv;
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 
@@ -12,7 +13,7 @@ const compiler = webpack(config);
 
 app.use(webpackDevMiddleware(compiler, {
   stats,
-  noInfo: false,
+  noInfo: !yargs.verbose,
   publicPath: WEBPACK_PUBLIC_PATH,
 }));
 
