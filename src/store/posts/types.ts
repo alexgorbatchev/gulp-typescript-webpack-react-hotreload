@@ -1,4 +1,4 @@
-import { IAction, IFetching, INormalized, IPayloadAction } from '../interfaces';
+import { IFetching, INormalized, IPayloadAction } from '../interfaces';
 
 export interface IAuthor {
   id: string;
@@ -13,11 +13,20 @@ export interface IPost {
   author: IAuthor | string;
 }
 
+export interface IPostsMap {
+  posts: {
+    [id: string]: IPost;
+  };
+  authors: {
+    [id: string]: IAuthor;
+  };
+}
+
 export interface IPostsJSON {
   data: IPost[];
 }
 
-export interface IPostsState extends IFetching, INormalized<IPost[], number[]> { }
+export interface IPostsState extends IFetching, INormalized<IPostsMap, string[]> { }
 
 export interface IPostsAction extends IPayloadAction<IPostsJSON> { }
 

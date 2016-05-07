@@ -5,7 +5,7 @@ export interface IAction {
 }
 
 export interface IPayloadAction<Payload> extends IAction {
-  payload: Payload;
+  payload?: Payload;
 }
 
 export interface IErrorAction extends IAction {
@@ -23,8 +23,4 @@ export interface IThunk {
 export interface INormalized<Entities, Result> {
   entities: Entities;
   result: Result;
-}
-
-export interface IReducerMap<TState, TAction> {
-  [action: string]: (state: TState, action: TAction) => TState;
 }

@@ -1,33 +1,40 @@
 const { normalize, Schema, arrayOf } = require('normalizr');
-import { RECEIVE_POSTS, REQUEST_POSTS, IPostsState, IPostsAction }  from './types';
-import { IPayloadAction, IReducerMap } from '../interfaces';
+import { RECEIVE_POSTS, REQUEST_POSTS, IPost, IPostsState, IPostsAction }  from './types';
+import { INormalized } from '../interfaces';
 
 const initialState: IPostsState = {
   isFetching: false,
-  entities: [],
+  entities: {
+    posts: {},
+    authors: {},
+  },
   result: [],
 };
 
-const article = new Schema('articles');
-const user = new Schema('users');
-article.define({ author: user });
+const post = new Schema('posts');
+const author = new Schema('authors');
 
-const REDUCERS: IReducerMap<IPostsState, IPostsAction> = {
-  [RECEIVE_POSTS](state: IPostsState, action: IPostsAction): IPostsState {
-    const { entities, result } = normalize(action.payload.data, arrayOf(article));
-    return Object.assign({}, state, {
-      entities,
-      result,
-      isFetching: false
-    });
-  },
+post.define({ author });
 
-  [REQUEST_POSTS](state: IPostsState, action: IPostsAction): IPostsState {
-    return Object.assign({}, state, { isFetching: true });
-  },
-};
+function receivePosts(state: IPostsState, action: IPostsAction): IPostsState {
+  const { entities, result } = <INormalized<IPost[], number[]>>normalize(action.payload.data, arrayOf(post));
+
+  return Object.assign({}, state, {
+    entities,
+    result,
+    isFetching: false
+  });
+}
+
+function requestPosts(state: IPostsState, action: IPostsAction): IPostsState {
+  return Object.assign({}, state, { isFetching: true });
+}
 
 export function postsReducer(state: IPostsState = initialState, action: IPostsAction): IPostsState {
-  const reducer = REDUCERS[action.type];
-  return reducer ? reducer(state, action) : state;
+  switch (action.type) {
+    case RECEIVE_POSTS: return receivePosts(state, action);
+    case REQUEST_POSTS: return requestPosts(state, action);
+  }
+
+  return state;
 }
