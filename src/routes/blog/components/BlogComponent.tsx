@@ -5,8 +5,7 @@ import Post from './PostComponent';
 
 export default class BlogComponent extends React.Component<IPostsProps, any> {
   render() {
-    const { posts, authors } = this.props.posts.entities;
-    const { isFetching, result: displayPosts } = this.props.posts;
+    const { posts, authors, isFetching, displayPosts } = this.props;
 
     return (
       <div>

@@ -1,5 +1,8 @@
-import { IPostsState, IState } from '../../store';
+import { IPost, IAuthor } from '../../store';
 
 export interface IPostsProps {
-  posts: IPostsState;
+  isFetching: boolean;
+  posts: { [id: string]: IPost };
+  authors: { [id: string]: IAuthor };
+  displayPosts: string[];
 }

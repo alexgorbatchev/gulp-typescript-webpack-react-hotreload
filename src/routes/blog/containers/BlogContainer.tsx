@@ -5,7 +5,14 @@ import { IState } from '../../../store';
 import { IPostsProps } from '../types';
 
 function stateToProps(state: IState, ownProps: any): IPostsProps {
-  return { posts: state.posts };
+  const { posts } = state;
+
+  return {
+    isFetching: posts.isFetching,
+    posts: posts.entities.posts,
+    authors: posts.entities.authors,
+    displayPosts: posts.result,
+  };
 }
 
 @connect(stateToProps)
