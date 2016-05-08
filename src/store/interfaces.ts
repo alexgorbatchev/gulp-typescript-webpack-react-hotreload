@@ -1,4 +1,11 @@
 import { Dispatch } from 'redux';
+import { ICounterState } from './counter';
+import { IPostsState } from './posts';
+
+export interface IState {
+  counter: ICounterState;
+  posts: IPostsState;
+}
 
 export interface IAction {
   type: string;

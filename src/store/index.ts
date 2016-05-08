@@ -3,6 +3,7 @@ import { createStore, combineReducers, compose, applyMiddleware } from 'redux';
 import { browserHistory } from 'react-router';
 import { counterReducer } from './counter';
 import { postsReducer, fetchPosts } from './posts';
+import { IState } from './interfaces';
 
 const { syncHistoryWithStore, routerReducer } = require('react-router-redux');
 
@@ -16,9 +17,6 @@ if (DEVELOPMENT) {
 }
 
 const reducer = combineReducers({
-  // entities: combineReducers({
-  //   posts: postsEntitiesReducer,
-  // }),
   counter: counterReducer,
   posts: postsReducer,
   routing: routerReducer
@@ -32,4 +30,6 @@ const history = syncHistoryWithStore(browserHistory, store);
 
 store.dispatch(fetchPosts());
 
-export { store, history };
+export { IState, store, history };
+export * from './posts';
+export * from './counter';
