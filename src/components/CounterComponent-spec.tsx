@@ -10,7 +10,7 @@ describe('CounterComponent', () => {
 
   beforeEach(() => {
     props = {
-      counter: { value: 0 },
+      counter: 0,
       increaseCounter: sinon.spy(),
       decreaseCounter: sinon.spy(),
     };
@@ -32,11 +32,11 @@ describe('CounterComponent', () => {
 
   describe('display', () => {
     it('renders initial value', () => {
-      expect(instance.refs.displayValue.innerHTML).to.equal(props.counter.value.toString());
+      expect(instance.refs.displayValue.innerHTML).to.equal(props.counter.toString());
     });
 
     it('renders new value', () => {
-      props.counter.value = 100;
+      props.counter = 100;
       instance.forceUpdate();
       expect(instance.refs.displayValue.innerHTML).to.equal('100');
     });

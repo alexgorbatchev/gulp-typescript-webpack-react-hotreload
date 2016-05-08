@@ -1,6 +1,15 @@
-import { INCREASE_COUNTER, DECREASE_COUNTER } from './constants';
-import { ICounterState } from './state';
-import { createAction } from 'redux-actions';
+import { INCREASE_COUNTER, DECREASE_COUNTER, ICounterAction } from './types';
 
-export const increaseCounter = createAction<number, ICounterState>(INCREASE_COUNTER, value => ({ value }));
-export const decreaseCounter = createAction<number, ICounterState>(DECREASE_COUNTER, value => ({ value }));
+export function increaseCounter(): ICounterAction {
+  return {
+    type: INCREASE_COUNTER,
+    payload: 1,
+  };
+}
+
+export function decreaseCounter(): ICounterAction {
+  return {
+    type: DECREASE_COUNTER,
+    payload: -1,
+  };
+}

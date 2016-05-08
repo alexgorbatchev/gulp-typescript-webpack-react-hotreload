@@ -1,16 +1,16 @@
-import { INCREASE_COUNTER, DECREASE_COUNTER, ICounterState } from './';
-import { handleActions } from 'redux-actions';
+import { INCREASE_COUNTER, DECREASE_COUNTER, ICounterState, ICounterAction } from './types';
 
-const initialState: ICounterState = {
-  value: 0
-};
+const initialState: ICounterState = 0;
 
-export const counterReducer = handleActions<ICounterState>({
-  [INCREASE_COUNTER]: (state, action) => ({
-    value: state.value + action.payload.value
-  }),
+function updateCounter(state: ICounterState, action: ICounterAction): ICounterState {
+  return state + action.payload;
+}
 
-  [DECREASE_COUNTER]: (state, action) => ({
-    value: state.value - action.payload.value
-  }),
-}, initialState);
+export function counterReducer(state: ICounterState = initialState, action: ICounterAction): ICounterState {
+  switch (action.type) {
+    case INCREASE_COUNTER: return updateCounter(state, action);
+    case DECREASE_COUNTER: return updateCounter(state, action);
+  }
+
+  return state;
+}
