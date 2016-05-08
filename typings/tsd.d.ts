@@ -21,4 +21,3 @@
 /// <reference path="orchestrator/orchestrator.d.ts" />
 /// <reference path="q/Q.d.ts" />
 /// <reference path="isomorphic-fetch/isomorphic-fetch.d.ts" />
-/// <reference path="redux-actions/redux-actions.d.ts" />

@@ -23,11 +23,9 @@ config.entry.vendor = [
   'react-router',
   'react-router-redux',
   'redux',
-  'redux-actions',
   'redux-thunk',
   'reselect',
   'whatwg-fetch',
-  'lodash',
 ];
 
 config.output.library = 'vendor';

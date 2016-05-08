@@ -54,6 +54,7 @@
     "source-map-support": "^0.4.0",
     "ts-node": "^0.7.2",
     "tsd": "^0.6.5",
+    "tslint": "^3.9.0",
     "typescript": "^1.8.10",
     "url-loader": "^0.5.7",
     "webpack": "^1.13.0",
@@ -78,7 +79,6 @@
     "react-router": "^2.4.0",
     "react-router-redux": "^4.0.4",
     "redux": "^3.5.2",
-    "redux-actions": "^0.9.1",
     "redux-thunk": "^2.0.1",
     "reselect": "^2.5.1"
   }
