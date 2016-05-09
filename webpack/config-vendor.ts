@@ -12,7 +12,6 @@ export default config;
 
 config.entry.vendor = [
   'es6-promise',
-  'immutable',
   'history',
   'object.assign',
   'radium',
