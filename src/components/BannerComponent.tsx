@@ -2,13 +2,13 @@ import * as Radium from 'radium';
 import * as React from 'react';
 import { readFileSync } from 'fs';
 
-const toDataURI = (mediaType: string, value: Buffer): string =>
-  `data:${mediaType};base64,${value.toString('base64')}`;
+const toDataURI = (mediaType: string, value: string): string =>
+  `data:${mediaType};base64,${value}`;
 
-const svg = (value: Buffer): string =>
+const toSVGDataURI = (value: string): string =>
   toDataURI('image/svg+xml', value);
 
-const TWITTER_SVG = svg(readFileSync(`${__dirname}/twitter.svg`));
+const TWITTER_SVG = toSVGDataURI(readFileSync(`${__dirname}/twitter.svg`, 'base64'));
 
 export enum BannerKind {
   primary,
