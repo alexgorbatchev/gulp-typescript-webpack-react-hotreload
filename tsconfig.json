@@ -8,10 +8,9 @@
     "preserveConstEnums": true,
     "removeComments": false,
     "sourceMap": true,
-    "target": "es5"
+    "target": "es6"
   },
   "exclude": [
-    "node_modules",
     "build",
     ".vscode"
   ]

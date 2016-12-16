@@ -36,7 +36,7 @@ interface IOutput {
 
 interface IConfig<IEntry> {
   target: string;
-  devtool: string;
+  devtool?: string;
   entry: IEntry;
   plugins: Array<any>;
   noParse: Array<string | RegExp>;
@@ -75,7 +75,7 @@ const sourceMapFix = {
 export default function <Entry>(): IConfig<Entry> {
   const config = {
     target: 'web',
-    devtool: 'inline-source-map',
+    // devtool: '#source-map',
     entry: <Entry>{},
     plugins: [],
     output: <IOutput>{
@@ -114,13 +114,13 @@ export default function <Entry>(): IConfig<Entry> {
     ]);
   }
 
-  if (!PRODUCTION) {
-    config.module.preLoaders.push(sourceMap);
-    config.module.loaders.push(sourceMapFix);
-  }
+  // if (!PRODUCTION) {
+  //   config.module.preLoaders.push(sourceMap);
+  //   config.module.loaders.push(sourceMapFix);
+  // }
 
   if (PRODUCTION) {
-    config.devtool = 'source-map';
+    // config.devtool = 'source-map';
 
     config.output.filename = '[name]-[hash].js';
     config.output.chunkFilename = '[name]-[hash].js';

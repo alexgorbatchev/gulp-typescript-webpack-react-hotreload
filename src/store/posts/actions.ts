@@ -1,6 +1,6 @@
 import { REQUEST_POSTS, RECEIVE_POSTS, IPostsJSON, IPostsAction } from './types';
 import { IThunk } from '../interfaces';
-import fetch from 'isomorphic-fetch';
+import * as fetch from 'isomorphic-fetch';
 
 export function requestPosts(): IPostsAction {
   return { type: REQUEST_POSTS };

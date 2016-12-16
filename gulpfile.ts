@@ -62,11 +62,12 @@ gulp.task('typescript:format', () =>
 
 gulp.task('typescript:lint', () =>
   gulp.src(TYPESCRIPT_FILES.concat(['webpack/**/*.ts']))
-    .pipe($.tslint())
-    .pipe($.tslint.report('verbose', {
+    .pipe($.tslint({
+      formatter: 'verbose',
       summarizeFailureOutput: true,
       emitError: yargs._.indexOf('dev') === -1,
     }))
+    .pipe($.tslint.report())
 );
 
 gulp.task('build:static', ['build:clean'], () =>
@@ -80,7 +81,7 @@ gulp.task('build:typescript', ['build:clean', 'build:static', 'typescript:format
   gulp.src(TYPESCRIPT_FILES.concat(['typings/tsd.d.ts']))
     .pipe($.changed(BUILD_SRC_DIR, { extension: '.js' }))
     .pipe($.sourcemaps.init())
-    .pipe($.typescript(typescriptProject))
+    .pipe(typescriptProject())
     .js
     .pipe($.sourcemaps.write({ sourceRoot: SRC_DIR }))
     .pipe($.print(filepath => `build:typescript ➡ ${filepath}`))
@@ -169,7 +170,7 @@ function webpackTask(configName: string, ...expectedFiles: Array<string>): Funct
         webpack(config, printStats(configName, stats, done));
       })
       .catch(e => console.error(e.stack));
-  }
+  };
 }
 
 const statsCache = {};
@@ -199,5 +200,5 @@ function printStats(configName: string, statsOpts: Object, done: Function): Func
     }
 
     done();
-  }
+  };
 }
