@@ -39,7 +39,7 @@
     "gulp-cli": "^1.2.1",
     "gulp-exec": "^2.1.2",
     "gulp-print": "^2.0.1",
-    "gulp-sourcemaps": "^1.6.0",
+    "gulp-sourcemaps": "^2.5.2",
     "gulp-spawn-mocha": "^3.1.0",
     "gulp-task-graph-visualizer": "^1.0.0",
     "gulp-tsfmt": "^1.0.2",
