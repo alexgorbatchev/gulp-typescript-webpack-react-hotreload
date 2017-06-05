@@ -17,7 +17,7 @@
     "@types/react": "^0.14.55",
     "@types/react-redux": "^4.4.35",
     "@types/react-router": "^2.0.41",
-    "@types/sinon": "^1.16.33",
+    "@types/sinon": "^2.3.1",
     "@types/sinon-chai": "^2.7.27",
     "babel-core": "^6.20.0",
     "babel-loader": "^6.2.4",
