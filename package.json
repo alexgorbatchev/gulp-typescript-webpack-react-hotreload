@@ -60,7 +60,7 @@
     "redux-devtools-log-monitor": "^1.0.11",
     "remap-istanbul": "^0.8.0",
     "rimraf": "^2.5.2",
-    "run-sequence": "^1.1.5",
+    "run-sequence": "^2.1.0",
     "sinon": "^1.17.4",
     "sinon-chai": "^2.8.0",
     "source-map-loader": "^0.1.5",
