@@ -61,7 +61,7 @@
     "remap-istanbul": "^0.8.0",
     "rimraf": "^2.5.2",
     "run-sequence": "^1.1.5",
-    "sinon": "^1.17.4",
+    "sinon": "^4.0.1",
     "sinon-chai": "^2.8.0",
     "source-map-loader": "^0.1.5",
     "source-map-support": "^0.4.0",
