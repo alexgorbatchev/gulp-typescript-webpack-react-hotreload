@@ -67,7 +67,7 @@
     "source-map-support": "^0.4.0",
     "ts-node": "^1.7.2",
     "tslint": "^4.0.2",
-    "typescript": "^2.1.4",
+    "typescript": "^2.6.2",
     "url-loader": "^0.5.7",
     "webpack": "^1.13.0",
     "webpack-dev-middleware": "^1.6.1",
