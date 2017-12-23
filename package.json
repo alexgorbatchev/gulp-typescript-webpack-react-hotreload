@@ -12,7 +12,7 @@
     "@types/gulp": "^3.8.32",
     "@types/isomorphic-fetch": "0.0.31",
     "@types/lodash": "^4.14.43",
-    "@types/mocha": "^2.2.33",
+    "@types/mocha": "^2.2.45",
     "@types/node": "^6.0.52",
     "@types/react": "^0.14.55",
     "@types/react-redux": "^4.4.35",
