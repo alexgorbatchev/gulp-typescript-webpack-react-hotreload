@@ -73,7 +73,7 @@
     "webpack-dev-middleware": "^1.6.1",
     "webpack-hot-middleware": "^2.10.0",
     "webpack-manifest-plugin": "^1.0.1",
-    "yargs": "^6.5.0"
+    "yargs": "^11.0.0"
   },
   "dependencies": {
     "es6-promise": "^4.0.5",
