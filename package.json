@@ -8,7 +8,7 @@
     "build": "NODE_ENV=production npm run lint && gulp webpack --no-color"
   },
   "devDependencies": {
-    "@types/chai": "^3.4.34",
+    "@types/chai": "^4.1.4",
     "@types/gulp": "^3.8.32",
     "@types/isomorphic-fetch": "0.0.31",
     "@types/lodash": "^4.14.43",
