@@ -91,6 +91,6 @@
     "react-router-redux": "^4.0.4",
     "redux": "^3.5.2",
     "redux-thunk": "^2.0.1",
-    "reselect": "^2.5.1"
+    "reselect": "^4.0.0"
   }
 }
