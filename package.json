@@ -15,7 +15,7 @@
     "@types/mocha": "^2.2.33",
     "@types/node": "^6.0.52",
     "@types/react": "^0.14.55",
-    "@types/react-redux": "^4.4.35",
+    "@types/react-redux": "^7.0.0",
     "@types/react-router": "^2.0.41",
     "@types/sinon": "^1.16.33",
     "@types/sinon-chai": "^2.7.27",
