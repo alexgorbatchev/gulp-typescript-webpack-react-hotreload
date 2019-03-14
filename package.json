@@ -38,7 +38,7 @@
     "gulp-changed-in-place": "^2.0.3",
     "gulp-cli": "^1.2.1",
     "gulp-exec": "^2.1.2",
-    "gulp-print": "^2.0.1",
+    "gulp-print": "^5.0.2",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-spawn-mocha": "^3.1.0",
     "gulp-task-graph-visualizer": "^1.0.0",
