@@ -82,7 +82,7 @@
     "lodash": "^4.11.2",
     "normalizr": "^2.0.1",
     "object.assign": "^4.0.3",
-    "radium": "^0.18.1",
+    "radium": "^0.25.2",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
     "react-intl": "^2.1.2",
